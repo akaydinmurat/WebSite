@@ -1,5 +1,5 @@
 import { PageIntro } from "@/components/animation/page-intro";
-import { SectionDivider } from "@/components/animation/section-divider";
+import { HomeScrollLayers } from "@/components/animation/home-scroll-layers";
 import { FeaturedProjects } from "@/components/projects/featured-projects";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Hero } from "@/components/sections/hero";
@@ -12,15 +12,13 @@ export default function HomePage() {
     <>
       <PageIntro />
       <Hero />
-      <SectionDivider index="01" label="Seçili Projeler" />
       <FeaturedProjects />
-      <SectionDivider index="02" label="Çalışma Alanları" />
-      <ServicesPreview />
-      <SectionDivider index="03" label="Tasarım Paketleri" />
-      <PackagesPreview />
-      <SectionDivider index="04" label="Göknur Uygur Akaydın" />
-      <StudioStory />
-      <ContactCta />
+      <HomeScrollLayers>
+        <ServicesPreview />
+        <PackagesPreview />
+        <StudioStory />
+        <ContactCta />
+      </HomeScrollLayers>
     </>
   );
 }

@@ -37,7 +37,7 @@ export function FadeIn({ children, className, delay = 0, distance = 24, ...props
         },
       );
     },
-    { scope: root, dependencies: [delay, distance, reducedMotion] },
+    { scope: root, dependencies: [delay, distance, reducedMotion], revertOnUpdate: true },
   );
 
   return (

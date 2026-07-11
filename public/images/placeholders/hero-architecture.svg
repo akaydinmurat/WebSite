@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1200">
   <defs>
     <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#332f2a"/>
-      <stop offset="0.38" stop-color="#8d7966"/>
-      <stop offset="0.72" stop-color="#d6bea0"/>
-      <stop offset="1" stop-color="#6b5b4e"/>
+      <stop offset="0" stop-color="#202627"/>
+      <stop offset="0.38" stop-color="#626d6f"/>
+      <stop offset="0.72" stop-color="#c9ccca"/>
+      <stop offset="1" stop-color="#465052"/>
     </linearGradient>
     <radialGradient id="light" cx="72%" cy="22%" r="56%">
-      <stop offset="0" stop-color="#fff1d2" stop-opacity="0.98"/>
-      <stop offset="0.34" stop-color="#d9ad7d" stop-opacity="0.46"/>
-      <stop offset="1" stop-color="#1d1d1b" stop-opacity="0"/>
+      <stop offset="0" stop-color="#f4f5f2" stop-opacity="0.98"/>
+      <stop offset="0.34" stop-color="#87536a" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#121617" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#9a816b"/>
-      <stop offset="1" stop-color="#2a2825"/>
+      <stop offset="0" stop-color="#677174"/>
+      <stop offset="1" stop-color="#171d1f"/>
     </linearGradient>
     <pattern id="grain" width="8" height="8" patternUnits="userSpaceOnUse">
       <circle cx="1" cy="1" r="0.7" fill="#fff" opacity="0.09"/>
@@ -21,13 +21,13 @@
     </pattern>
   </defs>
   <rect width="1920" height="1200" fill="url(#wall)"/>
-  <path d="M0 0h520v1200H0z" fill="#20211f"/>
-  <path d="M520 0h760l-190 780H520z" fill="#b8a188" opacity="0.52"/>
-  <path d="M1280 0h640v1200H1088l188-774z" fill="#54483e" opacity="0.86"/>
+  <path d="M0 0h520v1200H0z" fill="#111617"/>
+  <path d="M520 0h760l-190 780H520z" fill="#aeb5b3" opacity="0.52"/>
+  <path d="M1280 0h640v1200H1088l188-774z" fill="#3b4547" opacity="0.86"/>
   <path d="M0 840h1920v360H0z" fill="url(#floor)"/>
-  <path d="M710 690h560v242H710z" fill="#34312d"/>
-  <path d="M760 644h460v72H760z" fill="#b19980"/>
-  <path d="M594 192h2v690h-2zM1280 120h2v812h-2z" fill="#f0dcc1" opacity="0.5"/>
+  <path d="M710 690h560v242H710z" fill="#252c2e"/>
+  <path d="M760 644h460v72H760z" fill="#7b8587"/>
+  <path d="M594 192h2v690h-2zM1280 120h2v812h-2z" fill="#e4e7e4" opacity="0.5"/>
   <ellipse cx="1325" cy="240" rx="700" ry="570" fill="url(#light)"/>
   <rect width="1920" height="1200" fill="url(#grain)"/>
 </svg>

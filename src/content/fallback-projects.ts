@@ -127,11 +127,11 @@ const visualVariants = [
 ] as const satisfies readonly ProjectVisualVariant[];
 
 const visualBackgrounds = [
-  "linear-gradient(128deg,#1b1916 0 22%,#7d5a43 22% 48%,#d4b98f 48% 72%,#3b3028 72%)",
-  "radial-gradient(circle at 68% 24%,#f3d59e 0 9%,transparent 31%),linear-gradient(138deg,#26211c,#9e7658 48%,#d9c7aa 70%,#49382e)",
-  "linear-gradient(102deg,#171918 0 28%,#5d685b 28% 45%,#c3aa85 45% 72%,#6b3e2e 72%)",
-  "radial-gradient(ellipse at 36% 88%,#b38b64 0 24%,transparent 25%),linear-gradient(146deg,#ede0ca,#8a735f 46%,#29231f 78%)",
-  "linear-gradient(165deg,rgba(238,215,178,.76) 0 31%,transparent 31%),linear-gradient(48deg,#201e1b 0 48%,#987b61 48% 71%,#d4c2a6 71%)",
+  "linear-gradient(128deg,#121617 0 22%,#4a5557 22% 48%,#b8c0bd 48% 72%,#4b2434 72%)",
+  "radial-gradient(circle at 68% 24%,#c7a2b2 0 9%,transparent 31%),linear-gradient(138deg,#171d1f,#6b3047 48%,#c9cecb 70%,#354043)",
+  "linear-gradient(102deg,#0e1213 0 28%,#596467 28% 45%,#aeb7b4 45% 72%,#4d2132 72%)",
+  "radial-gradient(ellipse at 36% 88%,#87536a 0 24%,transparent 25%),linear-gradient(146deg,#e7e9e6,#6f7a7c 46%,#171d1f 78%)",
+  "linear-gradient(165deg,rgba(201,206,203,.76) 0 31%,transparent 31%),linear-gradient(48deg,#121617 0 48%,#596467 48% 71%,#b8c0bd 71%)",
 ] as const;
 
 function createFacts(record: PortfolioRecord): readonly ProjectFact[] {

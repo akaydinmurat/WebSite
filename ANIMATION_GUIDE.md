@@ -13,23 +13,27 @@ Bu proje hareketi dekor olarak değil, içerik hiyerarşisini ve mekânsal hissi
 
 ## Kullanılabilir primitives
 
-| Bileşen          | Amaç                                     |
-| ---------------- | ---------------------------------------- |
-| `FadeIn`         | Görünür alana giren kısa içerik grupları |
-| `TextReveal`     | Editoryal başlık girişi                  |
-| `ImageReveal`    | Görsel yüzey açılışı                     |
-| `StaggerGroup`   | Küçük ve ilişkili öğe grupları           |
-| `ParallaxMedia`  | Yalnız uygun cihazlarda ölçülü derinlik  |
-| `MagneticLink`   | Fine-pointer cihazlarda eylem vurgusu    |
-| `ScrollProgress` | Sayfa ilerleme göstergesi                |
-| `PageIntro`      | Sayfa giriş katmanı                      |
-| `SectionDivider` | Bölümler arası çizgisel geçiş            |
+| Bileşen             | Amaç                                            |
+| ------------------- | ----------------------------------------------- |
+| `FadeIn`            | Görünür alana giren kısa içerik grupları        |
+| `TextReveal`        | Editoryal başlık girişi                         |
+| `ImageReveal`       | Görsel yüzey açılışı                            |
+| `StaggerGroup`      | Küçük ve ilişkili öğe grupları                  |
+| `ParallaxMedia`     | Yalnız uygun cihazlarda ölçülü derinlik         |
+| `MagneticLink`      | Fine-pointer cihazlarda eylem vurgusu           |
+| `ScrollProgress`    | Sayfa ilerleme göstergesi                       |
+| `PageIntro`         | Sayfa giriş katmanı                             |
+| `SectionMarker`     | Bölüm içindeki numara ve teknik üst çizgi       |
+| `ProjectReelMotion` | Sticky proje paftalarının iç medya hareketi     |
+| `HomeScrollLayers`  | Ana sayfa bölümlerinin katmanlı devralma geçişi |
 
 Primitive seçerken yeni bir varyant prop'u eklemeyi, yeni client bileşeni oluşturmaya tercih edin. Ancak ilgisiz davranışları tek bileşende birleştirmeyin.
 
 ## GSAP yaşam döngüsü
 
 GSAP ve ScrollTrigger yalnız `src/lib/animation/gsap.ts` içinde kaydedilir. React animasyonlarında `useGSAP` kullanın, kapsamı bir root ref ile sınırlandırın ve event handler içindeki GSAP işlemlerini gerektiğinde `contextSafe` ile sarın. Global selector, modül seviyesinde timeline veya temizlenmeyen ScrollTrigger eklemeyin.
+
+Dependency kullanan `useGSAP` çağrıları `revertOnUpdate: true` ile eski timeline ve ScrollTrigger kayıtlarını temizlemelidir. Sticky proje paftasının veya sticky ancestor'ın kendisine transform yazmayın; scroll hareketini yalnız iç medya wrapper'ında uygulayın.
 
 ## Lenis
 
@@ -38,6 +42,8 @@ GSAP ve ScrollTrigger yalnız `src/lib/animation/gsap.ts` içinde kaydedilir. Re
 ## Pointer etkileşimleri
 
 Hero reveal, proje parallax ve özel cursor pointer koordinatını RAF ile sınırlar. Bekleyen frame unmount sırasında iptal edilir. Touch cihazlarda ve reduced-motion tercihinde bu katmanlar devre dışı kalır; native cursor her zaman işlevsel fallback'tir.
+
+Mimari cursor, dairesel takipçi yerine köşe işaretli dikdörtgen kesit vizörü kullanır. `data-cursor-kind` ve `data-cursor-label` yalnız görünümü değiştirir; pointer hareketi React state üretmez. Form alanlarında custom cursor gizlenir ve native text/default cursor korunur.
 
 ## WebGL
 

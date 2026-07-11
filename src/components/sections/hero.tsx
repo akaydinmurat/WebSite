@@ -98,7 +98,9 @@ export function Hero() {
         <div className="hero-light-field pointer-events-none absolute inset-[-4%]" />
         <span className="hero-slab hero-slab-a pointer-events-none" />
         <span className="hero-slab hero-slab-b pointer-events-none" />
-        <span className="hero-lens-ring" />
+        <span className="hero-plan-window">
+          <span>Kesit / 01</span>
+        </span>
         {webglEnabled ? <WebGLHero /> : null}
         <div className="fine-noise pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(9,9,8,.82)_0%,rgba(12,10,8,.12)_58%,rgba(16,11,9,.44)_100%)]" />
       </div>
@@ -108,6 +110,28 @@ export function Hero() {
       </span>
 
       <div className="site-shell relative z-10 flex min-h-[max(100svh,46rem)] flex-col justify-end pt-36 pb-7">
+        <nav className="hero-social-rail" aria-label="Sosyal medya">
+          {siteConfig.socialLinks.map((socialLink) => {
+            const Icon = socialLink.label === "Instagram" ? InstagramIcon : LinkedInIcon;
+
+            return (
+              <a
+                key={socialLink.href}
+                href={socialLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${socialLink.label}, yeni sekmede açılır`}
+                data-cursor-kind="social"
+                data-cursor-label="Takip et"
+              >
+                <Icon size={17} />
+                <span>{socialLink.label}</span>
+                <ArrowUpRight aria-hidden="true" size={13} />
+              </a>
+            );
+          })}
+        </nav>
+
         <div className="editorial-grid items-end gap-y-10">
           <div className="col-span-12 md:col-span-9 xl:col-span-8">
             <p className="mb-7 flex items-center gap-4 text-[0.63rem] font-semibold tracking-[0.2em] text-white/72 uppercase">
@@ -120,10 +144,10 @@ export function Hero() {
           <div className="col-span-12 md:col-span-4 md:col-start-9 xl:col-span-3 xl:col-start-10">
             <p className="mb-7 text-base leading-relaxed text-white/80">{copy.description}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-3">
-              <Link href="/projects" className="text-link">
+              <Link href="/projects" className="text-link" data-cursor-kind="action">
                 {copy.primaryActionLabel} <ArrowUpRight aria-hidden="true" size={15} />
               </Link>
-              <Link href="/contact" className="text-link text-white/72">
+              <Link href="/contact" className="text-link text-white/72" data-cursor-kind="action">
                 {copy.secondaryActionLabel}
               </Link>
             </div>
@@ -142,5 +166,33 @@ export function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+function InstagramIcon({ size = 17 }: { size?: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ size = 17 }: { size?: number }) {
+  return (
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <rect x="3.2" y="9" width="3.5" height="11.5" />
+      <circle cx="4.95" cy="5.2" r="2" />
+      <path d="M9.2 9h3.35v1.58h.05c.47-.88 1.6-1.82 3.3-1.82 3.53 0 4.18 2.32 4.18 5.34v6.4h-3.49v-5.67c0-1.35-.03-3.09-1.88-3.09-1.88 0-2.17 1.47-2.17 2.99v5.77H9.2Z" />
+    </svg>
   );
 }

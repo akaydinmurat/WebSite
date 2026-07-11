@@ -1,187 +1,115 @@
-import type { DesignPackage, PackageDeliveryTime, PackageStartingPrice } from "@/types";
-
-const scopeNotice =
-  "Paket kapsamı mevcut hizmet tanımını yansıtır. Teslim takvimi, revizyon ve ücret; mekânın ölçüsü ile proje ihtiyacı görüldükten sonra teklif aşamasında netleştirilir.";
-
-const startingPrice = {
-  amount: null,
-  currency: "TRY",
-  label: "Teklif ile belirlenir",
-  isPlaceholder: true,
-  note: "Canlı portföyde doğrulanmış bir başlangıç fiyatı bulunmadığı için fiyat üretilmemiştir.",
-} as const satisfies PackageStartingPrice;
-
-const deliveryTime = {
-  label: "Kapsama göre planlanır",
-  isIndicative: true,
-  note: "Teslim süresi; ölçü, sunum içeriği ve proje yoğunluğu değerlendirildikten sonra paylaşılır.",
-} as const satisfies PackageDeliveryTime;
-
-const revisionPolicy = {
-  rounds: null,
-  label: "Teklifte netleşir",
-  isIndicative: true,
-  note: "Mevcut hizmet sayfasında revizyon sayısı belirtilmediği için sayı üretilmemiştir.",
-} as const;
+import type { DesignPackage } from "@/types";
 
 export const fallbackPackages = [
   {
-    slug: "space-design-one",
-    title: "Mekân Tasarımı — 1",
-    shortTitle: "Mekân 1",
+    slug: "space-design-2d",
+    title: "Mekân Tasarımı — 2D",
+    scopeLabel: "Tek mekân",
     summary:
-      "Tek bir mekânın detaylı analizi ve geliştirilen tasarımın 2D sunumlarla aktarılması için oluşturulan kapsam.",
-    idealFor:
-      "Oda, salon, mutfak, çocuk odası veya yatak odası gibi tek bir mekân için 2D tasarım desteği isteyenler için.",
-    includedServices: [
-      "Tek mekânın detaylı analizi",
-      "Mekâna özel tasarım yaklaşımı",
-      "2D tasarım sunumları",
-      "3D görsel bu kapsama dahil değildir",
-    ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Mekân Tasarımı 1'i sorun", href: "/contact?package=space-design-one" },
-    featured: false,
+      "Tek bir mekânın detaylı analizi ve bu mekân için geliştirilen tasarımın 2D sunumlarla aktarılması.",
+    scopeItems: ["Tek mekânın detaylı analizi", "İlgili mekâna yönelik tasarım"],
+    examples: ["Oda", "Salon", "Mutfak", "Çocuk odası", "Yatak odası"],
+    presentationFormats: ["2D"],
+    exclusions: ["3D görsel hizmeti"],
+    inquiry: {
+      label: "2D mekân tasarımı için iletişime geçin",
+      href: "/contact?package=space-design-2d",
+    },
+    showOnHomepage: false,
     order: 1,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
   {
     slug: "product-design",
     title: "Ürün Tasarımı",
-    shortTitle: "Ürün",
-    summary:
-      "Mekân içindeki tek bir bölümün veya özel imalat elemanının odaklı biçimde tasarlanması.",
-    idealFor:
-      "TV ünitesi, kitaplık, vestiyer veya benzeri tek bir bölüm tasarlatmak isteyenler için.",
-    includedServices: [
-      "Tasarım ihtiyacının değerlendirilmesi",
-      "Seçilen bölüme özel tasarım",
-      "Mekânla uyumlu ölçü ve malzeme yaklaşımı",
-    ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Ürün tasarımını sorun", href: "/contact?package=product-design" },
-    featured: false,
+    scopeLabel: "Tek bölüm",
+    summary: "Mekân içinde tanımlı tek bir bölümün tasarlanmasına yönelik odaklı hizmet.",
+    scopeItems: ["Seçilen tek bölümün tasarımı"],
+    examples: ["TV ünitesi", "Kitaplık", "Vestiyer"],
+    inquiry: {
+      label: "Ürün tasarımı için iletişime geçin",
+      href: "/contact?package=product-design",
+    },
+    showOnHomepage: false,
     order: 2,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
   {
     slug: "wall-design",
     title: "Duvar Tasarımı",
-    shortTitle: "Duvar",
-    summary:
-      "Mekândaki tek bir duvarı işlev, kompozisyon ve görsel bütünlük açısından ele alan kompakt tasarım kapsamı.",
-    idealFor: "Tek bir duvara odaklanan, kontrollü ve tanımlı bir tasarım çözümü isteyenler için.",
-    includedServices: [
-      "Mevcut duvarın değerlendirilmesi",
-      "Tek duvara özel tasarım yaklaşımı",
-      "Renk, malzeme ve eleman yerleşimi",
-    ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Duvar tasarımını sorun", href: "/contact?package=wall-design" },
-    featured: false,
+    scopeLabel: "Tek duvar",
+    summary: "Mekândaki tek bir duvarın tasarlanmasına yönelik tanımlı hizmet kapsamı.",
+    scopeItems: ["Seçilen tek duvarın tasarımı"],
+    inquiry: {
+      label: "Duvar tasarımı için iletişime geçin",
+      href: "/contact?package=wall-design",
+    },
+    showOnHomepage: false,
     order: 3,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
   {
-    slug: "space-design-two",
-    title: "Mekân Tasarımı — 2",
-    shortTitle: "Mekân 2",
+    slug: "space-design-2d-3d",
+    title: "Mekân Tasarımı — 2D + 3D",
+    scopeLabel: "Tek mekân + 1 özel imalat mobilya",
     summary:
-      "Tek bir mekânın detaylı analizi, 2D ve 3D sunumları ile bir özel imalat mobilya tasarımını birleştiren kapsam.",
-    idealFor:
-      "Tek mekân için tasarım kararlarını daha kapsamlı görsel sunumlarla değerlendirmek isteyenler için.",
-    includedServices: [
+      "Tek bir mekânın detaylı analizi, 2D ve 3D sunumları ile bir özel imalat mobilya tasarımını bir araya getiren kapsam.",
+    scopeItems: [
       "Tek mekânın detaylı analizi",
-      "2D tasarım sunumları",
-      "3D görsel sunumlar",
+      "İlgili mekâna yönelik tasarım",
       "1 özel imalat mobilya tasarımı",
     ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Mekân Tasarımı 2'yi sorun", href: "/contact?package=space-design-two" },
-    featured: true,
+    examples: ["Oda", "Salon", "Mutfak", "Çocuk odası", "Yatak odası"],
+    presentationFormats: ["2D", "3D"],
+    inquiry: {
+      label: "2D + 3D mekân tasarımı için iletişime geçin",
+      href: "/contact?package=space-design-2d-3d",
+    },
+    showOnHomepage: true,
     order: 4,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
   {
-    slug: "commercial-spaces",
-    title: "Ticari Mekân Paketi",
-    shortTitle: "Ticari",
+    slug: "commercial-space-design",
+    title: "Ticari Mekân Tasarımı",
+    scopeLabel: "Metrekareye göre değişen kapsam",
     summary:
-      "Mağaza, dükkân ve ofis gibi ticari mekânlar için metrekareye göre şekillenen 2D ve 3D tasarım kapsamı.",
-    idealFor:
-      "Ticari alanının işlevini ve marka kimliğini birlikte ele almak isteyen işletmeler için.",
-    includedServices: [
-      "Ticari mekân ihtiyaç analizi",
-      "Metrekareye göre belirlenen kapsam",
-      "2D tasarım sunumları",
-      "3D görsel sunumlar",
-    ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Ticari paketi sorun", href: "/contact?package=commercial-spaces" },
-    featured: true,
+      "Mağaza, dükkân ve ofis gibi ticari mekânlar için, metrekareye göre şekillenen 2D ve 3D sunumlu tasarım paketi.",
+    scopeItems: ["Ticari mekâna yönelik tasarım"],
+    examples: ["Mağaza", "Dükkân", "Ofis"],
+    presentationFormats: ["2D", "3D"],
+    scopeBasis: "Paket içeriği mekânın metrekaresine göre değişir.",
+    inquiry: {
+      label: "Ticari mekân kapsamı için iletişime geçin",
+      href: "/contact?package=commercial-space-design",
+    },
+    showOnHomepage: true,
     order: 5,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
   {
-    slug: "residential-spaces",
-    title: "Konut Paketi",
-    shortTitle: "Konut",
-    summary:
-      "Konutlar için metrekareye ve ihtiyaç programına göre şekillenen, 2D ve 3D sunumlar içeren tasarım kapsamı.",
-    idealFor:
-      "Birden fazla yaşam alanını veya konutun bütününü birlikte tasarlatmak isteyenler için.",
-    includedServices: [
-      "Konut ihtiyaç programı",
-      "Metrekareye göre belirlenen kapsam",
-      "2D tasarım sunumları",
-      "3D görsel sunumlar",
-    ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Konut paketini sorun", href: "/contact?package=residential-spaces" },
-    featured: true,
+    slug: "residential-design",
+    title: "Konut Tasarımı",
+    scopeLabel: "Metrekareye göre değişen kapsam",
+    summary: "Konutlar için, metrekareye göre şekillenen 2D ve 3D sunumlu tasarım paketi.",
+    scopeItems: ["Konuta yönelik tasarım"],
+    presentationFormats: ["2D", "3D"],
+    scopeBasis: "Paket içeriği konutun metrekaresine göre değişir.",
+    inquiry: {
+      label: "Konut tasarımı için iletişime geçin",
+      href: "/contact?package=residential-design",
+    },
+    showOnHomepage: true,
     order: 6,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
   {
-    slug: "online-consulting",
-    title: "Online Danışmanlık Paketi",
-    shortTitle: "Online",
+    slug: "online-design-consulting",
+    title: "Online Tasarım Danışmanlığı",
+    scopeLabel: "Online danışmanlık",
     summary:
-      "Esinlenme panosu, renk danışmanlığı, ürün ve aksesuar seçimlerini çevrim içi görüşmelerle netleştiren kapsam.",
-    idealFor:
-      "Mekânındaki belirli tasarım kararlarında uzaktan profesyonel yönlendirme almak isteyenler için.",
-    includedServices: [
-      "Esinlenme panosu",
-      "Renk danışmanlığı",
-      "Ürün seçimleri",
-      "Aksesuar seçimleri",
-    ],
-    revisionPolicy,
-    deliveryTime,
-    startingPrice,
-    inquiry: { label: "Online danışmanlığı sorun", href: "/contact?package=online-consulting" },
-    featured: false,
+      "Esinlenme panosu, renk danışmanlığı, ürün ve aksesuar seçimlerini kapsayan online tasarım hizmeti.",
+    scopeItems: ["Esinlenme panosu", "Renk danışmanlığı", "Ürün seçimleri", "Aksesuar seçimleri"],
+    inquiry: {
+      label: "Online danışmanlık için iletişime geçin",
+      href: "/contact?package=online-design-consulting",
+    },
+    showOnHomepage: false,
     order: 7,
-    isDemo: false,
-    demoNotice: scopeNotice,
   },
 ] as const satisfies readonly DesignPackage[];
 

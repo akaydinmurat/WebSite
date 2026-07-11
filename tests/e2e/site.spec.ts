@@ -20,7 +20,7 @@ test.describe("core visitor journeys", () => {
     });
     page.on("pageerror", (error) => browserErrors.push(error.message));
 
-    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/contact"]) {
+    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/packages", "/contact"]) {
       await page.goto(path);
       await expect(page.locator("main h1").first()).toBeVisible();
     }
@@ -45,6 +45,9 @@ test.describe("core visitor journeys", () => {
       "#main-content",
     );
     await expect(page.locator("html")).toHaveAttribute("lang", "tr");
+    await expect(page.getByRole("link", { name: "Instagram, yeni sekmede açılır" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "LinkedIn, yeni sekmede açılır" })).toBeVisible();
+    await expect(page.locator(".project-reel-card").first()).toHaveCSS("position", "relative");
 
     const accessibilityScan = await new AxeBuilder({ page }).analyze();
     const seriousOrCriticalViolations = accessibilityScan.violations.filter(
@@ -77,8 +80,8 @@ test.describe("core visitor journeys", () => {
     skipUnlessProject(testInfo.project.name, "chromium");
     await page.goto("/projects");
 
-    const categoryToolbar = page.getByRole("toolbar", { name: "Proje kategorileri" });
-    const kitchenFilter = categoryToolbar.getByRole("button", {
+    const categoryFilter = page.getByRole("group", { name: "Proje kategorileri" });
+    const kitchenFilter = categoryFilter.getByRole("button", {
       name: "Mutfak",
       exact: true,
     });
@@ -87,6 +90,10 @@ test.describe("core visitor journeys", () => {
     await kitchenFilter.click();
 
     await expect(kitchenFilter).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("[data-active-slug]")).toHaveAttribute(
+      "data-active-slug",
+      "bm-evi-mutfak",
+    );
     await expect(page.locator("main article")).toHaveCount(2);
     await expect(
       page.getByRole("heading", { level: 2, name: "B.M. Evi Mutfak Projesi" }),
@@ -94,6 +101,15 @@ test.describe("core visitor journeys", () => {
     await expect(
       page.getByRole("heading", { level: 2, name: "E.S. Evi Banyo Projesi" }),
     ).toHaveCount(0);
+
+    const projectAccessibilityScan = await new AxeBuilder({ page })
+      .include(".project-archive")
+      .analyze();
+    expect(
+      projectAccessibilityScan.violations.filter(
+        (violation) => violation.impact === "serious" || violation.impact === "critical",
+      ),
+    ).toEqual([]);
 
     await page.getByRole("link", { name: "B.M. Evi Mutfak Projesi projesini incele" }).click();
 
@@ -114,16 +130,26 @@ test.describe("core visitor journeys", () => {
 
     const heroStage = page.locator(".hero-stage");
     const customCursor = page.locator(".custom-cursor");
+    await expect(customCursor).toHaveAttribute("data-ready", "true");
     await page.mouse.move(40, 40);
     await page.mouse.move(240, 220, { steps: 4 });
 
     await expect(customCursor).toHaveAttribute("data-visible", "true");
+    await expect(page.locator(".project-reel-card").first()).toHaveCSS("position", "sticky");
     await expect
       .poll(() => heroStage.evaluate((element) => element.style.getPropertyValue("--pointer-x")))
       .not.toBe("");
 
     await page.getByRole("link", { name: "Projeleri keşfet" }).hover();
     await expect(customCursor).toHaveAttribute("data-active", "true");
+
+    const firstProjectLink = page.getByRole("link", {
+      name: "B.M. Evi Mutfak Projesi projesini incele",
+    });
+    await firstProjectLink.scrollIntoViewIfNeeded();
+    await firstProjectLink.hover();
+    await expect(customCursor).toHaveAttribute("data-kind", "project");
+    await expect(customCursor).toHaveAttribute("data-label", "true");
   });
 
   test("announces contact form validation errors without serious accessibility violations", async ({
@@ -216,7 +242,7 @@ test.describe("mobile journeys at 360px", () => {
   test("keeps key pages within the 360px viewport", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "mobile-chromium");
 
-    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/contact"]) {
+    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/packages", "/contact"]) {
       await page.goto(path);
       await expect(page.locator("main h1").first()).toBeVisible();
 

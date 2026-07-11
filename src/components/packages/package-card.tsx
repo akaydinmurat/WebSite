@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight, Check, Minus } from "lucide-react";
 import Link from "next/link";
 
 import type { DesignPackage } from "@/types";
@@ -13,59 +13,89 @@ export function PackageCard({
   index: number;
   className?: string;
 }) {
+  const dossierNumber = String(index + 1).padStart(2, "0");
+
   return (
-    <article
-      className={cn(
-        "flex h-full flex-col border-t border-[var(--color-border)] py-6",
-        designPackage.featured && "bg-[var(--color-night)] px-6 text-[var(--color-paper)] md:px-8",
-        className,
-      )}
-    >
-      <div className="mb-10 flex justify-between text-[0.62rem] font-semibold tracking-[0.15em] text-current/60 uppercase">
-        <span>{String(index + 1).padStart(2, "0")}</span>
-        <span>{designPackage.featured ? "Öne Çıkan" : "Tasarım Kapsamı"}</span>
+    <article className={cn("package-dossier", className)}>
+      <header className="package-dossier-header">
+        <span>Dosya / {dossierNumber}</span>
+        <span>{designPackage.scopeLabel}</span>
+      </header>
+
+      <div className="package-dossier-intro">
+        <h3 className="card-title">{designPackage.title}</h3>
+        <p>{designPackage.summary}</p>
       </div>
-      <h3 className="card-title mb-5">{designPackage.title}</h3>
-      <p className="mb-8 text-current/72">{designPackage.summary}</p>
-      <ul className="mb-10 space-y-3 text-sm" aria-label="Pakete dahil hizmetler">
-        {designPackage.includedServices.slice(0, 4).map((item) => (
+
+      <div className="package-dossier-body">
+        <PackageList title="Kapsam" items={designPackage.scopeItems} />
+
+        {designPackage.examples?.length ? (
+          <div className="package-dossier-block">
+            <h4>Örnekler</h4>
+            <p className="package-dossier-tags">{designPackage.examples.join(" · ")}</p>
+          </div>
+        ) : null}
+
+        {designPackage.presentationFormats?.length ? (
+          <div className="package-dossier-block">
+            <h4>Sunum biçimi</h4>
+            <div className="flex flex-wrap gap-2">
+              {designPackage.presentationFormats.map((format) => (
+                <span key={format} className="package-format-tag">
+                  {format}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {designPackage.scopeBasis ? (
+          <div className="package-dossier-block">
+            <h4>Kapsam ölçütü</h4>
+            <p>{designPackage.scopeBasis}</p>
+          </div>
+        ) : null}
+
+        {designPackage.exclusions?.length ? (
+          <div className="package-dossier-block package-dossier-exclusion">
+            <h4>Dahil değil</h4>
+            <ul>
+              {designPackage.exclusions.map((item) => (
+                <li key={item}>
+                  <Minus aria-hidden="true" size={14} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+
+      <Link
+        href={designPackage.inquiry.href}
+        className="package-dossier-action"
+        aria-label={designPackage.inquiry.label}
+      >
+        <span>Kapsamı görüşün</span>
+        <ArrowUpRight aria-hidden="true" size={18} />
+      </Link>
+    </article>
+  );
+}
+
+function PackageList({ title, items }: { title: string; items: readonly string[] }) {
+  return (
+    <div className="package-dossier-block">
+      <h4>{title}</h4>
+      <ul className="space-y-3">
+        {items.map((item) => (
           <li key={item} className="flex gap-3 border-t border-current/15 pt-3">
             <Check aria-hidden="true" size={15} className="mt-0.5 shrink-0" />
             <span>{item}</span>
           </li>
         ))}
       </ul>
-      <dl className="mt-auto grid grid-cols-2 gap-5 border-t border-current/20 pt-5 text-sm">
-        <div>
-          <dt className="mb-1 text-[0.6rem] font-semibold tracking-[0.12em] text-current/55 uppercase">
-            Teslim
-          </dt>
-          <dd>{designPackage.deliveryTime.label}</dd>
-        </div>
-        <div>
-          <dt className="mb-1 text-[0.6rem] font-semibold tracking-[0.12em] text-current/55 uppercase">
-            Revizyon
-          </dt>
-          <dd>{designPackage.revisionPolicy.label}</dd>
-        </div>
-      </dl>
-      <div className="mt-7 flex items-end justify-between gap-5">
-        <div>
-          <span className="block text-[0.58rem] font-semibold tracking-[0.12em] text-current/55 uppercase">
-            Ücret
-          </span>
-          <strong className="font-serif text-xl font-normal">
-            {designPackage.startingPrice.label}
-          </strong>
-        </div>
-        <Link
-          href={designPackage.inquiry.href}
-          className="grid size-11 shrink-0 place-items-center rounded-full border border-current"
-          aria-label={`${designPackage.title} için bilgi alın`}
-        >
-          <ArrowUpRight aria-hidden="true" size={18} />
-        </Link>
-      </div>
-    </article>
+    </div>
   );
 }

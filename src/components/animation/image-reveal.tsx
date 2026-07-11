@@ -34,7 +34,7 @@ export function ImageReveal({
         gsap.fromTo(media, { scale: 1.08 }, { scale: 1, duration: 1.4, ease: "power3.out" });
       }
     },
-    { scope: root, dependencies: [reducedMotion] },
+    { scope: root, dependencies: [reducedMotion], revertOnUpdate: true },
   );
 
   return (

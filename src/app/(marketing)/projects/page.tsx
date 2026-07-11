@@ -12,21 +12,35 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function ProjectsPage() {
+  const projectSummaries = fallbackProjects.map(
+    ({ slug, title, category, excerpt, facts, cover, order }) => ({
+      slug,
+      title,
+      category,
+      excerpt,
+      facts,
+      cover,
+      order,
+    }),
+  );
+
   return (
     <>
       <PageHero
         eyebrow="Proje Seçkisi"
         title="Her mekân, kendi yaşam biçiminden doğar."
-        description="Bu seçki mevcut sitede yayımlanan gerçek proje adlarını, yıllarını ve konumlarını yeni portföy yapısında bir araya getirir."
+        description="Sekiz proje kaydı; sabit bir görsel kesit ve doğal kaydırma içinde, yıl, konum ve mekân türüyle birlikte okunur."
         aside={
-          <p className="max-w-xs text-sm text-[var(--color-muted)]">
-            Yüksek çözünürlüklü gerçek proje görselleri henüz aktarılmadığı için soyut yer tutucular
-            kullanılmaktadır.
-          </p>
+          <div className="max-w-xs border-l border-[var(--color-accent)] pl-5">
+            <strong className="block font-serif text-4xl font-normal">08</strong>
+            <span className="text-[0.68rem] tracking-[0.14em] text-[var(--color-muted)] uppercase">
+              Portföy kaydı
+            </span>
+          </div>
         }
       />
-      <section className="section-space-sm pt-0">
-        <ProjectIndex projects={fallbackProjects} categories={projectCategories} />
+      <section className="section-space-sm border-t border-[var(--color-border-strong)] pt-10 md:pt-14">
+        <ProjectIndex projects={projectSummaries} categories={projectCategories} />
       </section>
     </>
   );

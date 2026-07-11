@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { FadeIn } from "@/components/animation/fade-in";
+import { SectionMarker } from "@/components/animation/section-divider";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { siteConfig } from "@/config/site";
 import { fallbackServices } from "@/content/fallback-services";
@@ -10,9 +11,22 @@ export function ServicesPreview() {
   const copy = siteConfig.copy.services;
 
   return (
-    <section className="section-space bg-[var(--color-paper)]" data-cursor-theme="light">
-      <div className="site-shell">
-        <SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.description} />
+    <section
+      id="services-preview"
+      aria-labelledby="services-preview-title"
+      className="section-space section-tone-dark bg-[var(--color-night-soft)] text-[var(--color-paper)]"
+      data-cursor-theme="dark"
+      data-layered-section
+    >
+      <div className="site-shell section-frame">
+        <SectionMarker index="02" label="Çalışma Alanları" meta="05 disiplin" />
+        <SectionHeading
+          headingId="services-preview-title"
+          className="mt-14 md:mt-20"
+          eyebrow={copy.eyebrow}
+          title={copy.title}
+          description={copy.description}
+        />
         <div className="mt-24 border-t border-[var(--color-border)]">
           {fallbackServices.slice(0, 5).map((service, index) => (
             <FadeIn key={service.slug} className="border-b border-[var(--color-border)]">

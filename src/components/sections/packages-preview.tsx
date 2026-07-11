@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { FadeIn } from "@/components/animation/fade-in";
+import { SectionMarker } from "@/components/animation/section-divider";
 import { PackageCard } from "@/components/packages/package-card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { siteConfig } from "@/config/site";
@@ -9,12 +10,21 @@ import { fallbackPackages } from "@/content/fallback-packages";
 
 export function PackagesPreview() {
   const copy = siteConfig.copy.packages;
-  const featuredPackages = fallbackPackages.filter((designPackage) => designPackage.featured);
+  const featuredPackages = fallbackPackages.filter((designPackage) => designPackage.showOnHomepage);
 
   return (
-    <section className="section-space bg-[var(--color-sand)]" data-cursor-theme="light">
-      <div className="site-shell">
+    <section
+      id="packages-preview"
+      aria-labelledby="packages-preview-title"
+      className="section-space bg-[var(--color-paper)]"
+      data-cursor-theme="light"
+      data-layered-section
+    >
+      <div className="site-shell section-frame">
+        <SectionMarker index="03" label="Tasarım Kapsamları" meta="07 dosya" />
         <SectionHeading
+          headingId="packages-preview-title"
+          className="mt-14 md:mt-20"
           eyebrow={copy.eyebrow}
           title={copy.title}
           description={copy.description}
@@ -24,7 +34,7 @@ export function PackagesPreview() {
             </Link>
           }
         />
-        <div className="mt-20 grid gap-x-6 gap-y-12 md:grid-cols-3">
+        <div className="package-preview-grid mt-20 grid gap-5 lg:grid-cols-3">
           {featuredPackages.slice(0, 3).map((designPackage, index) => (
             <FadeIn key={designPackage.slug} delay={index * 0.08}>
               <PackageCard designPackage={designPackage} index={index} />

@@ -31,6 +31,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     return () => {
       lenis.off("scroll", handleScroll);
       gsap.ticker.remove(update);
+      gsap.ticker.lagSmoothing(500, 33);
       lenis.destroy();
     };
   }, [finePointer, reducedMotion]);

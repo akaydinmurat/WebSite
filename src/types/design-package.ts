@@ -1,40 +1,19 @@
-export interface PackageRevisionPolicy {
-  rounds: number | null;
-  label: string;
-  isIndicative: boolean;
-  note: string;
-}
-
-export interface PackageDeliveryTime {
-  label: string;
-  isIndicative: boolean;
-  note: string;
-}
-
-export interface PackageStartingPrice {
-  amount: null;
-  currency: "TRY";
-  label: string;
-  isPlaceholder: boolean;
-  note: string;
-}
+export type PresentationFormat = "2D" | "3D";
 
 export interface DesignPackage {
   slug: string;
   title: string;
-  shortTitle: string;
+  scopeLabel: string;
   summary: string;
-  idealFor: string;
-  includedServices: readonly string[];
-  revisionPolicy: PackageRevisionPolicy;
-  deliveryTime: PackageDeliveryTime;
-  startingPrice: PackageStartingPrice;
+  scopeItems: readonly string[];
+  examples?: readonly string[];
+  presentationFormats?: readonly PresentationFormat[];
+  scopeBasis?: string;
+  exclusions?: readonly string[];
   inquiry: {
     label: string;
     href: `/contact?package=${string}`;
   };
-  featured: boolean;
+  showOnHomepage: boolean;
   order: number;
-  isDemo: boolean;
-  demoNotice: string;
 }

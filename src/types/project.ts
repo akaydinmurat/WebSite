@@ -71,3 +71,8 @@ export interface Project {
     noIndex?: boolean;
   };
 }
+
+export type ProjectSummary = Pick<
+  Project,
+  "slug" | "title" | "category" | "excerpt" | "facts" | "cover" | "order"
+>;

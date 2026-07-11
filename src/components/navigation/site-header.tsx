@@ -13,7 +13,7 @@ export function SiteHeader() {
         Ana içeriğe geç
       </a>
       <header
-        className="fixed top-0 z-[var(--z-header)] w-full border-b border-white/15 bg-[rgba(23,20,17,.72)] text-[var(--color-paper)] backdrop-blur-xl"
+        className="fixed top-0 z-[var(--z-header)] w-full border-b border-white/15 bg-[rgba(14,18,19,.78)] text-[var(--color-paper)] backdrop-blur-xl"
         data-cursor-theme="dark"
         data-testid="site-header"
       >

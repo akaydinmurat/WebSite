@@ -31,7 +31,7 @@ export function TextReveal({
         },
       );
     },
-    { scope: root, dependencies: [reducedMotion] },
+    { scope: root, dependencies: [reducedMotion], revertOnUpdate: true },
   );
 
   return (

@@ -31,7 +31,7 @@ export function StaggerGroup({
         },
       );
     },
-    { scope: root, dependencies: [reducedMotion] },
+    { scope: root, dependencies: [reducedMotion], revertOnUpdate: true },
   );
 
   return (

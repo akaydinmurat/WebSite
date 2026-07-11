@@ -35,7 +35,7 @@ export function ParallaxMedia({
         },
       );
     },
-    { scope: root, dependencies: [reducedMotion] },
+    { scope: root, dependencies: [reducedMotion], revertOnUpdate: true },
   );
 
   return (

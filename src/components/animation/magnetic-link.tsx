@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
 
 import { useFinePointer } from "@/hooks/use-pointer-capability";
@@ -20,6 +20,13 @@ export function MagneticLink({
   const linkRef = useRef<HTMLAnchorElement>(null);
   const finePointer = useFinePointer();
   const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const element = linkRef.current;
+    return () => {
+      if (element) gsap.killTweensOf(element);
+    };
+  }, []);
 
   const handlePointerMove = (event: React.PointerEvent<HTMLAnchorElement>) => {
     const element = linkRef.current;

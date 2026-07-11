@@ -62,11 +62,11 @@ export const siteConfig = {
       actionLabel: "Hizmetleri incele",
     },
     packages: {
-      eyebrow: "Tasarım Paketleri",
-      title: "İhtiyacınıza göre seçebileceğiniz net başlangıç kapsamları.",
+      eyebrow: "Hizmet Dosyaları",
+      title: "İhtiyaca göre tanımlanmış profesyonel kapsamlar.",
       description:
-        "Tek bir duvardan bütün bir konuta uzanan paketler; 2D, 3D ve danışmanlık ihtiyaçlarına göre ayrışır.",
-      actionLabel: "Paketleri karşılaştır",
+        "Tek bir duvardan konut ve ticari mekânlara uzanan hizmetler; ölçek, kapsam ve doğrulanmış sunum biçimleriyle ayrışır.",
+      actionLabel: "Tüm kapsamları incele",
     },
     about: {
       eyebrow: "Göknur Uygur Akaydın",

@@ -1,9 +1,4 @@
-export type { DesignPackage } from "./design-package";
-export type {
-  PackageDeliveryTime,
-  PackageRevisionPolicy,
-  PackageStartingPrice,
-} from "./design-package";
+export type { DesignPackage, PresentationFormat } from "./design-package";
 export type { InternalHref, NavigationConfig, NavigationItem } from "./navigation";
 export type {
   Project,
@@ -11,6 +6,7 @@ export type {
   ProjectCategoryId,
   ProjectFact,
   ProjectMaterial,
+  ProjectSummary,
   ProjectVisual,
   ProjectVisualLayout,
   ProjectVisualVariant,

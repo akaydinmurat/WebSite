@@ -24,14 +24,21 @@ export function ProjectVisual({
   projectSlug,
   className,
   eager = false,
+  decorative = false,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1200px",
+  showArchiveLabel = true,
 }: {
   visual: ProjectVisualType;
   projectSlug?: string;
   className?: string;
   eager?: boolean;
+  decorative?: boolean;
+  sizes?: string;
+  showArchiveLabel?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
+  const pointRef = useRef({ x: 0, y: 0 });
   const finePointer = useFinePointer();
   const reducedMotion = useReducedMotion();
   const imageSrc =
@@ -51,20 +58,29 @@ export function ProjectVisual({
   } as CSSProperties;
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!finePointer || reducedMotion || frameRef.current !== null) return;
-    const { clientX, clientY, currentTarget } = event;
+    if (!finePointer || reducedMotion) return;
 
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointRef.current = {
+      x: (event.clientX - rect.left) / rect.width - 0.5,
+      y: (event.clientY - rect.top) / rect.height - 0.5,
+    };
+
+    if (frameRef.current !== null) return;
     frameRef.current = requestAnimationFrame(() => {
       frameRef.current = null;
-      const rect = currentTarget.getBoundingClientRect();
-      const x = (clientX - rect.left) / rect.width - 0.5;
-      const y = (clientY - rect.top) / rect.height - 0.5;
-      rootRef.current?.style.setProperty("--parallax-x", `${x * 10}px`);
-      rootRef.current?.style.setProperty("--parallax-y", `${y * 10}px`);
+      rootRef.current?.style.setProperty("--parallax-x", `${pointRef.current.x * 10}px`);
+      rootRef.current?.style.setProperty("--parallax-y", `${pointRef.current.y * 10}px`);
     });
   };
 
   const reset = () => {
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+
+    pointRef.current = { x: 0, y: 0 };
     rootRef.current?.style.setProperty("--parallax-x", "0px");
     rootRef.current?.style.setProperty("--parallax-y", "0px");
   };
@@ -76,20 +92,25 @@ export function ProjectVisual({
       style={style}
       onPointerMove={handlePointerMove}
       onPointerLeave={reset}
+      aria-hidden={decorative || undefined}
     >
-      <Image
-        src={imageSrc}
-        alt={visual.alt}
-        fill
-        preload={eager}
-        unoptimized
-        sizes="(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1200px"
-        className="project-visual-image object-cover opacity-75 mix-blend-luminosity transition-[transform,opacity] duration-700 ease-out group-hover:opacity-90 motion-safe:translate-x-[var(--parallax-x,0px)] motion-safe:translate-y-[var(--parallax-y,0px)]"
-      />
-      <div className="absolute inset-0 z-[1] bg-[linear-gradient(115deg,rgba(23,22,20,.2),transparent_48%,rgba(238,213,177,.15))]" />
-      <span className="absolute right-4 bottom-4 z-[3] border border-white/30 bg-black/15 px-2 py-1 text-[0.58rem] font-semibold tracking-[0.14em] text-white uppercase backdrop-blur-sm">
-        Görsel Aktarılıyor
-      </span>
+      <div className="project-visual-parallax">
+        <div className="project-visual-scale">
+          <Image
+            src={imageSrc}
+            alt={decorative ? "" : visual.alt}
+            fill
+            preload={eager}
+            unoptimized
+            sizes={sizes}
+            className="project-visual-image object-cover opacity-80 mix-blend-luminosity"
+          />
+        </div>
+      </div>
+      <div className="project-visual-wash" />
+      {showArchiveLabel ? (
+        <span className="project-visual-status">Arşiv görseli hazırlanıyor</span>
+      ) : null}
     </div>
   );
 }

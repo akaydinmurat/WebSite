@@ -117,17 +117,18 @@ export interface Service {
 
 export interface DesignPackage {
   _id: string;
-  deliveryTime: string;
   description?: PortableTextContent;
-  featured: boolean;
+  examples: readonly string[];
+  exclusions: readonly string[];
   image?: ImageWithAlt;
-  includedServices: readonly string[];
   order: number;
-  priceDisclaimer?: string;
-  revisionCount: number;
+  presentationFormats: readonly ("2D" | "3D")[];
+  scopeBasis?: string;
+  scopeItems: readonly string[];
+  scopeLabel: string;
+  showOnHomepage: boolean;
   seo?: Seo;
   slug: string;
-  startingPrice: string;
   summary: string;
   title: string;
 }

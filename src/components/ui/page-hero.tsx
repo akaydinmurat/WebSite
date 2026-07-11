@@ -12,7 +12,7 @@ export function PageHero({
   aside?: ReactNode;
 }) {
   return (
-    <header className="site-shell pt-40 pb-20 md:pt-52 md:pb-28">
+    <header className="site-shell section-frame pt-40 pb-20 md:pt-52 md:pb-28">
       <div className="editorial-grid gap-y-10">
         <p className="eyebrow col-span-12 md:col-span-3">{eyebrow}</p>
         <div className="col-span-12 md:col-span-9 md:col-start-4">
