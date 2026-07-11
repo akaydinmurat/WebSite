@@ -1,0 +1,27 @@
+# Dependencies and framework output
+node_modules/
+.next/
+out/
+.turbo/
+.sanity/
+
+# Test and coverage output
+coverage/
+playwright-report/
+test-results/
+
+# Generated files
+next-env.d.ts
+pnpm-lock.yaml
+src/sanity/types.generated.ts
+
+# Local configuration and secrets
+.env*
+
+# Binary and optimized public assets
+public/images/
+public/models/
+public/textures/
+public/videos/
+*.min.*
+
