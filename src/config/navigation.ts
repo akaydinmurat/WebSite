@@ -13,7 +13,7 @@ export const primaryNavigation = [
     label: "Projeler",
     href: "/projects",
     match: "prefix",
-    description: "Kavramsal proje seçkisini keşfet",
+    description: "Gerçek proje arşivini keşfet",
   },
   {
     id: "services",
@@ -27,14 +27,14 @@ export const primaryNavigation = [
     label: "Paketler",
     href: "/packages",
     match: "prefix",
-    description: "Örnek tasarım kapsamlarını karşılaştır",
+    description: "Tasarım kapsamlarını karşılaştır",
   },
   {
     id: "about",
-    label: "Stüdyo",
+    label: "Hakkımda",
     href: "/about",
     match: "prefix",
-    description: "Yaklaşımı ve süreci tanı",
+    description: "Göknur'un yaklaşımını ve deneyimini tanı",
   },
   {
     id: "contact",

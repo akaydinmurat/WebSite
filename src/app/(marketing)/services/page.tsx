@@ -9,7 +9,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata: Metadata = createMetadata({
   title: "Hizmetler",
   description:
-    "İç mimari, 3D görselleştirme, oda ve mutfak tasarımı ile online tasarım danışmanlığı hizmetleri.",
+    "Mimarlık, konut ve ticari mekân tasarımı, online iç mimari danışmanlık ve içerik üretimi hizmetleri.",
   path: "/services",
 });
 
@@ -18,8 +18,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Hizmetler"
-        title="Tasarım kararlarını, bütünlüklü bir mekân anlatısına dönüştürmek."
-        description="Kapsamı projenizin ölçeğine göre kuruyor; planlama, atmosfer, malzeme ve görsel iletişimi aynı düşünce çizgisinde ele alıyoruz."
+        title="Her ölçeğe, ihtiyacına uygun bir tasarım kapsamı."
+        description="Konut, ofis ve mağaza tasarımından online danışmanlığa; proje kapsamını mekânın gereksinimleri ve beklenen çıktı üzerinden birlikte tanımlıyorum."
       />
       <section className="section-space-sm pt-0">
         <div className="site-shell border-t border-[var(--color-border)]">

@@ -56,7 +56,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           <div className="editorial-grid gap-y-9">
             <div className="col-span-12 md:col-span-9">
               <p className="mb-6 text-[0.65rem] font-semibold tracking-[0.16em] text-white/65 uppercase">
-                Kavramsal Demo Proje
+                Portföy Projesi · {project.facts.find((fact) => fact.id === "year")?.value}
               </p>
               <h1 className="page-title max-w-[12ch]">{project.title}</h1>
             </div>
@@ -70,7 +70,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       <section className="section-space-sm">
         <div className="site-shell">
           <div className="mb-20 border border-[var(--color-border)] p-5 text-sm text-[var(--color-ink-soft)]">
-            <strong className="mr-2 font-semibold text-[var(--color-ink)]">Demo içerik:</strong>
+            <strong className="mr-2 font-semibold text-[var(--color-ink)]">Arşiv notu:</strong>
             {project.demoNotice}
           </div>
           <div className="editorial-grid gap-y-12">
@@ -129,32 +129,34 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      <section className="section-space bg-[var(--color-paper)]">
-        <div className="site-shell editorial-grid gap-y-12">
-          <div className="col-span-12 md:col-span-4">
-            <p className="eyebrow mb-7">Malzeme Paleti</p>
-            <h2 className="section-title max-w-[10ch]">Dokunun sessiz katmanları.</h2>
+      {project.materials.length > 0 ? (
+        <section className="section-space bg-[var(--color-paper)]">
+          <div className="site-shell editorial-grid gap-y-12">
+            <div className="col-span-12 md:col-span-4">
+              <p className="eyebrow mb-7">Malzeme Paleti</p>
+              <h2 className="section-title max-w-[10ch]">Dokunun sessiz katmanları.</h2>
+            </div>
+            <div className="col-span-12 grid gap-8 sm:grid-cols-2 md:col-span-7 md:col-start-6">
+              {project.materials.map((material) => (
+                <article key={material.name} className="border-t border-[var(--color-border)] pt-4">
+                  <span
+                    className="mb-8 block aspect-[5/2] w-full"
+                    style={{ backgroundColor: material.swatch }}
+                    aria-hidden="true"
+                  />
+                  <h3 className="mb-2 font-serif text-2xl">{material.name}</h3>
+                  <p className="text-sm text-[var(--color-muted)]">{material.description}</p>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="col-span-12 grid gap-8 sm:grid-cols-2 md:col-span-7 md:col-start-6">
-            {project.materials.map((material) => (
-              <article key={material.name} className="border-t border-[var(--color-border)] pt-4">
-                <span
-                  className="mb-8 block aspect-[5/2] w-full"
-                  style={{ backgroundColor: material.swatch }}
-                  aria-hidden="true"
-                />
-                <h3 className="mb-2 font-serif text-2xl">{material.name}</h3>
-                <p className="text-sm text-[var(--color-muted)]">{material.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       {relatedProject ? (
         <section className="section-space">
           <div className="site-shell">
-            <p className="eyebrow mb-10">Sonraki Demo Proje</p>
+            <p className="eyebrow mb-10">Sonraki Proje</p>
             <Link
               href={`/projects/${relatedProject.slug}`}
               className="project-link group editorial-grid items-end gap-y-8"

@@ -51,7 +51,7 @@ export default function StudioPage() {
             textTransform: "uppercase",
           }}
         >
-          Murat Akaydın Studio
+          Göknur Uygur Akaydın
         </p>
         <h1
           id="studio-setup-title"

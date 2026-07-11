@@ -14,7 +14,11 @@ export function FeaturedProjects() {
   const projects = fallbackProjects.filter((project) => project.featured).slice(0, 3);
 
   return (
-    <section id="featured-projects" className="section-space scroll-mt-24">
+    <section
+      id="featured-projects"
+      className="section-space scroll-mt-24 bg-[var(--color-canvas)]"
+      data-cursor-theme="light"
+    >
       <div className="site-shell">
         <SectionHeading
           eyebrow={copy.eyebrow}
@@ -60,7 +64,7 @@ export function FeaturedProjects() {
               >
                 <div className="mb-5 flex justify-between text-[0.64rem] font-semibold tracking-[0.13em] text-[var(--color-muted)] uppercase">
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                  <span>Demo Seçki</span>
+                  <span>Portföy Arşivi</span>
                 </div>
                 <h3 className="card-title mb-5">{project.title}</h3>
                 <p className="mb-7 text-[var(--color-ink-soft)]">{project.excerpt}</p>

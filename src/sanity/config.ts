@@ -11,7 +11,7 @@ import { structure } from "./structure";
 export function createStudioConfig({ projectId, dataset, apiVersion }: SanityPublicEnv) {
   return defineConfig({
     name: "default",
-    title: "Murat Akaydın Studio",
+    title: "Göknur Uygur Akaydın",
     basePath: "/studio",
     projectId,
     dataset,

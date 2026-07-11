@@ -17,28 +17,28 @@ describe("filterProjects", () => {
   });
 
   it("keeps only the selected category and sorts the filtered projects", () => {
-    const laterLivingRoomProject = {
+    const laterKitchenProject = {
       ...fallbackProjects[0],
-      slug: "later-living-room-test-fixture",
-      title: "Later Living Room Test Fixture",
-      order: 6,
+      slug: "later-kitchen-test-fixture",
+      title: "Later Kitchen Test Fixture",
+      order: 12,
     } satisfies Project;
-    const projects = [laterLivingRoomProject, fallbackProjects[1], fallbackProjects[0]];
+    const projects = [laterKitchenProject, fallbackProjects[1], fallbackProjects[0]];
 
-    const result = filterProjects(projects, "living-room");
+    const result = filterProjects(projects, "kitchen");
 
     expect(result.map((project) => project.slug)).toEqual([
-      "sessiz-esik",
-      "later-living-room-test-fixture",
+      "bm-evi-mutfak",
+      "later-kitchen-test-fixture",
     ]);
     expect(projects.map((project) => project.slug)).toEqual([
-      "later-living-room-test-fixture",
-      "katmanli-isik",
-      "sessiz-esik",
+      "later-kitchen-test-fixture",
+      "es-evi-banyo",
+      "bm-evi-mutfak",
     ]);
   });
 
   it("returns an empty list when the selected category has no projects", () => {
-    expect(filterProjects([fallbackProjects[0]], "bedroom")).toEqual([]);
+    expect(filterProjects([fallbackProjects[0]], "commercial")).toEqual([]);
   });
 });

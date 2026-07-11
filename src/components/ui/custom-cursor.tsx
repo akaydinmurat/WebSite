@@ -16,37 +16,60 @@ export function CustomCursor() {
   useEffect(() => {
     if (!finePointer || reducedMotion) return;
 
+    const root = document.documentElement;
+    root.setAttribute("data-cursor", "enhanced");
+
     const update = () => {
       frameRef.current = null;
       cursorRef.current?.style.setProperty(
         "transform",
         `translate3d(${pointRef.current.x}px, ${pointRef.current.y}px, 0) translate(-50%, -50%)`,
       );
-      cursorRef.current?.style.setProperty("opacity", "1");
+      cursorRef.current?.setAttribute("data-visible", "true");
     };
 
-    const handlePointerMove = (event: PointerEvent) => {
+    const hide = () => cursorRef.current?.setAttribute("data-visible", "false");
+
+    const handlePointerMove = (event: MouseEvent) => {
       pointRef.current = { x: event.clientX, y: event.clientY };
       if (frameRef.current === null) frameRef.current = requestAnimationFrame(update);
     };
 
     const handlePointerOver = (event: PointerEvent) => {
-      const target =
-        event.target instanceof Element
-          ? event.target.closest<HTMLElement>("[data-cursor-label], a, button")
-          : null;
+      const element = event.target instanceof Element ? event.target : null;
+      const target = element?.closest<HTMLElement>("[data-cursor-label], a, button");
+      const theme = element?.closest<HTMLElement>("[data-cursor-theme]")?.dataset.cursorTheme;
       const label = target?.dataset.cursorLabel ?? "";
-      cursorRef.current?.toggleAttribute("data-active", Boolean(target));
-      cursorRef.current?.toggleAttribute("data-label", Boolean(label));
+
+      cursorRef.current?.setAttribute("data-active", target ? "true" : "false");
+      cursorRef.current?.setAttribute("data-label", label ? "true" : "false");
+      cursorRef.current?.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
       if (labelRef.current) labelRef.current.textContent = label;
     };
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    const handlePointerDown = () => cursorRef.current?.setAttribute("data-pressed", "true");
+    const handlePointerUp = () => cursorRef.current?.setAttribute("data-pressed", "false");
+    const handleVisibility = () => {
+      if (document.hidden) hide();
+    };
+
+    window.addEventListener("mousemove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    window.addEventListener("pointerup", handlePointerUp, { passive: true });
+    window.addEventListener("blur", hide);
     document.addEventListener("pointerover", handlePointerOver, { passive: true });
+    document.documentElement.addEventListener("pointerleave", hide);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
+      root.removeAttribute("data-cursor");
+      window.removeEventListener("mousemove", handlePointerMove);
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("blur", hide);
       document.removeEventListener("pointerover", handlePointerOver);
+      document.documentElement.removeEventListener("pointerleave", hide);
+      document.removeEventListener("visibilitychange", handleVisibility);
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
     };
   }, [finePointer, reducedMotion]);
@@ -56,14 +79,16 @@ export function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="pointer-events-none fixed top-0 left-0 z-[var(--z-cursor)] grid size-3 place-items-center rounded-full border border-white/50 bg-[var(--color-accent)] text-[var(--color-paper)] shadow-lg transition-[width,height,background-color] duration-300 ease-out data-[active]:size-10 data-[label]:h-20 data-[label]:w-20"
-      style={{ opacity: 0, transform: "translate3d(-100px, -100px, 0)" }}
+      className="custom-cursor pointer-events-none fixed top-0 left-0 z-[var(--z-cursor)] grid place-items-center"
+      data-active="false"
+      data-label="false"
+      data-theme="light"
+      data-visible="false"
       aria-hidden="true"
     >
-      <span
-        ref={labelRef}
-        className="max-w-16 text-center text-[0.55rem] leading-tight font-semibold tracking-[0.08em] uppercase"
-      />
+      <span className="custom-cursor-ring" />
+      <span className="custom-cursor-dot" />
+      <span ref={labelRef} className="custom-cursor-label" />
     </div>
   );
 }

@@ -2,130 +2,104 @@ import type { Service } from "@/types";
 
 export const fallbackServices = [
   {
-    slug: "interior-architecture",
-    title: "İç Mimari",
-    eyebrow: "01 · Mekânın bütünü",
+    slug: "architecture-interior-design",
+    title: "Mimarlık ve İç Mekân Tasarımı",
+    eyebrow: "01 · Bütüncül projelendirme",
     summary:
-      "İhtiyaç programından yerleşime, malzeme kararlarından uygulama diline uzanan bütüncül tasarım yaklaşımı.",
+      "Mekânın ihtiyaçlarını, estetik kararlarını ve işlevsel gereksinimlerini ortak bir tasarım fikrinde buluşturan proje desteği.",
     description:
-      "Mekânın nasıl görüneceğinden önce nasıl kullanılacağını anlamaya odaklanırız. Dolaşım, oran, depolama, ışık ve malzeme kararlarını tek bir tasarım fikri çevresinde geliştiririz.",
+      "Mevcut veya yeni bir mekânı; kullanıcı alışkanlıkları, dolaşım, yerleşim ve görsel bütünlük üzerinden ele alıyorum. Kapsam, projenin ölçeği ve ihtiyaçları doğrultusunda birlikte belirlenir.",
     deliverables: [
-      "İhtiyaç ve kullanım senaryosu analizi",
-      "Konsept ve mekânsal yön önerisi",
-      "Yerleşim ve dolaşım kararları",
-      "Malzeme, renk ve aydınlatma yaklaşımı",
-      "Kapsama göre teknik çizim ve görsel sunum",
+      "İhtiyaç ve mevcut durum değerlendirmesi",
+      "Mekânsal kurgu ve yerleşim yaklaşımı",
+      "Renk, malzeme ve tasarım dili",
+      "Kapsama göre 2D ve 3D sunumlar",
     ],
     suitableFor:
-      "Yeni bir mekânı bütüncül biçimde ele almak veya mevcut mekânını yeniden kurgulamak isteyenler için.",
+      "Yeni bir mekân tasarlamak veya mevcut mekânını daha işlevsel ve özgün bir düzende yenilemek isteyenler için.",
     visualVariant: "plan",
     order: 1,
-    inquiryLabel: "İç mimari projesini konuşalım",
+    inquiryLabel: "Projenizi paylaşın",
   },
   {
-    slug: "3d-visualization",
-    title: "3D Görselleştirme",
-    eyebrow: "02 · Fikrin atmosferi",
+    slug: "residential-design",
+    title: "Konut Tasarımı",
+    eyebrow: "02 · Yaşam alanları",
     summary:
-      "Henüz uygulanmamış tasarım kararlarını ışık, malzeme ve kamera diliyle okunabilir bir görsel anlatıya dönüştürme.",
+      "Tek bir odadan konutun bütününe uzanan, kişisel yaşam alışkanlıklarını merkeze alan iç mekân tasarımı.",
     description:
-      "Mimari fikrin yalnızca biçimini değil, mekândaki hissini de görünür kılan sahneler üretiriz. Görsel dil; tasarımın amacı, hedef kitlesi ve sunum bağlamına göre şekillenir.",
+      "Konut projelerinde estetik kararları gündelik kullanım, depolama ve dolaşım ihtiyaçlarıyla birlikte değerlendiriyorum. Amaç, yalnızca iyi görünen değil, içinde yaşamaktan mutluluk duyulan mekânlar üretmek.",
     deliverables: [
-      "Görsel brief ve referans yönü",
-      "Model veya sahne değerlendirmesi",
-      "Malzeme ve ışık kurgusu",
-      "Kamera açıları ve kompozisyon",
-      "Kapsama göre yüksek çözünürlüklü görseller",
-    ],
-    suitableFor:
-      "Tasarımını uygulama, sunum veya iletişim öncesinde güçlü bir atmosferle anlatmak isteyenler için.",
-    visualVariant: "perspective",
-    order: 2,
-    inquiryLabel: "Görselleştirme kapsamını paylaş",
-  },
-  {
-    slug: "room-design",
-    title: "Oda Tasarımı",
-    eyebrow: "03 · Tek hacim, net odak",
-    summary:
-      "Salon, yatak odası, çalışma odası veya benzeri tek bir hacmi kullanım alışkanlıkları çevresinde yeniden düşünme.",
-    description:
-      "Sınırlı bir alanda doğru öncelikleri belirleyerek yerleşim, depolama, mobilya, renk ve aydınlatma kararlarını birlikte ele alırız. Amaç, tek bir odada tamamlanmış ve kişiye ait bir bütünlük kurmaktır.",
-    deliverables: [
-      "Oda ihtiyaç analizi",
+      "Kullanıcı ihtiyaçlarının analizi",
       "Mobilya ve dolaşım yerleşimi",
-      "Renk, doku ve malzeme yönü",
-      "Aydınlatma ve ürün yaklaşımı",
-      "Kapsama göre 3D görsel sunum",
+      "Renk, malzeme ve aydınlatma yaklaşımı",
+      "Kapsama göre 2D ve 3D sunumlar",
     ],
     suitableFor:
-      "Belirli bir odayı kontrollü bir kapsamla yenilemek veya sıfırdan kurmak isteyenler için.",
+      "Oda, mutfak, banyo veya bütün bir konut için profesyonel tasarım desteği arayanlar için.",
     visualVariant: "room",
+    order: 2,
+    inquiryLabel: "Konut projesini konuşalım",
+  },
+  {
+    slug: "commercial-design",
+    title: "Ofis ve Ticari Mekân Tasarımı",
+    eyebrow: "03 · Marka ve kullanım",
+    summary:
+      "Ofis, mağaza ve ticari mekânlarda kullanıcı deneyimi ile marka karakterini bir araya getiren tasarım yaklaşımı.",
+    description:
+      "Ticari mekânın işleyişini, hedef kitlesini ve temsil ettiği kimliği birlikte değerlendiriyorum. Kapsam ve sunum içeriği mekânın metrekaresine ve operasyonel ihtiyaçlarına göre şekillenir.",
+    deliverables: [
+      "İşlev ve kullanıcı akışı değerlendirmesi",
+      "Konsept ve mekânsal kimlik yaklaşımı",
+      "Yerleşim, malzeme ve aydınlatma kararları",
+      "Kapsama göre 2D ve 3D sunumlar",
+    ],
+    suitableFor:
+      "Ofis, mağaza, kafe veya benzeri ticari alanını özgün ve işlevsel bir kimlikle tasarlamak isteyenler için.",
+    visualVariant: "perspective",
     order: 3,
-    inquiryLabel: "Oda tasarımına başla",
+    inquiryLabel: "Ticari proje kapsamını paylaşın",
   },
   {
-    slug: "kitchen-design",
-    title: "Mutfak Tasarımı",
-    eyebrow: "04 · İşlevin ritmi",
+    slug: "online-interior-consulting",
+    title: "Online İç Mimari Danışmanlık",
+    eyebrow: "04 · Uzaktan tasarım desteği",
     summary:
-      "Hazırlık, pişirme, depolama ve paylaşım hareketlerini ergonomik ve sakin bir mekânsal düzende buluşturma.",
+      "Mekânla ilgili renk, ürün, aksesuar ve tasarım kararlarını çevrim içi görüşmelerle netleştiren odaklı destek.",
     description:
-      "Mutfağı sabit dolapların toplamı olarak değil, gün içindeki hareketleri taşıyan bir sistem olarak ele alırız. Yerleşim, saklama, yüzey, aydınlatma ve cihaz ilişkilerini aynı kurgu içinde değerlendiririz.",
+      "Online danışmanlık; esinlenme panosu, renk danışmanlığı, ürün ve aksesuar seçimleri gibi belirli kararların profesyonel bir çerçevede ele alınmasını sağlar.",
     deliverables: [
-      "Kullanım ve depolama ihtiyaç analizi",
-      "Yerleşim ve çalışma üçgeni önerisi",
-      "Dolap modülü ve yüzey yaklaşımı",
-      "Tezgâh, armatür ve aydınlatma yönü",
-      "Kapsama göre çizim ve 3D görseller",
-    ],
-    suitableFor:
-      "Yeni mutfak planlayan veya mevcut mutfağının işlevini ve görünümünü birlikte yenilemek isteyenler için.",
-    visualVariant: "kitchen",
-    order: 4,
-    inquiryLabel: "Mutfak projesini konuşalım",
-  },
-  {
-    slug: "online-design-consulting",
-    title: "Online Tasarım Danışmanlığı",
-    eyebrow: "05 · Uzaktan, odaklı destek",
-    summary:
-      "Belirli tasarım kararlarını netleştirmek için çevrim içi görüşme ve ihtiyaca göre hazırlanan yönlendirme desteği.",
-    description:
-      "Mekânla ilgili soruları önceden toplar, görüşmeyi karar alınması gereken başlıklara odaklarız. Danışmanlık; tam proje hizmetinin yerine geçmez, tanımlı bir konuda bağımsız bir yön sunar.",
-    deliverables: [
-      "Görüşme öncesi brief değerlendirmesi",
+      "Görüşme öncesi ihtiyaç değerlendirmesi",
       "Çevrim içi tasarım görüşmesi",
-      "Yerleşim, renk veya ürün kararlarına yön",
-      "Görüşme sonrası kısa karar özeti",
-      "Gerekirse sonraki kapsam için öneri",
+      "Esinlenme ve renk yönü",
+      "Ürün ve aksesuar seçim önerileri",
     ],
     suitableFor:
-      "Uygulama öncesinde belirli kararlarını doğrulamak veya tasarım yönünü netleştirmek isteyenler için.",
+      "Tam proje hizmeti yerine belirli tasarım kararlarında profesyonel yönlendirme isteyenler için.",
     visualVariant: "remote",
-    order: 5,
-    inquiryLabel: "Danışmanlık konusu paylaş",
+    order: 4,
+    inquiryLabel: "Danışmanlık talebi oluşturun",
   },
   {
-    slug: "material-furniture-selection",
-    title: "Malzeme ve Mobilya Seçimi",
-    eyebrow: "06 · Dokunsal bütünlük",
+    slug: "interior-content-production",
+    title: "İç Mimari İçerik Üretimi",
+    eyebrow: "05 · Dijital anlatı",
     summary:
-      "Yüzey, renk, sabit eleman, mobilya ve aydınlatma seçimlerini tutarlı bir mekân dili içinde bir araya getirme.",
+      "İç mimari odağındaki ürün, proje ve fikirleri sosyal medya platformlarına uygun bir anlatıya dönüştüren içerik desteği.",
     description:
-      "Tekil ürünlerden oluşan bir liste yerine, parçaların ölçek, ton, doku ve kullanım açısından birbirleriyle nasıl ilişki kurduğuna bakarız. Seçimler bütçe ve erişilebilirlik bilgisi netleştikçe uyarlanır.",
+      "Mimarlık deneyimini dijital içerik üretimiyle bir araya getiriyor; iş birliği yapılacak konu, ürün veya proje için platforma ve hedef kitleye uygun bir kapsam oluşturuyorum.",
     deliverables: [
-      "Malzeme ve renk paleti yönü",
-      "Mobilya ölçeği ve stil çerçevesi",
-      "Aydınlatma ve aksesuar yaklaşımı",
-      "Kapsama göre ürün seçki listesi",
-      "Alternatif seçim ilkeleri",
+      "İçerik veya iş birliği brief'i",
+      "İç mimari odaklı anlatı yönü",
+      "Platforma uygun içerik kapsamı",
+      "Yayın öncesi içerik değerlendirmesi",
     ],
     suitableFor:
-      "Mekânındaki parçaları değiştirmeden önce tutarlı bir seçim çerçevesi oluşturmak isteyenler için.",
-    visualVariant: "materials",
-    order: 6,
-    inquiryLabel: "Seçim desteğini konuşalım",
+      "Ürününü veya projesini iç mimari perspektifiyle anlatmak isteyen marka ve yaratıcı ekipler için.",
+    visualVariant: "content",
+    order: 5,
+    inquiryLabel: "İş birliği kapsamını paylaşın",
   },
 ] as const satisfies readonly Service[];
 

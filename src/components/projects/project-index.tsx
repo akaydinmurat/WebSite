@@ -66,7 +66,7 @@ export function ProjectIndex({
             >
               <div className="mb-5 flex justify-between text-[0.64rem] font-semibold tracking-[0.14em] text-[var(--color-muted)] uppercase">
                 <span>{String(project.order).padStart(2, "0")}</span>
-                <span>Kavramsal Demo</span>
+                <span>Portföy Arşivi</span>
               </div>
               <h2 className="card-title mb-5">{project.title}</h2>
               <p className="mb-7 text-[var(--color-ink-soft)]">{project.excerpt}</p>

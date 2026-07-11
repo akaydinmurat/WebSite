@@ -15,7 +15,7 @@ async function fillValidForm() {
   await user.type(screen.getByRole("textbox", { name: /e-posta/i }), "ayse@example.com");
   await user.selectOptions(
     screen.getByRole("combobox", { name: /proje türü/i }),
-    "interior-architecture",
+    "architecture-interior-design",
   );
   await user.type(screen.getByRole("textbox", { name: /yaklaşık alan/i }), "120");
   await user.selectOptions(screen.getByRole("combobox", { name: /bütçe aralığı/i }), "500k-1m");

@@ -7,8 +7,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata({
   title: "Projeler",
-  description:
-    "İç mimari ve 3D görselleştirme sunum biçimini gösteren kavramsal demo proje seçkisi.",
+  description: "Göknur Uygur Akaydın'ın konut ve ticari mekân proje arşivi.",
   path: "/projects",
 });
 
@@ -17,12 +16,12 @@ export default function ProjectsPage() {
     <>
       <PageHero
         eyebrow="Proje Seçkisi"
-        title="Her mekân, kendine ait bir ritim arar."
-        description="Bu seçki, gerçek içerikler eklenene kadar sitenin editoryal proje deneyimini göstermek için hazırlanmış kavramsal demo çalışmalardan oluşur."
+        title="Her mekân, kendi yaşam biçiminden doğar."
+        description="Bu seçki mevcut sitede yayımlanan gerçek proje adlarını, yıllarını ve konumlarını yeni portföy yapısında bir araya getirir."
         aside={
           <p className="max-w-xs text-sm text-[var(--color-muted)]">
-            Tüm görseller ve proje bilgileri demo niteliğindedir; uygulanmış bir mekânı temsil
-            etmez.
+            Yüksek çözünürlüklü gerçek proje görselleri henüz aktarılmadığı için soyut yer tutucular
+            kullanılmaktadır.
           </p>
         }
       />

@@ -106,7 +106,7 @@ export function MobileNavigation({ contactAction, items, siteName }: MobileNavig
         aria-expanded={isOpen}
         aria-haspopup="dialog"
         aria-label="Menüyü aç"
-        className="group flex min-h-11 min-w-11 items-center justify-center text-[var(--color-ink)]"
+        className="group flex min-h-11 min-w-11 items-center justify-center text-[var(--color-paper)]"
         onClick={() => setIsOpen(true)}
         type="button"
       >

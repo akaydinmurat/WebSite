@@ -14,11 +14,13 @@ test.describe("core visitor journeys", () => {
     const browserErrors: string[] = [];
 
     page.on("console", (message) => {
-      if (message.type() === "error") browserErrors.push(message.text());
+      if (message.type() === "error" && !message.text().includes("/_next/webpack-hmr")) {
+        browserErrors.push(message.text());
+      }
     });
     page.on("pageerror", (error) => browserErrors.push(error.message));
 
-    for (const path of ["/", "/projects", "/projects/sessiz-esik", "/contact"]) {
+    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/contact"]) {
       await page.goto(path);
       await expect(page.locator("main h1").first()).toBeVisible();
     }
@@ -35,7 +37,7 @@ test.describe("core visitor journeys", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Yaşanacak atmosferler tasarlıyoruz.",
+        name: "Mekânı, yaşamla birlikte tasarlıyorum.",
       }),
     ).toBeVisible();
     await expect(page.getByRole("link", { name: "Ana içeriğe geç" })).toHaveAttribute(
@@ -43,6 +45,12 @@ test.describe("core visitor journeys", () => {
       "#main-content",
     );
     await expect(page.locator("html")).toHaveAttribute("lang", "tr");
+
+    const accessibilityScan = await new AxeBuilder({ page }).analyze();
+    const seriousOrCriticalViolations = accessibilityScan.violations.filter(
+      (violation) => violation.impact === "serious" || violation.impact === "critical",
+    );
+    expect(seriousOrCriticalViolations).toEqual([]);
   });
 
   test("uses the desktop navigation to open the project collection", async ({ page }, testInfo) => {
@@ -57,7 +65,7 @@ test.describe("core visitor journeys", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Her mekân, kendine ait bir ritim arar.",
+        name: "Her mekân, kendi yaşam biçiminden doğar.",
       }),
     ).toBeVisible();
     await expect(
@@ -70,34 +78,52 @@ test.describe("core visitor journeys", () => {
     await page.goto("/projects");
 
     const categoryToolbar = page.getByRole("toolbar", { name: "Proje kategorileri" });
-    const residentialFilter = categoryToolbar.getByRole("button", {
-      name: "Konut",
+    const kitchenFilter = categoryToolbar.getByRole("button", {
+      name: "Mutfak",
       exact: true,
     });
 
-    await expect(page.locator("main article")).toHaveCount(5);
-    await residentialFilter.click();
+    await expect(page.locator("main article")).toHaveCount(8);
+    await kitchenFilter.click();
 
-    await expect(residentialFilter).toHaveAttribute("aria-pressed", "true");
-    await expect(page.locator("main article")).toHaveCount(1);
+    await expect(kitchenFilter).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("main article")).toHaveCount(2);
     await expect(
-      page.getByRole("heading", { level: 2, name: "Yumuşak Ufuk — Demo" }),
+      page.getByRole("heading", { level: 2, name: "B.M. Evi Mutfak Projesi" }),
     ).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Sessiz Eşik — Demo" })).toHaveCount(
-      0,
-    );
-
-    await page.getByRole("link", { name: "Yumuşak Ufuk — Demo projesini incele" }).click();
-
-    await expect(page).toHaveURL(/\/projects\/yumusak-ufuk\/?$/);
     await expect(
-      page.getByRole("heading", { level: 1, name: "Yumuşak Ufuk — Demo" }),
+      page.getByRole("heading", { level: 2, name: "E.S. Evi Banyo Projesi" }),
+    ).toHaveCount(0);
+
+    await page.getByRole("link", { name: "B.M. Evi Mutfak Projesi projesini incele" }).click();
+
+    await expect(page).toHaveURL(/\/projects\/bm-evi-mutfak\/?$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "B.M. Evi Mutfak Projesi" }),
     ).toBeVisible();
-    await expect(page.getByText("Demo içerik:", { exact: true })).toBeVisible();
+    await expect(page.getByText("Arşiv notu:", { exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: /Proje seçkisi/i })).toHaveAttribute(
       "href",
       "/projects",
     );
+  });
+
+  test("responds to a fine pointer and exposes the enhanced cursor", async ({ page }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "chromium");
+    await page.goto("/");
+
+    const heroStage = page.locator(".hero-stage");
+    const customCursor = page.locator(".custom-cursor");
+    await page.mouse.move(40, 40);
+    await page.mouse.move(240, 220, { steps: 4 });
+
+    await expect(customCursor).toHaveAttribute("data-visible", "true");
+    await expect
+      .poll(() => heroStage.evaluate((element) => element.style.getPropertyValue("--pointer-x")))
+      .not.toBe("");
+
+    await page.getByRole("link", { name: "Projeleri keşfet" }).hover();
+    await expect(customCursor).toHaveAttribute("data-active", "true");
   });
 
   test("announces contact form validation errors without serious accessibility violations", async ({
@@ -182,7 +208,7 @@ test.describe("mobile journeys at 360px", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Her mekân, kendine ait bir ritim arar.",
+        name: "Her mekân, kendi yaşam biçiminden doğar.",
       }),
     ).toBeVisible();
   });
@@ -190,7 +216,7 @@ test.describe("mobile journeys at 360px", () => {
   test("keeps key pages within the 360px viewport", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "mobile-chromium");
 
-    for (const path of ["/", "/projects", "/projects/sessiz-esik", "/contact"]) {
+    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/contact"]) {
       await page.goto(path);
       await expect(page.locator("main h1").first()).toBeVisible();
 

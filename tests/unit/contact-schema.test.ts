@@ -5,7 +5,7 @@ const validContactData = {
   name: "Ayşe Yılmaz",
   email: "ayse@example.com",
   phone: "+90 555 111 22 33",
-  projectType: "interior-architecture",
+  projectType: "architecture-interior-design",
   approximateArea: "120",
   budgetRange: "500k-1m",
   message: "Yeni evimizin yaşam alanları için tasarım desteği istiyoruz.",

@@ -16,15 +16,17 @@ export default function robots(): MetadataRoute.Robots {
     };
   }
 
-  const demoProjectPaths = isSanityConfigured()
+  const privateProjectPaths = isSanityConfigured()
     ? []
-    : fallbackProjects.filter((project) => project.isDemo).map(({ slug }) => getProjectPath(slug));
+    : fallbackProjects
+        .filter((project) => project.isDemo || project.seo.noIndex === true)
+        .map(({ slug }) => getProjectPath(slug));
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/studio", ...demoProjectPaths],
+      disallow: ["/api/", "/studio", ...privateProjectPaths],
     },
     host: homeUrl.origin,
     sitemap: getSiteUrl("/sitemap.xml").toString(),

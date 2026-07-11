@@ -17,7 +17,9 @@ async function getPublicProjectSlugs(): Promise<readonly string[]> {
     return getProjectSlugs([]);
   }
 
-  return fallbackProjects.flatMap((project) => (project.isDemo ? [] : [project.slug]));
+  return fallbackProjects.flatMap((project) =>
+    project.isDemo || project.seo.noIndex === true ? [] : [project.slug],
+  );
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

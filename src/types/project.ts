@@ -1,5 +1,11 @@
 export type ProjectCategoryId =
-  "residential" | "living-room" | "kitchen" | "bedroom" | "visualization";
+  | "residential"
+  | "living-room"
+  | "kitchen"
+  | "bathroom"
+  | "bedroom"
+  | "commercial"
+  | "visualization";
 
 export interface ProjectCategory {
   id: ProjectCategoryId;
@@ -35,7 +41,7 @@ export interface ProjectMaterial {
   name: string;
   description: string;
   swatch: `#${string}`;
-  isConceptual: true;
+  isConceptual: boolean;
 }
 
 export interface Project {
@@ -56,11 +62,12 @@ export interface Project {
   relatedProjectSlug: string;
   featured: boolean;
   order: number;
-  isDemo: true;
+  isDemo: boolean;
   demoNotice: string;
   inquiryPrompt: string;
   seo: {
     title: string;
     description: string;
+    noIndex?: boolean;
   };
 }

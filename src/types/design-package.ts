@@ -1,13 +1,13 @@
 export interface PackageRevisionPolicy {
-  rounds: number;
+  rounds: number | null;
   label: string;
-  isIndicative: true;
+  isIndicative: boolean;
   note: string;
 }
 
 export interface PackageDeliveryTime {
   label: string;
-  isIndicative: true;
+  isIndicative: boolean;
   note: string;
 }
 
@@ -15,7 +15,7 @@ export interface PackageStartingPrice {
   amount: null;
   currency: "TRY";
   label: string;
-  isPlaceholder: true;
+  isPlaceholder: boolean;
   note: string;
 }
 
@@ -35,6 +35,6 @@ export interface DesignPackage {
   };
   featured: boolean;
   order: number;
-  isDemo: true;
+  isDemo: boolean;
   demoNotice: string;
 }

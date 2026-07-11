@@ -9,11 +9,14 @@ import type { ProjectVisual as ProjectVisualType } from "@/types";
 import { cn } from "@/lib/utils";
 
 const projectImages: Record<string, string> = {
-  "sessiz-esik": "/images/placeholders/sessiz-esik.svg",
-  "katmanli-isik": "/images/placeholders/katmanli-isik.svg",
-  "yumusak-ufuk": "/images/placeholders/yumusak-ufuk.svg",
-  "golge-odasi": "/images/placeholders/golge-odasi.svg",
-  "mineral-sessizlik": "/images/placeholders/mineral-sessizlik.svg",
+  "bm-evi-mutfak": "/images/placeholders/katmanli-isik.svg",
+  "es-evi-banyo": "/images/placeholders/mineral-sessizlik.svg",
+  "aa-evi-yatak-odasi": "/images/placeholders/golge-odasi.svg",
+  "sf-evi-genc-odasi": "/images/placeholders/yumusak-ufuk.svg",
+  "cd-evi-mutfak": "/images/placeholders/katmanli-isik.svg",
+  "gy-evi-salon": "/images/placeholders/sessiz-esik.svg",
+  "ag-evi-banyo": "/images/placeholders/mineral-sessizlik.svg",
+  "rozzis-chocolate-cafe": "/images/placeholders/yumusak-ufuk.svg",
 };
 
 export function ProjectVisual({
@@ -81,11 +84,11 @@ export function ProjectVisual({
         preload={eager}
         unoptimized
         sizes="(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1200px"
-        className="project-visual-image object-cover opacity-75 mix-blend-luminosity transition-transform duration-700 ease-out group-hover:opacity-90 motion-safe:translate-x-[var(--parallax-x,0px)] motion-safe:translate-y-[var(--parallax-y,0px)]"
+        className="project-visual-image object-cover opacity-75 mix-blend-luminosity transition-[transform,opacity] duration-700 ease-out group-hover:opacity-90 motion-safe:translate-x-[var(--parallax-x,0px)] motion-safe:translate-y-[var(--parallax-y,0px)]"
       />
       <div className="absolute inset-0 z-[1] bg-[linear-gradient(115deg,rgba(23,22,20,.2),transparent_48%,rgba(238,213,177,.15))]" />
       <span className="absolute right-4 bottom-4 z-[3] border border-white/30 bg-black/15 px-2 py-1 text-[0.58rem] font-semibold tracking-[0.14em] text-white uppercase backdrop-blur-sm">
-        Demo Görsel
+        Görsel Aktarılıyor
       </span>
     </div>
   );

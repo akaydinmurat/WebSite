@@ -10,7 +10,10 @@ export function StudioStory() {
   const copy = siteConfig.copy.about;
 
   return (
-    <section className="section-space">
+    <section
+      className="section-space bg-[var(--color-night-soft)] text-[var(--color-paper)]"
+      data-cursor-theme="dark"
+    >
       <div className="site-shell editorial-grid items-center gap-y-12">
         <ImageReveal
           className="architectural-visual fine-noise col-span-12 aspect-[4/5] md:col-span-5 md:aspect-[5/6]"
@@ -26,9 +29,9 @@ export function StudioStory() {
           />
         </ImageReveal>
         <FadeIn className="col-span-12 md:col-span-6 md:col-start-7">
-          <p className="eyebrow mb-8">{copy.eyebrow}</p>
+          <p className="eyebrow mb-8 text-white/60">{copy.eyebrow}</p>
           <h2 className="section-title mb-9 max-w-[12ch]">{copy.title}</h2>
-          <p className="body-large mb-10 max-w-[34rem]">{copy.description}</p>
+          <p className="body-large mb-10 max-w-[34rem] text-white/72">{copy.description}</p>
           <Link href="/about" className="text-link">
             {copy.actionLabel} <ArrowUpRight aria-hidden="true" size={15} />
           </Link>

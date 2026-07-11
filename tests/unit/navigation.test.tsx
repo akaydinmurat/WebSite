@@ -106,7 +106,7 @@ describe("SiteHeader", () => {
     const dialog = screen.getByRole("dialog", { name: "Ana menü" });
     const closeButton = within(dialog).getByRole("button", { name: "Menüyü kapat" });
     const homeLink = within(dialog).getByRole("link", {
-      name: "Murat Akaydın Studio ana sayfa",
+      name: "Göknur Uygur Akaydın ana sayfa",
     });
     const contactLink = within(dialog).getByRole("link", { name: "Bir proje başlat" });
 
@@ -164,6 +164,12 @@ describe("SiteFooter", () => {
       "/",
     );
     expect(screen.getByText(/Tüm hakları saklıdır/i)).toBeInTheDocument();
-    expect(screen.getByText(/İç mimari ve 3D görselleştirme/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Konut, ticari mekân ve online iç mimari danışmanlık/i),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/mimargoknuruygur/",
+    );
   });
 });

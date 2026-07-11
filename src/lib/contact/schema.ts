@@ -1,24 +1,26 @@
 import { z } from "zod";
 
 export const projectTypeValues = [
-  "interior-architecture",
-  "three-dimensional-visualization",
-  "room-design",
-  "kitchen-design",
+  "architecture-interior-design",
+  "residential-design",
+  "commercial-design",
+  "space-design",
+  "product-wall-design",
   "online-consulting",
-  "material-selection",
+  "content-collaboration",
   "other",
 ] as const;
 
 export type ProjectType = (typeof projectTypeValues)[number];
 
 export const projectTypeLabels: Record<ProjectType, string> = {
-  "interior-architecture": "İç mimari",
-  "three-dimensional-visualization": "3D görselleştirme",
-  "room-design": "Oda tasarımı",
-  "kitchen-design": "Mutfak tasarımı",
-  "online-consulting": "Online tasarım danışmanlığı",
-  "material-selection": "Malzeme ve mobilya seçimi",
+  "architecture-interior-design": "Mimarlık ve iç mekân tasarımı",
+  "residential-design": "Konut tasarımı",
+  "commercial-design": "Ofis veya ticari mekân tasarımı",
+  "space-design": "Tek mekân tasarımı",
+  "product-wall-design": "Ürün veya duvar tasarımı",
+  "online-consulting": "Online iç mimari danışmanlık",
+  "content-collaboration": "İçerik üretimi veya marka iş birliği",
   other: "Diğer",
 };
 

@@ -3,68 +3,77 @@ import type { SiteConfig } from "@/types";
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
 export const siteConfig = {
-  name: "Murat Akaydın Studio",
-  shortName: "Murat Akaydın",
-  positioningStatement:
-    "İç mekânları yalnızca tasarlamıyor, yaşanacak atmosferlere dönüştürüyoruz.",
+  name: "Göknur Uygur Akaydın",
+  shortName: "Göknur Uygur",
+  positioningStatement: "Estetik ve işlevi, size ait yaşanabilir mekânlarda buluşturuyorum.",
   description:
-    "İç mimari, mekânsal tasarım ve 3D görselleştirme odağında çalışan bağımsız tasarım stüdyosu.",
+    "Yüksek Mimar Göknur Uygur Akaydın'ın konut, ticari mekân ve online iç mimari danışmanlık pratiği.",
   language: "tr",
   locale: "tr_TR",
   siteUrl: configuredSiteUrl || "http://localhost:3000",
   contact: {
-    email: null,
+    email: "goknuruygur0@gmail.com",
     phone: null,
-    location: "Türkiye",
-    availabilityText: "Yeni proje görüşmeleri için iletişime geçebilirsiniz.",
+    location: "Ankara · Türkiye",
+    availabilityText:
+      "Konut, ticari mekân ve online danışmanlık talepleri için iletişime geçebilirsiniz.",
   },
-  socialLinks: [],
+  socialLinks: [
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/mimargoknuruygur/",
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/g%C3%B6knur-sena-uygur-4289451b2/",
+    },
+  ],
   copy: {
     hero: {
-      eyebrow: "İç mimari · Mekânsal tasarım · Görselleştirme",
-      title: "İç mekânları yalnızca tasarlamıyor, yaşanacak atmosferlere dönüştürüyoruz.",
+      eyebrow: "Yüksek Mimar · İç Mekân Tasarımı · Ankara",
+      title: "Mekânı, yaşamla birlikte tasarlıyorum.",
       description:
-        "Işık, malzeme ve gündelik ritüeller arasında sakin ama karakterli bir bütünlük kuruyoruz.",
+        "Konut ve ticari mekânlarda estetik, işlev ve kullanıcı alışkanlıklarını özgün bir tasarım dili içinde buluşturuyorum.",
       primaryActionLabel: "Projeleri keşfet",
-      secondaryActionLabel: "Bir proje başlat",
+      secondaryActionLabel: "Projenizi anlatın",
       scrollLabel: "Aşağı kaydır",
       visualAlt:
-        "Gerçek bir projeyi temsil etmeyen, ışık ve mimari yüzeylerden oluşan soyut demo kompozisyonu",
+        "Gerçek bir proje renderı olmayan, ışık ve mimari yüzeylerden oluşan etkileşimli soyut kompozisyon",
     },
     featuredProjects: {
-      eyebrow: "Seçili çalışmalar",
-      title: "Mekânın hissini, planın ötesinde ele alan sahneler.",
+      eyebrow: "Seçili Projeler",
+      title: "Farklı yaşamlar için düşünülmüş mekânlar.",
       description:
-        "Aşağıdaki çalışmalar site deneyimini göstermek için hazırlanmış kavramsal demo içeriklerdir; gerçek uygulama veya müşteri projesi değildir.",
-      actionLabel: "Tüm demo projeleri gör",
+        "Mevcut portföyden seçilen gerçek proje kayıtlarıdır. Yeni siteye ait yüksek çözünürlüklü görsel arşivin aktarımı sürmektedir.",
+      actionLabel: "Tüm projeleri gör",
     },
     philosophy: {
       eyebrow: "Yaklaşım",
-      title: "Her karar, mekânın nasıl yaşanacağına cevap verir.",
+      title: "Her proje, kullanıcıyla kurulan açık bir diyalogla başlar.",
       description:
-        "Oran, dolaşım, ışık ve dokuyu tek bir anlatının parçaları olarak ele alıyor; gösterişten çok kalıcı bir denge arıyoruz.",
-      actionLabel: "Stüdyo yaklaşımı",
+        "Kullanıcı isteklerini kendi tasarım yaklaşımımla bir araya getiriyor; estetik ve işlevi yaşanabilir bir bütünlük içinde ele alıyorum.",
+      actionLabel: "Tasarım yaklaşımı",
     },
     services: {
       eyebrow: "Hizmetler",
-      title: "Fikirden görsel anlatıma uzanan bütüncül tasarım desteği.",
+      title: "İhtiyaca göre şekillenen mimari ve iç mekân desteği.",
       description:
-        "İhtiyaca göre tek bir oda, mutfak, bütün bir konut ya da yalnızca görselleştirme kapsamıyla çalışabiliriz.",
+        "Konut, ofis ve mağaza tasarımından online danışmanlığa; proje ölçeğine uygun, açık ve odaklı kapsamlar sunuyorum.",
       actionLabel: "Hizmetleri incele",
     },
     packages: {
-      eyebrow: "Tasarım paketleri",
-      title: "Kapsamı anlaşılır, süreci esnek başlangıç noktaları.",
+      eyebrow: "Tasarım Paketleri",
+      title: "İhtiyacınıza göre seçebileceğiniz net başlangıç kapsamları.",
       description:
-        "Paketler ön görüşmeyi kolaylaştıran geçici örneklerdir. İçerik, takvim ve ücret proje gereksinimlerine göre netleştirilir.",
+        "Tek bir duvardan bütün bir konuta uzanan paketler; 2D, 3D ve danışmanlık ihtiyaçlarına göre ayrışır.",
       actionLabel: "Paketleri karşılaştır",
     },
     about: {
-      eyebrow: "Stüdyo",
-      title: "Sakin, düşünülmüş ve kişiye ait mekânlar için.",
+      eyebrow: "Göknur Uygur Akaydın",
+      title: "Özgün, işlevsel ve yaşanabilir mekânlar için.",
       description:
-        "Murat Akaydın Studio; iç mimari kararları güçlü görsel anlatım ve ölçülü bir tasarım diliyle bir araya getiren bağımsız bir çalışma pratiğidir.",
-      actionLabel: "Stüdyoyu tanı",
+        "Mimarlık ve iç mekân tasarımı deneyimini, kullanıcı ihtiyaçlarıyla kişisel tasarım yaklaşımını buluşturan bağımsız bir pratik içinde sürdürüyorum.",
+      actionLabel: "Göknur'u tanıyın",
     },
     contact: {
       eyebrow: "Yeni bir mekân üzerine konuşalım",
@@ -76,9 +85,10 @@ export const siteConfig = {
         "İletişim altyapısı etkinleştirilene kadar form gönderimleri yalnızca geliştirme ortamında doğrulanır.",
     },
     footer: {
-      statement: "İç mimari ve 3D görselleştirme için bağımsız tasarım stüdyosu.",
+      statement:
+        "Konut, ticari mekân ve online iç mimari danışmanlık için bağımsız mimarlık pratiği.",
       contentNotice:
-        "Sitedeki proje görselleri ve paket bilgileri, gerçek içerikler sağlanana kadar demo niteliğindedir.",
+        "Proje başlıkları mevcut portföyden aktarılmıştır; yer tutucu görseller gerçek proje renderları değildir.",
     },
   },
 } satisfies SiteConfig;

@@ -5,7 +5,7 @@ const validRequestBody = {
   name: "Ayşe Yılmaz",
   email: "ayse@example.com",
   phone: "",
-  projectType: "room-design",
+  projectType: "space-design",
   approximateArea: "35",
   budgetRange: "250k-500k",
   message: "Çalışma odamız için işlevsel ve sakin bir tasarım istiyoruz.",

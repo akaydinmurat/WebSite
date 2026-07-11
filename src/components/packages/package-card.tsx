@@ -23,7 +23,7 @@ export function PackageCard({
     >
       <div className="mb-10 flex justify-between text-[0.62rem] font-semibold tracking-[0.15em] text-current/60 uppercase">
         <span>{String(index + 1).padStart(2, "0")}</span>
-        <span>{designPackage.featured ? "Öne Çıkan Demo" : "Demo Paket"}</span>
+        <span>{designPackage.featured ? "Öne Çıkan" : "Tasarım Kapsamı"}</span>
       </div>
       <h3 className="card-title mb-5">{designPackage.title}</h3>
       <p className="mb-8 text-current/72">{designPackage.summary}</p>
@@ -52,7 +52,7 @@ export function PackageCard({
       <div className="mt-7 flex items-end justify-between gap-5">
         <div>
           <span className="block text-[0.58rem] font-semibold tracking-[0.12em] text-current/55 uppercase">
-            Başlangıç fiyatı
+            Ücret
           </span>
           <strong className="font-serif text-xl font-normal">
             {designPackage.startingPrice.label}

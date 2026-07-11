@@ -7,7 +7,10 @@ export function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--color-border-light)] bg-[var(--color-night)] text-[var(--color-paper)]">
+    <footer
+      className="border-t border-[var(--color-border-light)] bg-[var(--color-night)] text-[var(--color-paper)]"
+      data-cursor-theme="dark"
+    >
       <div className="site-shell">
         <div className="grid gap-14 py-[clamp(4.5rem,9vw,9rem)] md:grid-cols-12 md:gap-8">
           <div className="md:col-span-7 lg:col-span-8">
@@ -45,7 +48,7 @@ export function SiteFooter() {
 
             <div>
               <h2 className="text-[0.66rem] font-semibold tracking-[0.16em] text-[var(--color-paper)]/50 uppercase">
-                Stüdyo
+                İletişim
               </h2>
               <p className="mt-6 text-sm leading-relaxed text-[var(--color-paper)]/75">
                 {siteConfig.copy.footer.statement}
@@ -53,14 +56,38 @@ export function SiteFooter() {
               <p className="mt-5 text-sm text-[var(--color-paper)]/55">
                 {siteConfig.contact.location}
               </p>
+              {siteConfig.contact.email ? (
+                <a
+                  className="mt-5 block text-sm text-[var(--color-paper)]/75 hover:text-[var(--color-paper)]"
+                  href={`mailto:${siteConfig.contact.email}`}
+                >
+                  {siteConfig.contact.email}
+                </a>
+              ) : null}
               <p className="mt-5 text-sm leading-relaxed text-[var(--color-paper)]/55">
                 {siteConfig.contact.availabilityText}
               </p>
+              {siteConfig.socialLinks.length > 0 ? (
+                <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                  {siteConfig.socialLinks.map((socialLink) => (
+                    <li key={socialLink.href}>
+                      <a
+                        className="text-[var(--color-paper)]/72 hover:text-[var(--color-accent-warm)]"
+                        href={socialLink.href}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {socialLink.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           </div>
         </div>
 
-        <div className="grid gap-5 border-t border-[var(--color-border-light)] py-6 text-[0.65rem] leading-relaxed tracking-[0.08em] text-[var(--color-paper)]/45 uppercase md:grid-cols-12">
+        <div className="grid gap-5 border-t border-[var(--color-border-light)] py-6 text-[0.65rem] leading-relaxed tracking-[0.08em] text-[var(--color-paper)]/65 uppercase md:grid-cols-12">
           <p className="md:col-span-4">
             © {currentYear} {siteConfig.name}. Tüm hakları saklıdır.
           </p>

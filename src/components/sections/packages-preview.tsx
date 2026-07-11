@@ -9,9 +9,10 @@ import { fallbackPackages } from "@/content/fallback-packages";
 
 export function PackagesPreview() {
   const copy = siteConfig.copy.packages;
+  const featuredPackages = fallbackPackages.filter((designPackage) => designPackage.featured);
 
   return (
-    <section className="section-space bg-[var(--color-paper)]">
+    <section className="section-space bg-[var(--color-sand)]" data-cursor-theme="light">
       <div className="site-shell">
         <SectionHeading
           eyebrow={copy.eyebrow}
@@ -24,7 +25,7 @@ export function PackagesPreview() {
           }
         />
         <div className="mt-20 grid gap-x-6 gap-y-12 md:grid-cols-3">
-          {fallbackPackages.slice(0, 3).map((designPackage, index) => (
+          {featuredPackages.slice(0, 3).map((designPackage, index) => (
             <FadeIn key={designPackage.slug} delay={index * 0.08}>
               <PackageCard designPackage={designPackage} index={index} />
             </FadeIn>

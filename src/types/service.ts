@@ -6,7 +6,7 @@ export interface Service {
   description: string;
   deliverables: readonly string[];
   suitableFor: string;
-  visualVariant: "plan" | "perspective" | "room" | "kitchen" | "remote" | "materials";
+  visualVariant: "plan" | "perspective" | "room" | "kitchen" | "remote" | "materials" | "content";
   order: number;
   inquiryLabel: string;
 }

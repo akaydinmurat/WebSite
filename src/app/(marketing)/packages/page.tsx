@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata: Metadata = createMetadata({
   title: "Tasarım Paketleri",
   description:
-    "Tek oda, salon, mutfak, komple ev ve 3D görselleştirme için geçici örnek tasarım paketleri.",
+    "Mekân, ürün, duvar, konut, ticari mekân ve online danışmanlık için tasarım paketleri.",
   path: "/packages",
 });
 
@@ -17,22 +17,23 @@ export default function PackagesPage() {
     <>
       <PageHero
         eyebrow="Tasarım Paketleri"
-        title="Süreci anlaşılır bir kapsamla başlatın."
-        description="Aşağıdaki paketler ön görüşmeyi kolaylaştıran geçici örneklerdir. İçerik, teslim takvimi, revizyon ve ücret her proje için yeniden netleştirilir."
+        title="İhtiyacınıza uyan kapsamla başlayın."
+        description="Paketler mevcut hizmet kapsamlarını 2D, 3D ve danışmanlık ihtiyaçlarına göre ayrıştırır. Teslim takvimi, revizyon ve ücret proje görüşmesinde netleştirilir."
         aside={
           <p className="max-w-xs border border-[var(--color-border)] p-4 text-sm text-[var(--color-muted)]">
-            Fiyatlar henüz sağlanmadı; gösterilen tüm fiyat alanları açıkça yer tutucudur.
+            Mevcut sitede doğrulanmış fiyat, süre veya revizyon sayısı bulunmadığı için bu bilgiler
+            üretilmemiştir.
           </p>
         }
       />
-      <section className="section-space-sm pt-0">
+      <section className="section-space-sm bg-[var(--color-sand)] pt-20">
         <div className="site-shell grid gap-x-6 gap-y-16 md:grid-cols-2 xl:grid-cols-3">
           {fallbackPackages.map((designPackage, index) => (
             <PackageCard key={designPackage.slug} designPackage={designPackage} index={index} />
           ))}
         </div>
         <div className="site-shell mt-16 border-t border-[var(--color-border)] pt-6 text-sm text-[var(--color-muted)]">
-          Paket bilgileri demo niteliğindedir. Nihai kapsam ve teklif, proje görüşmesinin ardından
+          Nihai kapsam, teslim takvimi, revizyon akışı ve teklif proje görüşmesinin ardından
           hazırlanır.
         </div>
       </section>

@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata: Metadata = createMetadata({
   title: "İletişim",
   description:
-    "İç mimari, tasarım veya 3D görselleştirme projeniz için Murat Akaydın Studio ile iletişime geçin.",
+    "Mimarlık, iç mekân tasarımı veya online danışmanlık projeniz için Göknur Uygur Akaydın ile iletişime geçin.",
   path: "/contact",
 });
 
@@ -28,6 +28,19 @@ export default function ContactPage() {
                 {siteConfig.contact.availabilityText}
               </p>
               <dl className="space-y-6 text-sm">
+                <div>
+                  <dt className="mb-1 text-[0.61rem] font-semibold tracking-[0.13em] text-[var(--color-muted)] uppercase">
+                    E-posta
+                  </dt>
+                  <dd>
+                    <a
+                      className="text-link normal-case"
+                      href={`mailto:${siteConfig.contact.email}`}
+                    >
+                      {siteConfig.contact.email}
+                    </a>
+                  </dd>
+                </div>
                 <div>
                   <dt className="mb-1 text-[0.61rem] font-semibold tracking-[0.13em] text-[var(--color-muted)] uppercase">
                     Konum

@@ -7,7 +7,10 @@ export function ContactCta() {
   const copy = siteConfig.copy.contact;
 
   return (
-    <section className="relative flex min-h-[82svh] items-end overflow-hidden bg-[var(--color-accent)] py-12 text-[var(--color-paper)] md:py-20">
+    <section
+      className="relative flex min-h-[72svh] items-end overflow-hidden bg-[var(--color-oxblood)] py-12 text-[var(--color-paper)] md:py-20"
+      data-cursor-theme="dark"
+    >
       <div className="pointer-events-none absolute -top-48 -right-40 size-[44rem] rounded-full border border-white/20" />
       <div className="pointer-events-none absolute top-24 right-24 size-44 rounded-full bg-white/8 blur-2xl" />
       <div className="site-shell relative">
@@ -19,7 +22,7 @@ export function ContactCta() {
           <p className="max-w-xl text-lg text-white/76">{copy.description}</p>
           <MagneticLink
             href="/contact"
-            className="grid size-28 shrink-0 place-items-center rounded-full border border-white/55 transition-colors hover:bg-white hover:text-[var(--color-accent)] md:size-36"
+            className="grid size-28 shrink-0 place-items-center rounded-full border border-white/55 transition-colors hover:bg-white hover:text-[var(--color-oxblood)] md:size-36"
           >
             <span className="flex max-w-20 items-center gap-2 text-center text-[0.68rem] font-semibold tracking-[0.11em] uppercase">
               {copy.actionLabel} <ArrowUpRight aria-hidden="true" size={17} />
