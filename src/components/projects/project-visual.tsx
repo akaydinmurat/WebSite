@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 import { useFinePointer } from "@/hooks/use-pointer-capability";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -33,9 +33,18 @@ export function ProjectVisual({
   const reducedMotion = useReducedMotion();
   const imageSrc =
     (projectSlug && projectImages[projectSlug]) || "/images/placeholders/placeholder-plan.svg";
+
+  useEffect(
+    () => () => {
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    },
+    [],
+  );
+
   const style = {
     "--visual-background": visual.background,
     aspectRatio: visual.aspectRatio,
+    position: "relative",
   } as CSSProperties;
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {

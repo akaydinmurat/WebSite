@@ -22,6 +22,7 @@ export function CustomCursor() {
         "transform",
         `translate3d(${pointRef.current.x}px, ${pointRef.current.y}px, 0) translate(-50%, -50%)`,
       );
+      cursorRef.current?.style.setProperty("opacity", "1");
     };
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -56,6 +57,7 @@ export function CustomCursor() {
     <div
       ref={cursorRef}
       className="pointer-events-none fixed top-0 left-0 z-[var(--z-cursor)] grid size-3 place-items-center rounded-full border border-white/50 bg-[var(--color-accent)] text-[var(--color-paper)] shadow-lg transition-[width,height,background-color] duration-300 ease-out data-[active]:size-10 data-[label]:h-20 data-[label]:w-20"
+      style={{ opacity: 0, transform: "translate3d(-100px, -100px, 0)" }}
       aria-hidden="true"
     >
       <span

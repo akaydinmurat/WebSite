@@ -34,7 +34,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const relatedProject = getFallbackProjectBySlug(project.relatedProjectSlug);
 
   return (
-    <main>
+    <>
       <ProjectBreadcrumbJsonLd project={{ slug: project.slug, title: project.title }} />
       <header className="relative min-h-[100svh] bg-[var(--color-night)] text-[var(--color-paper)]">
         <ParallaxMedia className="absolute inset-0">
@@ -185,6 +185,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </Link>
         </div>
       </section>
-    </main>
+    </>
   );
 }

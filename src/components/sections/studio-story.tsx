@@ -12,7 +12,10 @@ export function StudioStory() {
   return (
     <section className="section-space">
       <div className="site-shell editorial-grid items-center gap-y-12">
-        <ImageReveal className="architectural-visual fine-noise col-span-12 aspect-[4/5] md:col-span-5 md:aspect-[5/6]">
+        <ImageReveal
+          className="architectural-visual fine-noise col-span-12 aspect-[4/5] md:col-span-5 md:aspect-[5/6]"
+          style={{ position: "relative" }}
+        >
           <Image
             src="/images/placeholders/placeholder-plan.svg"
             alt="Gerçek bir proje planı olmayan, stüdyo yaklaşımını temsil eden soyut demo plan çizimi"

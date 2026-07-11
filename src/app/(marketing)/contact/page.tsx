@@ -14,7 +14,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function ContactPage() {
   return (
-    <main>
+    <>
       <PageHero
         eyebrow="İletişim"
         title="Projenizin ilk sorusuyla başlayın."
@@ -48,6 +48,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

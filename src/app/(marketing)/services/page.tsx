@@ -15,7 +15,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function ServicesPage() {
   return (
-    <main>
+    <>
       <PageHero
         eyebrow="Hizmetler"
         title="Tasarım kararlarını, bütünlüklü bir mekân anlatısına dönüştürmek."
@@ -64,6 +64,6 @@ export default function ServicesPage() {
           ))}
         </div>
       </section>
-    </main>
+    </>
   );
 }

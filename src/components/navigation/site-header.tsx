@@ -13,7 +13,7 @@ export function SiteHeader() {
         Ana içeriğe geç
       </a>
       <header
-        className="bg-canvas/85 sticky top-0 z-[var(--z-header)] w-full border-b border-[var(--color-border)] backdrop-blur-md"
+        className="fixed top-0 z-[var(--z-header)] w-full border-b border-[var(--color-border)] bg-[rgba(241,237,228,.78)] backdrop-blur-md"
         data-testid="site-header"
       >
         <div className="site-shell flex min-h-[4.75rem] items-center justify-between gap-5">
@@ -36,12 +36,14 @@ export function SiteHeader() {
 
           <div className="ml-auto flex items-center gap-4 xl:gap-6">
             <DesktopNavigation items={navigationConfig.primary} />
-            <Link
-              className="pill-button hidden shrink-0 text-[var(--color-ink)] xl:inline-flex"
-              href={navigationConfig.contactAction.href}
-            >
-              {navigationConfig.contactAction.label}
-            </Link>
+            <div className="hidden xl:block">
+              <Link
+                className="pill-button shrink-0 text-[var(--color-ink)]"
+                href={navigationConfig.contactAction.href}
+              >
+                {navigationConfig.contactAction.label}
+              </Link>
+            </div>
             <MobileNavigation
               contactAction={navigationConfig.contactAction}
               items={navigationConfig.primary}

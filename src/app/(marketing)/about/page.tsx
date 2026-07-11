@@ -22,7 +22,7 @@ const processSteps = [
 
 export default function AboutPage() {
   return (
-    <main>
+    <>
       <PageHero
         eyebrow="Stüdyo"
         title="Sakin, düşünülmüş ve kişiye ait mekânlar için."
@@ -91,6 +91,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

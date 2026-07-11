@@ -14,7 +14,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function PackagesPage() {
   return (
-    <main>
+    <>
       <PageHero
         eyebrow="Tasarım Paketleri"
         title="Süreci anlaşılır bir kapsamla başlatın."
@@ -36,6 +36,6 @@ export default function PackagesPage() {
           hazırlanır.
         </div>
       </section>
-    </main>
+    </>
   );
 }

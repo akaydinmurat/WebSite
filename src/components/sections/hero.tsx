@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { useFinePointer } from "@/hooks/use-pointer-capability";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -26,6 +26,13 @@ export function Hero() {
   const finePointer = useFinePointer();
   const reducedMotion = useReducedMotion();
   const copy = siteConfig.copy.hero;
+
+  useEffect(
+    () => () => {
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    },
+    [],
+  );
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!finePointer || reducedMotion || frameRef.current !== null) return;

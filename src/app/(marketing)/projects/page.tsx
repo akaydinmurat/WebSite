@@ -14,7 +14,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function ProjectsPage() {
   return (
-    <main>
+    <>
       <PageHero
         eyebrow="Proje Seçkisi"
         title="Her mekân, kendine ait bir ritim arar."
@@ -29,6 +29,6 @@ export default function ProjectsPage() {
       <section className="section-space-sm pt-0">
         <ProjectIndex projects={fallbackProjects} categories={projectCategories} />
       </section>
-    </main>
+    </>
   );
 }
