@@ -27,6 +27,7 @@ export function FeaturedProjects() {
       aria-labelledby="featured-projects-title"
       className="featured-projects scroll-mt-24 bg-[var(--color-canvas)]"
       data-cursor-theme="light"
+      data-home-scene="projects"
     >
       <div className="site-shell section-frame pt-[var(--space-section)]">
         <SectionMarker index="01" label="Seçili Projeler" meta={`${projects.length} proje`} />

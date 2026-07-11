@@ -18,7 +18,7 @@ export function PackagesPreview() {
       aria-labelledby="packages-preview-title"
       className="section-space bg-[var(--color-paper)]"
       data-cursor-theme="light"
-      data-layered-section
+      data-home-scene="packages"
     >
       <div className="site-shell section-frame">
         <SectionMarker index="03" label="Tasarım Kapsamları" meta="07 dosya" />

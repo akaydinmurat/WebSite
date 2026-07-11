@@ -30,10 +30,10 @@ export const siteConfig = {
   ],
   copy: {
     hero: {
-      eyebrow: "Yüksek Mimar · İç Mekân Tasarımı · Ankara",
-      title: "Mekânı, yaşamla birlikte tasarlıyorum.",
+      eyebrow: "Yüksek Mimar · Mimarlık · İç Mekân Tasarımı",
+      title: "Mekân, yaşamla anlam kazanır.",
       description:
-        "Konut ve ticari mekânlarda estetik, işlev ve kullanıcı alışkanlıklarını özgün bir tasarım dili içinde buluşturuyorum.",
+        "Konut ve ticari mekânlarda estetik, işlev ve kullanıcı ihtiyaçlarını özgün bir tasarım diliyle bir araya getiriyorum.",
       primaryActionLabel: "Projeleri keşfet",
       secondaryActionLabel: "Projenizi anlatın",
       scrollLabel: "Aşağı kaydır",
@@ -55,10 +55,10 @@ export const siteConfig = {
       actionLabel: "Tasarım yaklaşımı",
     },
     services: {
-      eyebrow: "Hizmetler",
-      title: "İhtiyaca göre şekillenen mimari ve iç mekân desteği.",
+      eyebrow: "Çalışma Alanları",
+      title: "Her ihtiyaca, kendi ölçeğinde bir tasarım yaklaşımı.",
       description:
-        "Konut, ofis ve mağaza tasarımından online danışmanlığa; proje ölçeğine uygun, açık ve odaklı kapsamlar sunuyorum.",
+        "Konut, ofis ve mağaza tasarımından online danışmanlığa uzanan her çalışma; mekânın ihtiyacına, ölçeğine ve hedeflediği hisse göre biçimlenir.",
       actionLabel: "Hizmetleri incele",
     },
     packages: {
@@ -70,9 +70,9 @@ export const siteConfig = {
     },
     about: {
       eyebrow: "Göknur Uygur Akaydın",
-      title: "Özgün, işlevsel ve yaşanabilir mekânlar için.",
+      title: "Mimarlık, iç mekân ve dijital anlatı arasında.",
       description:
-        "Mimarlık ve iç mekân tasarımı deneyimini, kullanıcı ihtiyaçlarıyla kişisel tasarım yaklaşımını buluşturan bağımsız bir pratik içinde sürdürüyorum.",
+        "Mimarlık ve iç mekân tasarımı deneyimimi; kullanıcı ihtiyaçlarını, estetik kararları ve kişisel tasarım yaklaşımımı buluşturan bağımsız bir pratik içinde sürdürüyorum.",
       actionLabel: "Göknur'u tanıyın",
     },
     contact: {

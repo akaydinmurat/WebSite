@@ -8,6 +8,11 @@ function skipUnlessProject(projectName: string, expectedProjectName: string) {
   );
 }
 
+async function dismissHomeIntro(page: import("@playwright/test").Page) {
+  const skipButton = page.getByRole("button", { name: "Girişi atla" });
+  if (await skipButton.isVisible()) await skipButton.click();
+}
+
 test.describe("core visitor journeys", () => {
   test("loads key routes without browser or hydration errors", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
@@ -37,7 +42,7 @@ test.describe("core visitor journeys", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Mekânı, yaşamla birlikte tasarlıyorum.",
+        name: "Mekân, yaşamla anlam kazanır.",
       }),
     ).toBeVisible();
     await expect(page.getByRole("link", { name: "Ana içeriğe geç" })).toHaveAttribute(
@@ -56,9 +61,30 @@ test.describe("core visitor journeys", () => {
     expect(seriousOrCriticalViolations).toEqual([]);
   });
 
+  test("keeps the cinematic intro skippable and restores the page", async ({ page }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "chromium");
+    await page.goto("/");
+
+    const intro = page.locator(".intro-overlay");
+    const homeContent = page.locator("[data-home-content]");
+
+    await expect(page.getByRole("button", { name: "Girişi atla" })).toBeVisible();
+    await expect(intro).toHaveAttribute("data-state", "active");
+    await expect(homeContent).toHaveAttribute("inert", "");
+    await expect(page.locator("footer")).toHaveAttribute("inert", "");
+
+    await page.keyboard.press("Escape");
+
+    await expect(intro).toBeHidden();
+    await expect(homeContent).not.toHaveAttribute("inert", "");
+    await expect(page.locator("footer")).not.toHaveAttribute("inert", "");
+    await expect(page.locator("main#main-content")).toBeFocused();
+  });
+
   test("uses the desktop navigation to open the project collection", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
     await page.goto("/");
+    await dismissHomeIntro(page);
 
     const navigation = page.getByTestId("desktop-navigation");
     await expect(navigation).toBeVisible();
@@ -127,8 +153,9 @@ test.describe("core visitor journeys", () => {
   test("responds to a fine pointer and exposes the enhanced cursor", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
     await page.goto("/");
+    await dismissHomeIntro(page);
 
-    const heroStage = page.locator(".hero-stage");
+    const documentRoot = page.locator("html");
     const customCursor = page.locator(".custom-cursor");
     await expect(customCursor).toHaveAttribute("data-ready", "true");
     await page.mouse.move(40, 40);
@@ -137,8 +164,10 @@ test.describe("core visitor journeys", () => {
     await expect(customCursor).toHaveAttribute("data-visible", "true");
     await expect(page.locator(".project-reel-card").first()).toHaveCSS("position", "sticky");
     await expect
-      .poll(() => heroStage.evaluate((element) => element.style.getPropertyValue("--pointer-x")))
-      .not.toBe("");
+      .poll(() =>
+        documentRoot.evaluate((element) => element.style.getPropertyValue("--pointer-nx")),
+      )
+      .not.toBe("0.0000");
 
     await page.getByRole("link", { name: "Projeleri keşfet" }).hover();
     await expect(customCursor).toHaveAttribute("data-active", "true");
@@ -150,6 +179,29 @@ test.describe("core visitor journeys", () => {
     await firstProjectLink.hover();
     await expect(customCursor).toHaveAttribute("data-kind", "project");
     await expect(customCursor).toHaveAttribute("data-label", "true");
+  });
+
+  test("changes the cinematic service card with the active service scene", async ({
+    page,
+  }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "chromium");
+    await page.goto("/");
+    await dismissHomeIntro(page);
+
+    const serviceCards = page.locator("[data-service-stage-card]");
+    const secondService = page.locator('[data-home-scene="service-residential-design"]');
+
+    await page
+      .locator('[data-home-scene="service-architecture-interior-design"]')
+      .scrollIntoViewIfNeeded();
+    await expect(serviceCards.nth(0)).toHaveAttribute("data-state", "active");
+
+    await secondService.scrollIntoViewIfNeeded();
+    await expect(serviceCards.nth(1)).toHaveAttribute("data-state", "active");
+    await expect(page.locator(".home-experience")).toHaveAttribute(
+      "data-scene",
+      "service-residential-design",
+    );
   });
 
   test("announces contact form validation errors without serious accessibility violations", async ({

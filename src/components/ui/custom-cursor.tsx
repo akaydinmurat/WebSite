@@ -17,10 +17,35 @@ export function CustomCursor() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!finePointer || reducedMotion) return;
-
     const root = document.documentElement;
     const cursor = cursorRef.current;
+
+    const setPointerVariables = ({ x, y }: { x: number; y: number }) => {
+      const viewportWidth = Math.max(window.innerWidth, 1);
+      const viewportHeight = Math.max(window.innerHeight, 1);
+      const normalizedX = Math.min(0.5, Math.max(-0.5, x / viewportWidth - 0.5));
+      const normalizedY = Math.min(0.5, Math.max(-0.5, y / viewportHeight - 0.5));
+
+      root.style.setProperty("--pointer-vx", `${x}px`);
+      root.style.setProperty("--pointer-vy", `${y}px`);
+      root.style.setProperty("--pointer-nx", normalizedX.toFixed(4));
+      root.style.setProperty("--pointer-ny", normalizedY.toFixed(4));
+    };
+
+    const resetPointerVariables = () => {
+      pointRef.current = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      };
+      setPointerVariables(pointRef.current);
+    };
+
+    resetPointerVariables();
+
+    if (!finePointer || reducedMotion) {
+      root.removeAttribute("data-cursor");
+      return resetPointerVariables;
+    }
 
     const reset = () => {
       cursorRef.current?.setAttribute("data-active", "false");
@@ -33,6 +58,7 @@ export function CustomCursor() {
     const update = () => {
       frameRef.current = null;
       root.setAttribute("data-cursor", "enhanced");
+      setPointerVariables(pointRef.current);
       cursorRef.current?.style.setProperty(
         "transform",
         `translate3d(${pointRef.current.x}px, ${pointRef.current.y}px, 0) translate(-50%, -50%)`,
@@ -45,7 +71,11 @@ export function CustomCursor() {
       }
     };
 
-    const hide = () => cursorRef.current?.setAttribute("data-visible", "false");
+    const hide = () => {
+      cursorRef.current?.setAttribute("data-visible", "false");
+      reset();
+      resetPointerVariables();
+    };
 
     const handlePointerMove = (event: PointerEvent) => {
       pointRef.current = { x: event.clientX, y: event.clientY };
@@ -78,6 +108,13 @@ export function CustomCursor() {
     const handleVisibility = () => {
       if (document.hidden) hide();
     };
+    const handleResize = () => {
+      if (cursorRef.current?.dataset.visible === "true") {
+        setPointerVariables(pointRef.current);
+      } else {
+        resetPointerVariables();
+      }
+    };
 
     reset();
     cursor?.setAttribute("data-ready", "true");
@@ -86,8 +123,10 @@ export function CustomCursor() {
     window.addEventListener("pointerup", handlePointerUp, { passive: true });
     window.addEventListener("pointercancel", handlePointerUp, { passive: true });
     window.addEventListener("blur", hide);
+    window.addEventListener("resize", handleResize, { passive: true });
     document.addEventListener("pointerover", handlePointerOver, { passive: true });
     document.addEventListener("visibilitychange", handleVisibility);
+    document.documentElement.addEventListener("pointerleave", hide);
 
     return () => {
       cursor?.setAttribute("data-ready", "false");
@@ -97,9 +136,12 @@ export function CustomCursor() {
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", handlePointerUp);
       window.removeEventListener("blur", hide);
+      window.removeEventListener("resize", handleResize);
       document.removeEventListener("pointerover", handlePointerOver);
       document.removeEventListener("visibilitychange", handleVisibility);
+      document.documentElement.removeEventListener("pointerleave", hide);
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      resetPointerVariables();
     };
   }, [finePointer, pathname, reducedMotion]);
 

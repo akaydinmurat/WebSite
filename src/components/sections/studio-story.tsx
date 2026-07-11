@@ -2,10 +2,10 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { FadeIn } from "@/components/animation/fade-in";
-import { ImageReveal } from "@/components/animation/image-reveal";
 import { SectionMarker } from "@/components/animation/section-divider";
 import { siteConfig } from "@/config/site";
+
+const studioFacts = ["Yüksek Mimar", "Ankara", "Konut · Ticari · Online"] as const;
 
 export function StudioStory() {
   const copy = siteConfig.copy.about;
@@ -14,36 +14,60 @@ export function StudioStory() {
     <section
       id="studio-story"
       aria-labelledby="studio-story-title"
-      className="section-space section-tone-dark bg-[var(--color-slate)] text-[var(--color-paper)]"
+      className="studio-cinema section-tone-dark"
       data-cursor-theme="dark"
-      data-layered-section
+      data-home-scene="about"
     >
-      <div className="site-shell section-frame">
-        <SectionMarker index="04" label="Stüdyo" meta="Ankara" />
-        <div className="editorial-grid mt-14 items-center gap-y-12 md:mt-20">
-          <ImageReveal
-            className="architectural-visual fine-noise col-span-12 aspect-[4/5] md:col-span-5 md:aspect-[5/6]"
-            style={{ position: "relative" }}
-          >
-            <Image
-              src="/images/placeholders/placeholder-plan.svg"
-              alt="Gerçek bir proje planı olmayan, stüdyo yaklaşımını temsil eden soyut demo plan çizimi"
-              fill
-              unoptimized
-              sizes="(max-width: 768px) 100vw, 42vw"
-              className="object-cover opacity-85"
-            />
-          </ImageReveal>
-          <FadeIn className="col-span-12 md:col-span-6 md:col-start-7">
-            <p className="eyebrow mb-8 text-white/60">{copy.eyebrow}</p>
-            <h2 id="studio-story-title" className="section-title mb-9 max-w-[12ch]">
+      <div className="site-shell studio-cinema-shell">
+        <SectionMarker index="05" label="Stüdyo" meta="Ankara" />
+
+        <div className="studio-cinema-grid">
+          <div className="studio-portrait-stage" aria-hidden="true">
+            <div className="studio-portrait-plane studio-portrait-plane-back">
+              <Image
+                src="/images/placeholders/hero-architecture.svg"
+                alt=""
+                fill
+                unoptimized
+                sizes="(max-width: 767px) 100vw, 55vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="studio-portrait-plane studio-portrait-plane-front">
+              <Image
+                src="/images/placeholders/placeholder-plan.svg"
+                alt=""
+                fill
+                unoptimized
+                sizes="(max-width: 767px) 90vw, 38vw"
+                className="object-cover"
+              />
+            </div>
+            <span className="studio-orbit studio-orbit-one" />
+            <span className="studio-orbit studio-orbit-two" />
+            <span className="studio-portrait-caption">Mekân / İnsan / Anlatı</span>
+          </div>
+
+          <div className="studio-story-copy">
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h2 id="studio-story-title" className="section-title mt-7 max-w-[12ch]">
               {copy.title}
             </h2>
-            <p className="body-large mb-10 max-w-[34rem] text-white/72">{copy.description}</p>
-            <Link href="/about" className="text-link">
+            <p className="body-large mt-8 max-w-[36rem]">{copy.description}</p>
+
+            <ul className="studio-facts" aria-label="Çalışma pratiği özeti">
+              {studioFacts.map((fact, index) => (
+                <li key={fact}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{fact}</strong>
+                </li>
+              ))}
+            </ul>
+
+            <Link href="/about" className="text-link mt-9">
               {copy.actionLabel} <ArrowUpRight aria-hidden="true" size={15} />
             </Link>
-          </FadeIn>
+          </div>
         </div>
       </div>
     </section>

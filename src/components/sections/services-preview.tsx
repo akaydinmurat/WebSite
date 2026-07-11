@@ -1,11 +1,17 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-import { FadeIn } from "@/components/animation/fade-in";
 import { SectionMarker } from "@/components/animation/section-divider";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { siteConfig } from "@/config/site";
 import { fallbackServices } from "@/content/fallback-services";
+
+const serviceVisualLabels = [
+  "Plan / Kesit",
+  "Konut / Yaşam",
+  "Marka / Akış",
+  "Uzaktan / Odak",
+  "İçerik / Anlatı",
+] as const;
 
 export function ServicesPreview() {
   const copy = siteConfig.copy.services;
@@ -14,47 +20,89 @@ export function ServicesPreview() {
     <section
       id="services-preview"
       aria-labelledby="services-preview-title"
-      className="section-space section-tone-dark bg-[var(--color-night-soft)] text-[var(--color-paper)]"
+      className="services-cinema section-tone-dark"
       data-cursor-theme="dark"
-      data-layered-section
+      data-home-scene="services"
     >
-      <div className="site-shell section-frame">
+      <div className="site-shell services-cinema-intro">
         <SectionMarker index="02" label="Çalışma Alanları" meta="05 disiplin" />
-        <SectionHeading
-          headingId="services-preview-title"
-          className="mt-14 md:mt-20"
-          eyebrow={copy.eyebrow}
-          title={copy.title}
-          description={copy.description}
-        />
-        <div className="mt-24 border-t border-[var(--color-border)]">
-          {fallbackServices.slice(0, 5).map((service, index) => (
-            <FadeIn key={service.slug} className="border-b border-[var(--color-border)]">
-              <Link
-                href={`/services#${service.slug}`}
-                className="group grid min-h-24 gap-5 py-7 md:grid-cols-[5rem_1fr_1fr_auto] md:items-center"
+        <div className="editorial-grid mt-12 gap-y-8 md:mt-16">
+          <p className="eyebrow col-span-12 md:col-span-3">{copy.eyebrow}</p>
+          <div className="col-span-12 md:col-span-8 md:col-start-5">
+            <h2 id="services-preview-title" className="section-title max-w-[13ch]">
+              {copy.title}
+            </h2>
+            <p className="body-large mt-7 max-w-[40rem]">{copy.description}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="site-shell services-cinema-grid">
+        <div className="service-stage-column" aria-hidden="true">
+          <div className="service-stage-sticky">
+            <div className="service-stage-viewport">
+              <span className="service-stage-axis service-stage-axis-x" />
+              <span className="service-stage-axis service-stage-axis-y" />
+              <span className="service-stage-room" />
+              {fallbackServices.map((service, index) => (
+                <div
+                  key={service.slug}
+                  className="service-stage-card"
+                  data-service-stage-card
+                  data-service-index={index}
+                  data-state={index === 0 ? "active" : "after"}
+                >
+                  <span className="service-stage-number">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="service-stage-label">{serviceVisualLabels[index]}</span>
+                  <strong>{service.title}</strong>
+                  <span className="service-stage-line" />
+                </div>
+              ))}
+              <p className="service-stage-caption">
+                <span>Yaşayan Kesit</span>
+                <span>Kaydırdıkça dönüşen çalışma alanı</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <ol className="service-records">
+          {fallbackServices.map((service, index) => (
+            <li key={service.slug}>
+              <article
+                id={service.slug}
+                className="service-record"
+                data-home-scene={`service-${service.slug}`}
+                data-service-index={index}
               >
-                <span className="text-[0.62rem] font-semibold tracking-[0.16em] text-[var(--color-muted)] uppercase">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-serif text-[clamp(1.55rem,2.5vw,2.7rem)] leading-none tracking-[-0.035em]">
-                  {service.title}
-                </h3>
-                <p className="max-w-md text-sm text-[var(--color-ink-soft)]">{service.summary}</p>
-                <ArrowUpRight
-                  className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                  aria-hidden="true"
-                  size={20}
-                />
-              </Link>
-            </FadeIn>
+                <div className="service-record-head">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span>{service.eyebrow.split("·").at(-1)?.trim()}</span>
+                </div>
+                <h3>{service.title}</h3>
+                <p className="service-record-summary">{service.summary}</p>
+                <ul aria-label={`${service.title} kapsamında öne çıkanlar`}>
+                  {service.deliverables.slice(0, 3).map((deliverable) => (
+                    <li key={deliverable}>{deliverable}</li>
+                  ))}
+                </ul>
+                <Link
+                  href={`/services#${service.slug}`}
+                  className="service-record-action"
+                  data-cursor-kind="action"
+                >
+                  Kapsamı incele <ArrowUpRight aria-hidden="true" size={17} />
+                </Link>
+              </article>
+            </li>
           ))}
-        </div>
-        <div className="mt-10 flex justify-end">
-          <Link href="/services" className="text-link">
-            {copy.actionLabel} <ArrowUpRight aria-hidden="true" size={15} />
-          </Link>
-        </div>
+        </ol>
+      </div>
+
+      <div className="site-shell services-cinema-outro">
+        <Link href="/services" className="text-link">
+          {copy.actionLabel} <ArrowUpRight aria-hidden="true" size={15} />
+        </Link>
       </div>
     </section>
   );

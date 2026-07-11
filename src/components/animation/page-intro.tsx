@@ -1,24 +1,277 @@
+"use client";
+
+import Image from "next/image";
+import { useRef } from "react";
+
+import { siteConfig } from "@/config/site";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { gsap, useGSAP } from "@/lib/animation/gsap";
+
+const introSessionKey = "goknur-home-intro-v3";
+const safetyTimeoutMs = 4_200;
+
 export function PageIntro() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const finishRef = useRef<(restoreFocus?: boolean) => void>(() => undefined);
+  const reducedMotion = useReducedMotion();
+
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+      if (!root) return;
+
+      const hideImmediately = () => {
+        root.setAttribute("aria-hidden", "true");
+        root.setAttribute("data-state", "complete");
+        gsap.set(root, { autoAlpha: 0, display: "none" });
+      };
+
+      const prefersReducedMotion =
+        reducedMotion || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+      let introSeen = false;
+      try {
+        introSeen = window.sessionStorage.getItem(introSessionKey) === "true";
+      } catch {
+        // Storage may be unavailable in privacy-restricted browsing contexts.
+      }
+
+      if (prefersReducedMotion || introSeen) {
+        hideImmediately();
+        finishRef.current = () => undefined;
+        return;
+      }
+
+      const body = document.body;
+      const header = document.querySelector<HTMLElement>('header[data-testid="site-header"]');
+      const skipLink = document.querySelector<HTMLElement>(".skip-link");
+      const footer = document.querySelector<HTMLElement>("footer");
+      const homeContent = document.querySelector<HTMLElement>(
+        "[data-home-content], .home-experience-content",
+      );
+      const inertSnapshots = [skipLink, header, homeContent, footer]
+        .filter((element): element is HTMLElement => element !== null)
+        .map((element) => ({ element, hadInert: element.hasAttribute("inert") }));
+      const previousBodyOverflow = body.style.overflow;
+      const previousIntroState = body.getAttribute("data-intro-open");
+
+      let timeline: gsap.core.Timeline | null = null;
+      let safetyTimeout: number | null = null;
+      let finished = false;
+
+      const restoreEnvironment = () => {
+        inertSnapshots.forEach(({ element, hadInert }) => {
+          if (hadInert) {
+            element.setAttribute("inert", "");
+          } else {
+            element.removeAttribute("inert");
+          }
+        });
+
+        body.style.overflow = previousBodyOverflow;
+        if (previousIntroState === null) {
+          body.removeAttribute("data-intro-open");
+        } else {
+          body.setAttribute("data-intro-open", previousIntroState);
+        }
+      };
+
+      const finish = (restoreFocus = false) => {
+        if (finished) return;
+        finished = true;
+
+        timeline?.kill();
+        if (safetyTimeout !== null) window.clearTimeout(safetyTimeout);
+        document.removeEventListener("keydown", handleKeyDown);
+        hideImmediately();
+        restoreEnvironment();
+
+        if (restoreFocus) {
+          document.querySelector<HTMLElement>("#main-content")?.focus({ preventScroll: true });
+        }
+      };
+
+      function handleKeyDown(event: KeyboardEvent) {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        finish(true);
+      }
+
+      finishRef.current = finish;
+      inertSnapshots.forEach(({ element }) => element.setAttribute("inert", ""));
+      body.style.overflow = "hidden";
+      body.setAttribute("data-intro-open", "true");
+      root.setAttribute("aria-hidden", "false");
+      root.setAttribute("data-state", "active");
+      document.addEventListener("keydown", handleKeyDown);
+      root.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+
+      try {
+        window.sessionStorage.setItem(introSessionKey, "true");
+      } catch {
+        // The intro still works when session storage is unavailable.
+      }
+
+      const image = root.querySelector<HTMLElement>("[data-intro-image]");
+      const horizontalLines = root.querySelectorAll<HTMLElement>("[data-intro-line-x]");
+      const verticalLines = root.querySelectorAll<HTMLElement>("[data-intro-line-y]");
+      const depthFrame = root.querySelector<HTMLElement>("[data-intro-depth-frame]");
+      const mark = root.querySelector<HTMLElement>("[data-intro-mark]");
+      const name = root.querySelector<HTMLElement>("[data-intro-name]");
+      const discipline = root.querySelector<HTMLElement>("[data-intro-discipline]");
+      const statement = root.querySelector<HTMLElement>("[data-intro-statement]");
+      const lockup = root.querySelector<HTMLElement>("[data-intro-lockup]");
+      const leftCurtain = root.querySelector<HTMLElement>('[data-intro-curtain="left"]');
+      const rightCurtain = root.querySelector<HTMLElement>('[data-intro-curtain="right"]');
+
+      gsap.set(root, { autoAlpha: 1, display: "block" });
+      gsap.set(image, { autoAlpha: 0, scale: 1.16 });
+      gsap.set(horizontalLines, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(verticalLines, { scaleY: 0, transformOrigin: "center top" });
+      gsap.set(depthFrame, { autoAlpha: 0, z: -120, rotateY: -8, scale: 0.88 });
+      gsap.set(mark, { autoAlpha: 0, z: -160, rotateY: -12, scale: 0.72 });
+      gsap.set([name, discipline], { autoAlpha: 0, y: 18 });
+      gsap.set(statement, { autoAlpha: 0, clipPath: "inset(0 0 100% 0)", y: 24 });
+
+      timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      timeline
+        .to(image, { autoAlpha: 0.56, scale: 1.04, duration: 2.65, ease: "power2.out" }, 0)
+        .to(horizontalLines, { scaleX: 1, duration: 0.8, stagger: 0.08 }, 0.14)
+        .to(verticalLines, { scaleY: 1, duration: 0.78, stagger: 0.1 }, 0.2)
+        .to(depthFrame, { autoAlpha: 1, z: -20, rotateY: 0, scale: 1, duration: 0.95 }, 0.28)
+        .to(mark, { autoAlpha: 1, z: 0, rotateY: 0, scale: 1, duration: 0.85 }, 0.36)
+        .to(name, { autoAlpha: 1, y: 0, duration: 0.52 }, 0.82)
+        .to(discipline, { autoAlpha: 1, y: 0, duration: 0.5 }, 1.02)
+        .to(statement, { autoAlpha: 1, clipPath: "inset(0 0 0% 0)", y: 0, duration: 0.72 }, 1.24)
+        .to(lockup, { autoAlpha: 0, y: -16, z: 80, duration: 0.46 }, 2.12)
+        .to(leftCurtain, { xPercent: -102, duration: 0.82, ease: "power3.inOut" }, 2.2)
+        .to(rightCurtain, { xPercent: 102, duration: 0.82, ease: "power3.inOut" }, 2.2)
+        .to(
+          root,
+          {
+            autoAlpha: 0,
+            duration: 0.38,
+            ease: "power2.out",
+            onComplete: () => finish(true),
+          },
+          2.84,
+        );
+
+      safetyTimeout = window.setTimeout(() => finish(true), safetyTimeoutMs);
+
+      return () => {
+        timeline?.kill();
+        if (safetyTimeout !== null) window.clearTimeout(safetyTimeout);
+        document.removeEventListener("keydown", handleKeyDown);
+        restoreEnvironment();
+        finishRef.current = () => undefined;
+      };
+    },
+    { scope: rootRef, dependencies: [reducedMotion], revertOnUpdate: true },
+  );
+
   return (
     <div
-      className="intro-overlay pointer-events-none fixed inset-0 z-[var(--z-intro)] overflow-hidden bg-[var(--color-night)] text-[var(--color-paper)]"
+      ref={rootRef}
       aria-hidden="true"
+      aria-label={`${siteConfig.name} site açılışı`}
+      aria-modal="true"
+      className="intro-overlay fixed inset-0 z-[var(--z-intro)] overflow-hidden bg-[var(--color-night)] text-[var(--color-paper)]"
+      data-state="idle"
+      role="dialog"
+      style={{ opacity: 1, perspective: "1200px", visibility: "visible" }}
     >
-      <span className="intro-panel intro-panel-left" />
-      <span className="intro-panel intro-panel-right" />
-      <div className="intro-signature absolute inset-0 grid place-items-center">
-        <div className="text-center">
-          <span className="intro-monogram mx-auto mb-5 grid size-16 place-items-center border border-white/35 font-serif text-2xl italic">
-            GU
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        <div data-intro-image className="absolute inset-[-4%]">
+          <Image
+            alt=""
+            className="object-cover brightness-[0.34] contrast-[1.18] grayscale saturate-[0.7]"
+            fill
+            preload
+            sizes="100vw"
+            src="/images/placeholders/hero-architecture.svg"
+            unoptimized
+          />
+        </div>
+
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,18,19,.94),rgba(14,18,19,.34)_54%,rgba(75,36,52,.58))]" />
+        <span
+          data-intro-line-x
+          className="absolute top-[24%] right-[7%] left-[7%] h-px bg-white/22"
+        />
+        <span
+          data-intro-line-x
+          className="absolute right-[7%] bottom-[20%] left-[7%] h-px bg-white/16"
+        />
+        <span
+          data-intro-line-y
+          className="absolute top-[8%] bottom-[8%] left-[22%] w-px bg-white/18"
+        />
+        <span
+          data-intro-line-y
+          className="absolute top-[8%] right-[18%] bottom-[8%] w-px bg-white/14"
+        />
+        <div
+          data-intro-depth-frame
+          className="absolute top-[13%] right-[12%] bottom-[13%] left-[12%] border border-white/22 bg-white/[0.025] shadow-[0_3rem_8rem_rgba(0,0,0,.28)]"
+        >
+          <span className="absolute top-4 left-4 text-[0.48rem] tracking-[0.2em] text-white/42 uppercase">
+            Eşik / 01
           </span>
-          <span className="block text-[0.62rem] font-semibold tracking-[0.24em] uppercase">
-            Göknur Uygur Akaydın
-          </span>
-          <span className="mt-3 block text-[0.55rem] tracking-[0.2em] text-white/48 uppercase">
-            Mimarlık · İç Mekân
+          <span className="absolute right-4 bottom-4 text-[0.48rem] tracking-[0.2em] text-white/42 uppercase">
+            Ankara · Türkiye
           </span>
         </div>
+
+        <span
+          data-intro-curtain="left"
+          className="absolute inset-y-0 left-0 z-10 w-1/2 bg-[var(--color-night)]"
+        />
+        <span
+          data-intro-curtain="right"
+          className="absolute inset-y-0 right-0 z-10 w-1/2 bg-[var(--color-night)]"
+        />
       </div>
+
+      <div
+        data-intro-lockup
+        className="absolute inset-0 z-20 grid place-items-center px-[var(--space-gutter)] text-center [transform-style:preserve-3d]"
+      >
+        <div>
+          <span
+            data-intro-mark
+            className="mx-auto mb-6 grid size-20 place-items-center border border-white/38 font-serif text-[2rem] italic shadow-[0_1.5rem_4rem_rgba(0,0,0,.24)]"
+          >
+            GU
+          </span>
+          <span
+            data-intro-name
+            className="block text-[0.66rem] font-semibold tracking-[0.24em] uppercase"
+          >
+            {siteConfig.name}
+          </span>
+          <span
+            data-intro-discipline
+            className="mt-3 block text-[0.56rem] tracking-[0.2em] text-white/52 uppercase"
+          >
+            Yüksek Mimar · İç Mekân
+          </span>
+          <p
+            data-intro-statement
+            className="mx-auto mt-9 max-w-[18ch] font-serif text-[clamp(1.45rem,3vw,2.7rem)] leading-[1.02] tracking-[-0.035em] text-white/90"
+          >
+            {siteConfig.copy.hero.title}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        className="absolute top-5 right-[var(--space-gutter)] z-30 flex min-h-11 items-center border-b border-white/40 text-[0.58rem] font-semibold tracking-[0.16em] text-white/70 uppercase transition-colors hover:text-white focus-visible:text-white motion-reduce:transition-none"
+        onClick={() => finishRef.current(true)}
+      >
+        Girişi atla
+      </button>
     </div>
   );
 }

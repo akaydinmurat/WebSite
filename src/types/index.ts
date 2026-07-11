@@ -1,4 +1,17 @@
 export type { DesignPackage, PresentationFormat } from "./design-package";
+export type {
+  GoogleReview,
+  GoogleReviewAuthor,
+  GoogleReviewPlace,
+  GoogleReviewProviderAttribution,
+  GoogleReviewsDisabled,
+  GoogleReviewsEmpty,
+  GoogleReviewsReady,
+  GoogleReviewsResult,
+  GoogleReviewsUnavailable,
+  GoogleReviewsUnconfigured,
+  GoogleReviewVisitDate,
+} from "./google-reviews";
 export type { InternalHref, NavigationConfig, NavigationItem } from "./navigation";
 export type {
   Project,

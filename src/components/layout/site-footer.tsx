@@ -15,7 +15,7 @@ export function SiteFooter() {
         <div className="grid gap-14 py-[clamp(4.5rem,9vw,9rem)] md:grid-cols-12 md:gap-8">
           <div className="md:col-span-7 lg:col-span-8">
             <p className="eyebrow text-[var(--color-paper)]/55">Birlikte tasarlayalım</p>
-            <p className="mt-7 max-w-4xl font-serif text-[clamp(2.5rem,5vw,6.4rem)] leading-[0.98] tracking-[-0.045em] text-balance">
+            <p className="mt-7 max-w-4xl font-serif text-[clamp(2.25rem,4vw,4.9rem)] leading-[0.98] tracking-[-0.045em] text-balance">
               {siteConfig.positioningStatement}
             </p>
             <Link
