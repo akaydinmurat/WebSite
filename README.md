@@ -1,6 +1,6 @@
-# Murat Akaydın Studio
+# Göknur Uygur Akaydın
 
-Murat Akaydın Studio; iç mimari projeleri, hizmetleri ve tasarım paketlerini editoryal bir dille sunmak üzere geliştirilen, Next.js App Router tabanlı premium bir dijital showroom'dur. Mevcut `0.1.0` sürümü gerçek müşteri işi veya kesin fiyat içermeyen, yerel demo içerikle çalışan ilk ürün temelidir.
+Göknur Uygur Akaydın'ın mimarlık, iç mekân tasarımı, danışmanlık ve içerik üretimi çalışmalarını editoryal bir dille sunmak üzere geliştirilen Next.js App Router tabanlı premium dijital showroom'dur. Mevcut `0.1.0` sürümü canlı siteden doğrulanan marka, biyografi, proje kayıtları ve paket kapsamlarını kullanır; gerçek proje görselleri aktarılana kadar yerel soyut yer tutucular gösterir.
 
 Uygulama; erişilebilir navigasyon, filtrelenebilir proje seçkisi, dinamik proje detayları, doğrulanan iletişim formu, ölçülü GSAP/Lenis hareket sistemi, isteğe bağlı WebGL katmanı, SEO çıktıları ve gömülü Sanity Studio altyapısı içerir. Ödeme, kullanıcı hesabı, sipariş takibi, gerçek e-posta teslimi ve CMS'den canlı pazarlama içeriği bu sürümün kapsamında değildir.
 
@@ -8,12 +8,12 @@ Uygulama; erişilebilir navigasyon, filtrelenebilir proje seçkisi, dinamik proj
 
 | Rota               | Amaç                                                           |
 | ------------------ | -------------------------------------------------------------- |
-| `/`                | Ana sayfa ve seçili demo içerikler                             |
-| `/projects`        | Kategori filtreli demo proje seçkisi                           |
-| `/projects/[slug]` | Statik üretilen proje anlatısı, galeri ve malzeme paleti       |
+| `/`                | Etkileşimli ana sayfa ve seçili portföy kayıtları              |
+| `/projects`        | Kategori filtreli gerçek proje arşivi                          |
+| `/projects/[slug]` | Statik üretilen proje arşiv kaydı ve görsel aktarım durumu     |
 | `/services`        | Hizmet kapsamları                                              |
-| `/packages`        | Açıkça örnek olarak işaretlenen tasarım paketleri              |
-| `/about`           | Stüdyo yaklaşımı ve süreç                                      |
+| `/packages`        | Doğrulanmış tasarım paketi kapsamları                          |
+| `/about`           | Göknur Uygur Akaydın'ın yaklaşımı, eğitimi ve deneyimi         |
 | `/contact`         | Erişilebilir proje talep formu                                 |
 | `/api/contact`     | Zod doğrulamalı iletişim API'si                                |
 | `/studio`          | Sanity yapılandırılmışsa gömülü Studio; değilse kurulum ekranı |
@@ -164,17 +164,17 @@ Temel etkinleştirme sırası:
 
 Ayrıntılı kurulum için [SANITY_SETUP.md](./SANITY_SETUP.md) belgesini izleyin.
 
-## Demo içeriği ve gerçek varlıklarla değiştirme
+## Doğrulanmış içerik ve gerçek görsel aktarımı
 
-Mevcut proje, paket, süre, revizyon ve görseller demo olarak işaretlidir. Gerçek yayından önce:
+Proje adları, yılları, konumları, hizmetler ve paket kapsamları mevcut canlı siteden doğrulanmıştır. Fiyat, süre ve revizyon sayısı kaynakta bulunmadığı için üretilmemiştir. Gerçek yayından önce:
 
-1. Marka adı, konumlandırma, iletişim ve bölüm metinlerini `src/config/site.ts` içinde güncelleyin.
+1. Marka, iletişim ve bölüm metinlerindeki son onayı `src/config/site.ts` üzerinden yapın.
 2. Navigasyon değişecekse tek kaynak olan `src/config/navigation.ts` dosyasını düzenleyin.
-3. Proje, hizmet ve paket verilerini sırasıyla `src/content/fallback-projects.ts`, `src/content/fallback-services.ts` ve `src/content/fallback-packages.ts` içinde doğrulanmış bilgilerle değiştirin veya Sanity veri akışını tamamlayın.
+3. Proje anlatıları ile paketlerin operasyonel ayrıntılarını yalnız doğrulanmış yeni bilgiler geldikçe `src/content` altında genişletin veya Sanity veri akışını tamamlayın.
 4. Hero SVG'sini ve `public/images/placeholders` altındaki demo varlıkları lisanslı, yerel AVIF/WebP görsellerle değiştirin.
 5. `src/components/projects/project-visual.tsx` içindeki slug–görsel eşlemesini gerçek dosya yollarına göre güncelleyin; `unoptimized` kullanımını gerçek raster varlıklar için yeniden değerlendirin.
 6. Her içerik görseline bağlama özgü alt metin, doğru boyut/oran ve responsive `sizes` sağlayın.
-7. Demo etiketi, demo açıklaması ve placeholder fiyat notlarını ancak gerçek ve onaylı veriler geldikten sonra kaldırın.
+7. Görsel aktarım notlarını ve proje `noIndex` durumunu yalnız gerçek ve onaylı renderlar yerleştirildikten sonra kaldırın.
 
 İçerik kuralları ve yayın kontrol listesi için [CONTENT_GUIDE.md](./CONTENT_GUIDE.md) belgesine bakın.
 
@@ -249,6 +249,12 @@ git push -u origin feat/premium-interior-showroom
 ### Node veya pnpm sürümü uyuşmuyor
 
 `node --version` çıktısı 24.x, `pnpm --version` çıktısı 11.7.0 olmalıdır. Yeni terminal açın; kullandığınız sürüm yöneticisinde `.node-version`, `.nvmrc` ve `package.json#packageManager` değerlerini kaynak alın. Ardından `pnpm install --frozen-lockfile` çalıştırın.
+
+PowerShell `pnpm` komutunu bulamazsa Corepack üzerinden doğrudan çalıştırın:
+
+```powershell
+corepack.cmd pnpm dev
+```
 
 ### Port 3000 kullanımda
 

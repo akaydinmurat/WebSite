@@ -9,14 +9,14 @@ Bu belge mevcut `0.1.0` kod tabanının sınırlarını ve yeni geliştirmelerde
 - Marka, navigasyon ve site origin'i tek kaynaklardan okunur; bileşenlerde çoğaltılmaz.
 - Sunum, içerik erişimi ve etkileşim yaşam döngüsü ayrı modüllerde tutulur.
 - JavaScript, WebGL veya Sanity olmadan temel içerik ve navigasyon çalışmaya devam eder.
-- Gerçek müşteri verisi gelene kadar demo içerik açıkça demo olarak kalır.
+- Doğrulanmış portföy verisi ile yer tutucu görsel durumu açıkça ayrılır.
 
 ## İstek ve veri akışı
 
 ```text
 Next.js route (Server Component)
   ├─ src/config        → marka, navigasyon, site ayarları
-  ├─ src/content       → bugün kullanılan yerel demo içeriği
+  ├─ src/content       → doğrulanmış yerel fallback içeriği
   ├─ src/lib/seo       → metadata, canonical URL, JSON-LD yardımcıları
   └─ leaf components
        ├─ server       → statik bölüm ve düzen
@@ -37,7 +37,7 @@ src/
     api/contact/       # İletişim POST uç noktası
     studio/            # Opsiyonel gömülü Sanity Studio
     globals.css        # Tokenlar, global primitives ve reduced-motion CSS'i
-    layout.tsx         # Kök metadata ve global istemci yaprakları
+    layout.tsx         # Kök metadata ve ortak HTML kabuğu
     robots.ts          # Ortama göre indeksleme politikası
     sitemap.ts         # Statik ve uygun proje URL'leri
   components/
@@ -52,7 +52,7 @@ src/
     ui/                # Genel görsel primitives
     webgl/             # Dinamik yüklenen istemci WebGL deneyimi
   config/              # Site ve navigasyon için tek kaynak
-  content/             # Yerel demo proje, hizmet ve paket verisi
+  content/             # Yerel proje, hizmet ve paket fallback verisi
   hooks/               # Media query, pointer ve reduced-motion hook'ları
   lib/
     animation/         # GSAP kayıt noktası
@@ -66,7 +66,7 @@ tests/
   unit/                # Vitest ve React Testing Library
   e2e/                 # Playwright kullanıcı akışları
 public/images/placeholders/
-                       # Yerel, açıkça demo olarak işaretlenen SVG varlıklar
+                       # Yerel, açıkça yer tutucu olarak işaretlenen SVG varlıklar
 ```
 
 Yeni klasör veya dosya yalnız somut bir sorumlulukla eklenir; boş gelecek-kullanım yapıları oluşturulmaz.
@@ -89,7 +89,7 @@ Yeni klasör veya dosya yalnız somut bir sorumlulukla eklenir; boş gelecek-kul
 
 ## Server ve Client Component sınırı
 
-`src/app/layout.tsx` ve pazarlama rota dosyaları Server Component'tır. Kök layout, şu client yapraklarını kompoze eder:
+`src/app/layout.tsx`, pazarlama layout'u ve rota dosyaları Server Component'tır. Yalnız pazarlama layout'u şu client yapraklarını kompoze eder; bu katmanlar `/studio` rotasına sızmaz:
 
 - `SmoothScroll`: yalnız fine pointer ve normal motion tercihinde Lenis başlatır.
 - `ScrollProgress`: scroll değerini `requestAnimationFrame` ile DOM transform'una taşır.
@@ -106,7 +106,7 @@ Server'dan client'a yalnız seri hale getirilebilir domain verisi geçirin. Sani
 - `.env.example`: dağıtım başına değişen public değerler ve boş secret isimleri.
 - `next.config.ts`: güvenlik header'ları, `poweredByHeader: false`, Strict Mode ve AVIF/WebP desteği.
 
-`NEXT_PUBLIC_SITE_URL` güvenli bir HTTP(S) origin'e normalize edilir. Yerel, private veya Vercel preview origin'leri indekslenmez; production ve public origin koşulları sağlanmadığında `robots.txt` tüm siteyi kapatır. Yerel demo proje URL'leri sitemap'e alınmaz.
+`NEXT_PUBLIC_SITE_URL` güvenli bir HTTP(S) origin'e normalize edilir. Yerel, private veya Vercel preview origin'leri indekslenmez; production ve public origin koşulları sağlanmadığında `robots.txt` tüm siteyi kapatır. Görsel ve anlatı aktarımı tamamlanmayan proje URL'leri sitemap'e alınmaz.
 
 ## İçerik katmanı
 
@@ -118,7 +118,7 @@ Bugünkü kamusal sayfaların otoritatif kaynağı:
 - `fallback-services.ts`
 - `fallback-packages.ts`
 
-Proje tipleri özellikle demo durumunu zorunlu kılar: `isDemo: true`, placeholder facts, kavramsal malzemeler ve demo bildirimi. Bu yapı, örnek içeriğin yanlışlıkla gerçek proje gibi sunulmasını engeller.
+Proje kayıtları gerçek ad, yıl ve konumu; yer tutucu görsel ve yayın durumundan ayrı taşır. `seo.noIndex`, görsel ve ayrıntılı anlatı aktarımı tamamlanana kadar bu kayıtların arama motorlarına açılmasını engeller.
 
 ### Sanity temeli
 
@@ -178,4 +178,4 @@ Ayrıntılı kurallar için [ANIMATION_GUIDE.md](./ANIMATION_GUIDE.md) belgesini
 - Production iletişim sağlayıcısı ve rate limit yoktur.
 - WebGL hero, gerçek render/texture varlıklarıyla production ölçümünden geçmemiş deneysel bir katmandır.
 - Ödeme, hesap, sipariş, commerce, analytics ve authentication uygulanmamıştır.
-- Mevcut SVG ve proje verileri demo içindir; gerçek portföy olarak yayımlanmamalıdır.
+- Mevcut SVG'ler yer tutucudur; gerçek portföy renderları gibi sunulmamalıdır.

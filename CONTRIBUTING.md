@@ -1,6 +1,6 @@
 # Katkı Rehberi
 
-Bu depo, Murat Akaydın Studio için Next.js App Router tabanlı premium dijital showroom'u içerir. Arayüz metinleri Türkçe; kaynak kodu, tanımlayıcılar, dosya adları, teknik yorumlar ve commit mesajları profesyonel İngilizce olmalıdır. Ayrıntılı uygulama kuralları için `AGENTS.md` dosyasını okuyun.
+Bu depo, Göknur Uygur Akaydın için Next.js App Router tabanlı premium dijital showroom'u içerir. Arayüz metinleri Türkçe; kaynak kodu, tanımlayıcılar, dosya adları, teknik yorumlar ve commit mesajları profesyonel İngilizce olmalıdır. Ayrıntılı uygulama kuralları için `AGENTS.md` dosyasını okuyun.
 
 ## Yerel kurulum
 
@@ -19,7 +19,7 @@ Copy-Item .env.example .env.local
 pnpm dev
 ```
 
-`.env.local` yalnızca yerel makinede tutulmalı; token, parola veya servis kimliği hiçbir zaman commit edilmemeli, terminal çıktısında paylaşılmamalıdır. Sanity değerleri yoksa uygulama yerel demo içeriğiyle çalışmayı sürdürmelidir. WebGL hero varsayılan olarak kapalıdır.
+`.env.local` yalnızca yerel makinede tutulmalı; token, parola veya servis kimliği hiçbir zaman commit edilmemeli, terminal çıktısında paylaşılmamalıdır. Sanity değerleri yoksa uygulama doğrulanmış yerel fallback içeriğiyle çalışmayı sürdürmelidir. WebGL hero varsayılan olarak kapalıdır.
 
 ## Çalışma biçimi
 
@@ -69,4 +69,4 @@ pnpm check
 - Testler davranışı kapsıyor; animasyon karelerine bağlı kırılgan snapshot eklenmedi.
 - Yeni ortam değişkenleri `.env.example` ve ilgili belgelerde yalnız örnek değerlerle açıklandı.
 - Konsol hatası, hydration uyarısı, geçersiz DOM, eksik key, bozuk rota veya focus kaybı yok.
-- Demo içerik açıkça işaretli; sahte müşteri, ödül, metrik, referans ya da gerçekmiş gibi sunulan proje bulunmuyor.
+- Yer tutucu görseller açıkça işaretli; sahte müşteri, ödül, metrik, referans ya da doğrulanmamış proje ayrıntısı bulunmuyor.

@@ -1,6 +1,6 @@
 # İçerik Rehberi
 
-Sitedeki mevcut proje, paket, görsel ve bazı stüdyo anlatıları demo içeriğidir. Gerçek müşteri işi, fiyat, süre, ödül, metrik veya referans izlenimi verilmemelidir.
+Sitedeki marka, biyografi, proje adları/yılları/konumları ve paket kapsamları önceki canlı siteden doğrulanmıştır. Proje görselleri hâlen yer tutucudur; fiyat, süre, revizyon, ödül veya metrik bilgisi kaynakta yoksa üretilmemelidir.
 
 ## Kaynaklar
 
@@ -18,7 +18,7 @@ Sanity yapılandırılmadığında yerel içerik üretim build'ini ve rotaları 
 - Kamusal içerik Türkçe, kısa ve somut olmalıdır.
 - Başlıklarda cümle düzeni kullanın; gereksiz tamamı büyük harften kaçının.
 - Kanıtlanamayan üstünlük, başarı veya teslim sözü kullanmayın.
-- “Demo”, “temsili”, “başlangıç bilgisi” ve “proje kapsamına göre” ifadelerini görünür tutun.
+- “Yer tutucu görsel”, “görsel aktarımı sürüyor” ve “proje kapsamına göre” ifadelerini ilgili alanlarda görünür tutun.
 - Teknik CMS alan adları, slug'lar ve kaynak kod tanımlayıcıları İngilizce kalır.
 
 ## Projeler
@@ -42,7 +42,7 @@ Paket fiyatı, revizyon ve teslim süresi gerçek operasyonel karar verilmeden y
 
 ## Yayın kontrolü
 
-1. Demo etiketi gerçek içerikle birlikte doğru güncellendi mi?
+1. Yer tutucu etiketi gerçek görsel aktarımıyla birlikte doğru güncellendi mi?
 2. Tüm olgular proje sahibi tarafından doğrulandı mı?
 3. Görsel lisansı ve kişisel veri kontrol edildi mi?
 4. Başlık sırası, alt metin ve link metinleri anlamlı mı?
