@@ -5,7 +5,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useId, useRef, useState } from "react";
 
 import type { NavigationItem } from "@/types";
-
 import { isNavigationItemActive } from "./navigation-state";
 
 const focusableSelector = [

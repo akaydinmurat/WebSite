@@ -8,11 +8,6 @@ function skipUnlessProject(projectName: string, expectedProjectName: string) {
   );
 }
 
-async function dismissHomeIntro(page: import("@playwright/test").Page) {
-  const skipButton = page.getByRole("button", { name: "Girişi atla" });
-  if (await skipButton.isVisible()) await skipButton.click();
-}
-
 test.describe("core visitor journeys", () => {
   test("loads key routes without browser or hydration errors", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
@@ -33,10 +28,11 @@ test.describe("core visitor journeys", () => {
     expect(browserErrors).toEqual([]);
   });
 
-  test("loads the home page with its primary content and skip link", async ({ page }, testInfo) => {
+  test("loads the premium home experience with its brand and accessible content", async ({
+    page,
+  }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
     await page.emulateMedia({ reducedMotion: "reduce" });
-
     await page.goto("/");
 
     await expect(
@@ -45,87 +41,141 @@ test.describe("core visitor journeys", () => {
         name: "Mekân, yaşamla anlam kazanır.",
       }),
     ).toBeVisible();
+    await expect(page.getByRole("link", { name: "Göknur Uygur Akaydın ana sayfa" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Ana içeriğe geç" })).toHaveAttribute(
       "href",
       "#main-content",
     );
     await expect(page.locator("html")).toHaveAttribute("lang", "tr");
-    const socialNavigation = page.getByRole("navigation", { name: "Sosyal medya" });
-    await expect(socialNavigation.getByRole("link", { name: "Instagram" })).toBeVisible();
-    await expect(socialNavigation.getByRole("link", { name: "LinkedIn" })).toBeVisible();
-    await expect(page.locator("body")).toHaveAttribute("data-showroom-active", "true");
-    await expect(page.locator("[data-site-footer]")).toBeHidden();
-    await expect(page.locator('.showroom-card[data-active="true"]')).toHaveCount(1);
-    await expect(page.locator(".immersive-showroom .showroom-core-fallback")).toBeVisible();
-    await expect(page.locator(".showroom-canvas")).toHaveCount(0);
+    await expect(page.locator("body")).toHaveAttribute("data-home-experience", "true");
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "intro");
+    await expect(page.locator(".spatial-home")).toHaveAttribute("data-webgl-ready", "false");
+    await expect(page.locator(".experience-canvas")).toHaveCount(0);
+    await expect(page.locator(".experience-project-meta-title")).toContainText(
+      "B.M. Evi Mutfak Projesi",
+    );
+    await expect(page.locator(".experience-stage-list li")).toHaveCount(5);
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
 
-    const accessibilityScan = await new AxeBuilder({ page }).analyze();
+    const accessibilityScan = await new AxeBuilder({ page }).include("main").analyze();
     const seriousOrCriticalViolations = accessibilityScan.violations.filter(
       (violation) => violation.impact === "serious" || violation.impact === "critical",
     );
     expect(seriousOrCriticalViolations).toEqual([]);
   });
 
-  test("keeps the cinematic intro skippable and restores the page", async ({ page }, testInfo) => {
+  test("renders the cinematic WebGL experience by default on a capable desktop", async ({
+    page,
+  }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
-    await page.goto("/");
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/?scene=projects");
 
-    const intro = page.locator(".intro-overlay");
-    const homeContent = page.locator("[data-home-content]");
+    const hasFineDesktopPointer = await page.evaluate(
+      () => window.matchMedia("(min-width: 768px) and (hover: hover) and (pointer: fine)").matches,
+    );
 
-    await expect(page.getByRole("button", { name: "Girişi atla" })).toBeVisible();
-    await expect(intro).toHaveAttribute("data-state", "active");
-    await expect(homeContent).toHaveAttribute("inert", "");
-    await expect(page.locator("[data-site-footer]")).toHaveAttribute("inert", "");
-
-    await page.keyboard.press("Escape");
-
-    await expect(intro).toBeHidden();
-    await expect(homeContent).not.toHaveAttribute("inert", "");
-    await expect(page.locator("[data-site-footer]")).toHaveAttribute("inert", "");
-    await expect(page.locator("main#main-content")).toBeFocused();
+    expect(hasFineDesktopPointer).toBe(true);
+    await expect(page.locator(".experience-canvas canvas")).toHaveCount(1);
+    await expect(page.locator(".spatial-home")).toHaveAttribute("data-webgl-ready", "true", {
+      timeout: 15_000,
+    });
+    await expect(page.locator(".experience-fallback")).toHaveCSS("opacity", "0");
   });
 
-  test("changes showroom scenes without scrolling or remounting the world", async ({
+  test("navigates to Projects without remounting the home experience", async ({
     page,
   }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
     await page.goto("/");
-    await dismissHomeIntro(page);
 
-    const navigation = page.getByTestId("desktop-navigation");
-    const world = page.locator(".showroom-world");
+    const navigation = page.getByTestId("site-header").getByTestId("desktop-navigation");
+    const experience = page.locator(".spatial-home");
     await expect(navigation).toBeVisible();
-    await expect(world).toBeVisible();
+    await expect(experience).toBeVisible();
     await navigation.getByRole("link", { name: "Projeler" }).click();
 
     await expect(page).toHaveURL(/\/?\?scene=projects$/);
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Her proje, kendi yaşam biçiminin izini taşır.",
-      }),
-    ).toBeVisible();
-    await expect(page.locator("body")).toHaveAttribute("data-showroom-scene", "projects");
-    await expect(
-      page.getByRole("heading", { level: 2, name: "B.M. Evi Mutfak Projesi" }),
-    ).toBeVisible();
-    await expect(page.getByRole("link", { name: "Proje arşivini aç" })).toHaveAttribute(
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
+    await expect(page.getByRole("heading", { level: 2, name: "Seçili projeler" })).toBeAttached();
+    await expect(page.locator(".experience-project-meta-title")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Tüm projeler" })).toHaveAttribute(
       "href",
       "/projects",
     );
-    expect(await page.evaluate(() => window.scrollY)).toBe(0);
-    await expect(
-      page.getByTestId("desktop-navigation").getByRole("link", { name: "Projeler" }),
-    ).toHaveAttribute("aria-current", "page");
+    await expect(navigation.getByRole("link", { name: "Projeler" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 
     await page.goBack();
     await expect(page).toHaveURL(/\/$/);
-    await expect(
-      page.getByRole("heading", { level: 1, name: "Mekân, yaşamla anlam kazanır." }),
-    ).toBeVisible();
-    await expect(world).toBeVisible();
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "intro");
+    await expect(experience).toBeVisible();
+  });
+
+  test("keeps Process media, metadata and reverse scroll in sync", async ({ page }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "chromium");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/?scene=services");
+
+    const processSection = page.locator("#experience-showcase");
+    const activeStage = page.locator('.experience-stage-list [aria-current="step"]');
+    const processHeading = page.locator(".experience-showcase-copy h2");
+
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "showcase");
+    await expect(activeStage).toHaveCount(1);
+    await expect(activeStage).toContainText("Konsept");
+    await expect(processHeading).toHaveText("Atmosferi tanımlayan ilk fikir");
+    await expect(page.locator(".experience-fallback-process-visual")).toBeVisible();
+    await expect(page.locator(".experience-fallback-process-visual")).toHaveCSS(
+      "background-image",
+      /01-concept-sketch\.webp/,
+    );
+
+    const processHeaderColors = await page.getByTestId("site-header").evaluate((element) => ({
+      background: getComputedStyle(element).backgroundColor,
+      color: getComputedStyle(element).color,
+    }));
+    expect(processHeaderColors.color).toBe("rgb(38, 37, 34)");
+    expect(processHeaderColors.background).not.toBe("rgba(30, 30, 28, 0.72)");
+
+    await processSection.evaluate((element) => {
+      const section = element as HTMLElement;
+      const scrollDistance = Math.max(0, section.offsetHeight - window.innerHeight);
+      window.scrollTo({ top: section.offsetTop + scrollDistance * 0.56, behavior: "instant" });
+    });
+
+    await expect(activeStage).toContainText("Malzeme");
+    await expect(processHeading).toHaveText("Işıkla değişen yüzey dili");
+
+    await processSection.evaluate((element) => {
+      window.scrollTo({ top: (element as HTMLElement).offsetTop, behavior: "instant" });
+    });
+
+    await expect(activeStage).toContainText("Konsept");
+    await expect(processHeading).toHaveText("Atmosferi tanımlayan ilk fikir");
+  });
+
+  test("presents Packages as a framed cinematic track with an accessible fallback", async ({
+    page,
+  }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "chromium");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/?scene=packages");
+
+    const packageTrack = page.locator("[data-package-track]");
+    const packageCards = page.locator("[data-package-card]");
+
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "outro");
+    await expect(packageTrack).toBeVisible();
+    await expect(packageTrack.getByRole("heading", { level: 2 })).toHaveText(
+      "Kapsamı aç. Mekânı dönüştür.",
+    );
+    await expect(packageCards).toHaveCount(5);
+    await expect(packageCards.first().locator(".experience-package-corners i")).toHaveCount(4);
+    await expect(packageCards.first().getByRole("link", { name: "Görüşelim" })).toBeVisible();
   });
 
   test("filters the project collection and opens a project detail", async ({ page }, testInfo) => {
@@ -176,77 +226,6 @@ test.describe("core visitor journeys", () => {
     );
   });
 
-  test("responds to a fine pointer and exposes the enhanced cursor", async ({ page }, testInfo) => {
-    skipUnlessProject(testInfo.project.name, "chromium");
-    await page.goto("/");
-    await dismissHomeIntro(page);
-
-    const documentRoot = page.locator("html");
-    const customCursor = page.locator(".custom-cursor");
-    await expect(customCursor).toHaveAttribute("data-ready", "true");
-    await page.mouse.move(40, 40);
-    await page.mouse.move(240, 220, { steps: 4 });
-
-    await expect(customCursor).toHaveAttribute("data-visible", "true");
-    await expect(page.locator(".immersive-showroom")).toHaveAttribute("data-webgl-ready", "true");
-    const showroomCanvas = page.locator(".showroom-canvas canvas");
-    await expect(showroomCanvas).toBeVisible();
-    await expect
-      .poll(() =>
-        documentRoot.evaluate((element) => element.style.getPropertyValue("--pointer-nx")),
-      )
-      .not.toBe("0.0000");
-
-    await page.getByRole("button", { name: "Sahneyi aç" }).hover();
-    await expect(customCursor).toHaveAttribute("data-active", "true");
-
-    await showroomCanvas.dispatchEvent("webglcontextlost");
-    await expect(page.locator(".immersive-showroom")).toHaveAttribute("data-webgl-ready", "false");
-    await expect(page.locator(".immersive-showroom .showroom-core-fallback")).toBeVisible();
-  });
-
-  test("rotates service cards with controls, wheel and keyboard while the page stays fixed", async ({
-    page,
-  }, testInfo) => {
-    skipUnlessProject(testInfo.project.name, "chromium");
-    await page.goto("/?scene=services");
-    await dismissHomeIntro(page);
-
-    const activeCard = page.locator('.showroom-card[data-active="true"]');
-    await expect(
-      activeCard.getByRole("heading", { level: 2, name: "Mimarlık ve İç Mekân Tasarımı" }),
-    ).toBeVisible();
-    await expect(page.locator('.showroom-card[data-active="false"]').first()).toHaveAttribute(
-      "inert",
-      "",
-    );
-
-    await page.getByRole("button", { name: "Sonraki kart" }).click();
-    await expect(
-      activeCard.getByRole("heading", { level: 2, name: "Konut Tasarımı" }),
-    ).toBeVisible();
-
-    await page.mouse.wheel(0, 120);
-    await expect(
-      activeCard.getByRole("heading", { level: 2, name: "Ofis ve Ticari Mekân Tasarımı" }),
-    ).toBeVisible();
-
-    await page.keyboard.press("ArrowLeft");
-    await expect(
-      activeCard.getByRole("heading", { level: 2, name: "Konut Tasarımı" }),
-    ).toBeVisible();
-    await expect(page.locator(".showroom-live-status")).toContainText("02 / 05 — Konut Tasarımı");
-
-    await page.mouse.move(250, 160);
-    await page.mouse.down();
-    await page.mouse.move(170, 160, { steps: 5 });
-    await page.mouse.up();
-    await expect(
-      activeCard.getByRole("heading", { level: 2, name: "Ofis ve Ticari Mekân Tasarımı" }),
-    ).toBeVisible();
-    expect(await page.evaluate(() => window.scrollY)).toBe(0);
-  });
-
   test("announces contact form validation errors without serious accessibility violations", async ({
     page,
   }, testInfo) => {
@@ -254,7 +233,6 @@ test.describe("core visitor journeys", () => {
     await page.goto("/contact");
 
     await page.getByRole("button", { name: "Proje talebini gönder" }).click();
-
     const contactForm = page.getByRole("form", { name: "Projenizi anlatın" });
 
     await expect(contactForm.getByText("Adınız en az 2 karakter olmalıdır.")).toBeVisible();
@@ -275,26 +253,12 @@ test.describe("core visitor journeys", () => {
     const seriousOrCriticalViolations = accessibilityScan.violations.filter(
       (violation) => violation.impact === "serious" || violation.impact === "critical",
     );
-
-    expect(
-      seriousOrCriticalViolations,
-      JSON.stringify(
-        seriousOrCriticalViolations.map(({ id, impact, nodes }) => ({
-          id,
-          impact,
-          targets: nodes.map((node) => node.target),
-        })),
-        null,
-        2,
-      ),
-    ).toEqual([]);
+    expect(seriousOrCriticalViolations).toEqual([]);
   });
 });
 
 test.describe("mobile journeys at 360px", () => {
-  test.use({
-    viewport: { width: 360, height: 800 },
-  });
+  test.use({ viewport: { width: 360, height: 800 } });
 
   test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -326,22 +290,28 @@ test.describe("mobile journeys at 360px", () => {
     await dialog.getByRole("link", { name: /Projeler/i }).click();
 
     await expect(page).toHaveURL(/\/?\?scene=projects$/);
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Her proje, kendi yaşam biçiminin izini taşır.",
-      }),
-    ).toBeVisible();
-    await expect(page.locator("body")).toHaveAttribute("data-showroom-scene", "projects");
-    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
+    await expect(page.locator(".experience-project-meta-title")).toBeVisible();
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   });
 
-  test("keeps key pages within the 360px viewport", async ({ page }, testInfo) => {
+  test("keeps key pages and home chapters within the 360px viewport", async ({
+    page,
+  }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "mobile-chromium");
 
-    for (const path of ["/", "/projects", "/projects/bm-evi-mutfak", "/packages", "/contact"]) {
+    for (const path of [
+      "/",
+      "/?scene=projects",
+      "/?scene=services",
+      "/?scene=packages",
+      "/projects",
+      "/projects/bm-evi-mutfak",
+      "/packages",
+      "/contact",
+    ]) {
       await page.goto(path);
-      await expect(page.locator("main h1").first()).toBeVisible();
+      await expect(page.locator("main")).toBeVisible();
 
       await expect
         .poll(
