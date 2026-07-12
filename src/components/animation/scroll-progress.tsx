@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
@@ -8,9 +9,10 @@ export function ScrollProgress() {
   const barRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || pathname === "/") return;
 
     const update = () => {
       frameRef.current = null;
@@ -32,7 +34,9 @@ export function ScrollProgress() {
       window.removeEventListener("resize", requestUpdate);
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
     };
-  }, [reducedMotion]);
+  }, [pathname, reducedMotion]);
+
+  if (pathname === "/") return null;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-[80] h-px" aria-hidden="true">

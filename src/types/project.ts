@@ -21,7 +21,8 @@ export type ProjectVisualVariant =
 
 export interface ProjectVisual {
   id: string;
-  kind: "css-placeholder";
+  kind: "css-placeholder" | "image";
+  src?: `/images/${string}`;
   layout: ProjectVisualLayout;
   variant: ProjectVisualVariant;
   aspectRatio: `${number}/${number}`;

@@ -1,28 +1,46 @@
-import { HomeExperience } from "@/components/animation/home-experience";
 import { PageIntro } from "@/components/animation/page-intro";
-import { FeaturedProjects } from "@/components/projects/featured-projects";
-import { ContactCta } from "@/components/sections/contact-cta";
-import { GoogleReviews } from "@/components/sections/google-reviews";
-import { Hero } from "@/components/sections/hero";
-import { PackagesPreview } from "@/components/sections/packages-preview";
-import { ServicesPreview } from "@/components/sections/services-preview";
-import { StudioStory } from "@/components/sections/studio-story";
+import { ImmersiveShowroom } from "@/components/showroom/immersive-showroom";
+import type { ShowroomScene } from "@/components/showroom/showroom-canvas";
+import { fallbackPackages } from "@/content/fallback-packages";
+import { fallbackProjects } from "@/content/fallback-projects";
+import { fallbackServices } from "@/content/fallback-services";
+import { getGoogleReviews } from "@/lib/google-places/fetch-reviews";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
+const validScenes = new Set<ShowroomScene>([
+  "home",
+  "projects",
+  "services",
+  "packages",
+  "reviews",
+  "about",
+  "contact",
+]);
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ scene?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const requestedScene = Array.isArray(params.scene) ? params.scene[0] : params.scene;
+  const initialScene =
+    requestedScene && validScenes.has(requestedScene as ShowroomScene)
+      ? (requestedScene as ShowroomScene)
+      : "home";
+  const reviews = await getGoogleReviews();
+
   return (
     <>
       <PageIntro />
-      <HomeExperience>
-        <Hero />
-        <FeaturedProjects />
-        <ServicesPreview />
-        <PackagesPreview />
-        <GoogleReviews />
-        <StudioStory />
-        <ContactCta />
-      </HomeExperience>
+      <ImmersiveShowroom
+        initialScene={initialScene}
+        packages={fallbackPackages}
+        projects={fallbackProjects}
+        reviews={reviews}
+        services={fallbackServices}
+      />
     </>
   );
 }

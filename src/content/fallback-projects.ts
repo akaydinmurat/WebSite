@@ -14,11 +14,12 @@ interface PortfolioRecord {
   category: ProjectCategoryId;
   year: string;
   location: string;
+  imageSrc: `/images/${string}`;
   featured?: boolean;
 }
 
 const portfolioNotice =
-  "Bu kayıt mevcut portföyde yayımlanan gerçek proje adı, yılı ve konumundan taşınmıştır. Yeni siteye ait yüksek çözünürlüklü görseller henüz aktarılmadığı için soyut yer tutucu görseller kullanılmaktadır.";
+  "Bu kayıt ve kapak görseli mevcut portföyden aktarılmıştır. Ayrıntılı proje hikâyesi ile ek uygulama görsellerinin arşiv aktarımı sürmektedir.";
 
 export const projectCategories = [
   {
@@ -56,6 +57,7 @@ const portfolioRecords = [
     category: "kitchen",
     year: "2024",
     location: "Ümitköy, Ankara",
+    imageSrc: "/images/projects/archive/bm-evi-mutfak.jpg",
     featured: true,
   },
   {
@@ -65,6 +67,7 @@ const portfolioRecords = [
     category: "bathroom",
     year: "2024",
     location: "İncek, Ankara",
+    imageSrc: "/images/projects/archive/es-evi-banyo.jpg",
   },
   {
     slug: "aa-evi-yatak-odasi",
@@ -73,6 +76,7 @@ const portfolioRecords = [
     category: "bedroom",
     year: "2024",
     location: "Beytepe, Ankara",
+    imageSrc: "/images/projects/archive/aa-evi-yatak-odasi.jpg",
     featured: true,
   },
   {
@@ -82,6 +86,7 @@ const portfolioRecords = [
     category: "bedroom",
     year: "2024",
     location: "Ankara",
+    imageSrc: "/images/projects/archive/sf-evi-genc-odasi.jpg",
   },
   {
     slug: "cd-evi-mutfak",
@@ -90,6 +95,7 @@ const portfolioRecords = [
     category: "kitchen",
     year: "2024",
     location: "Ankara",
+    imageSrc: "/images/projects/archive/cd-evi-mutfak.jpg",
   },
   {
     slug: "gy-evi-salon",
@@ -98,6 +104,7 @@ const portfolioRecords = [
     category: "living-room",
     year: "2023",
     location: "Ankara",
+    imageSrc: "/images/projects/archive/gy-evi-salon.jpg",
   },
   {
     slug: "ag-evi-banyo",
@@ -106,6 +113,7 @@ const portfolioRecords = [
     category: "bathroom",
     year: "2023",
     location: "Sivas",
+    imageSrc: "/images/projects/archive/ag-evi-banyo.jpg",
   },
   {
     slug: "rozzis-chocolate-cafe",
@@ -114,6 +122,7 @@ const portfolioRecords = [
     category: "commercial",
     year: "2024",
     location: "İstanbul",
+    imageSrc: "/images/projects/archive/rozzis-chocolate-cafe.jpg",
     featured: true,
   },
 ] as const satisfies readonly PortfolioRecord[];
@@ -157,8 +166,8 @@ function createFacts(record: PortfolioRecord): readonly ProjectFact[] {
     {
       id: "status",
       label: "Arşiv Durumu",
-      value: "Görsel aktarımı sürüyor",
-      isPlaceholder: true,
+      value: "Kapak görseli aktarıldı",
+      isPlaceholder: false,
     },
   ];
 }
@@ -166,13 +175,14 @@ function createFacts(record: PortfolioRecord): readonly ProjectFact[] {
 function createVisual(record: PortfolioRecord, index: number, suffix: string): ProjectVisual {
   return {
     id: `${record.slug}-${suffix}`,
-    kind: "css-placeholder",
+    kind: "image",
+    src: record.imageSrc,
     layout: suffix === "cover" ? "cover" : "landscape",
     variant: visualVariants[index % visualVariants.length],
     aspectRatio: suffix === "cover" ? "16/10" : "3/2",
     background: visualBackgrounds[index % visualBackgrounds.length],
-    alt: `${record.title} gerçek proje görseli yerine kullanılan soyut mimari yer tutucu kompozisyon`,
-    caption: "Gerçek proje görseli henüz yeni arşive aktarılmadı.",
+    alt: `${record.title} için hazırlanmış iç mekân tasarım görseli`,
+    caption: "Mevcut proje arşivinden aktarılan tasarım görseli.",
   };
 }
 

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useId, useRef, useState } from "react";
 
 import type { NavigationItem } from "@/types";
 
@@ -20,8 +20,37 @@ interface MobileNavigationProps {
   siteName: string;
 }
 
-export function MobileNavigation({ contactAction, items, siteName }: MobileNavigationProps) {
+export function MobileNavigation(props: MobileNavigationProps) {
   const pathname = usePathname() ?? "/";
+
+  return (
+    <Suspense fallback={<MobileNavigationContent {...props} pathname={pathname} />}>
+      <MobileNavigationWithScene {...props} pathname={pathname} />
+    </Suspense>
+  );
+}
+
+interface MobileNavigationWithSceneProps extends MobileNavigationProps {
+  pathname: string;
+}
+
+function MobileNavigationWithScene(props: MobileNavigationWithSceneProps) {
+  const searchParams = useSearchParams();
+
+  return <MobileNavigationContent {...props} searchParams={searchParams} />;
+}
+
+interface MobileNavigationContentProps extends MobileNavigationWithSceneProps {
+  searchParams?: Pick<URLSearchParams, "get">;
+}
+
+function MobileNavigationContent({
+  contactAction,
+  items,
+  pathname,
+  searchParams,
+  siteName,
+}: MobileNavigationContentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -175,7 +204,7 @@ export function MobileNavigation({ contactAction, items, siteName }: MobileNavig
             <nav aria-label="Mobil navigasyon" className="mt-6 sm:mt-10">
               <ol className="divide-y divide-[var(--color-border-light)] border-y border-[var(--color-border-light)]">
                 {items.map((item, index) => {
-                  const isActive = isNavigationItemActive(pathname, item);
+                  const isActive = isNavigationItemActive(pathname, item, searchParams);
 
                   return (
                     <li key={item.id}>

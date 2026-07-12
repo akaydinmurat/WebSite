@@ -44,7 +44,7 @@ export const siteConfig = {
       eyebrow: "Seçili Projeler",
       title: "Farklı yaşamlar için düşünülmüş mekânlar.",
       description:
-        "Mevcut portföyden seçilen gerçek proje kayıtlarıdır. Yeni siteye ait yüksek çözünürlüklü görsel arşivin aktarımı sürmektedir.",
+        "Mevcut portföyden seçilen proje kayıtları ve aktarılan gerçek tasarım görselleri; farklı ihtiyaçlara verilen mekânsal yanıtları bir araya getiriyor.",
       actionLabel: "Tüm projeleri gör",
     },
     philosophy: {
@@ -88,7 +88,7 @@ export const siteConfig = {
       statement:
         "Konut, ticari mekân ve online iç mimari danışmanlık için bağımsız mimarlık pratiği.",
       contentNotice:
-        "Proje başlıkları mevcut portföyden aktarılmıştır; yer tutucu görseller gerçek proje renderları değildir.",
+        "Proje başlıkları ve kapak görselleri mevcut portföyden aktarılmıştır; ayrıntılı arşiv aktarımı sürmektedir.",
     },
   },
 } satisfies SiteConfig;

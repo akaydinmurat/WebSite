@@ -8,25 +8,13 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import type { ProjectVisual as ProjectVisualType } from "@/types";
 import { cn } from "@/lib/utils";
 
-const projectImages: Record<string, string> = {
-  "bm-evi-mutfak": "/images/placeholders/katmanli-isik.svg",
-  "es-evi-banyo": "/images/placeholders/mineral-sessizlik.svg",
-  "aa-evi-yatak-odasi": "/images/placeholders/golge-odasi.svg",
-  "sf-evi-genc-odasi": "/images/placeholders/yumusak-ufuk.svg",
-  "cd-evi-mutfak": "/images/placeholders/katmanli-isik.svg",
-  "gy-evi-salon": "/images/placeholders/sessiz-esik.svg",
-  "ag-evi-banyo": "/images/placeholders/mineral-sessizlik.svg",
-  "rozzis-chocolate-cafe": "/images/placeholders/yumusak-ufuk.svg",
-};
-
 export function ProjectVisual({
   visual,
-  projectSlug,
   className,
   eager = false,
   decorative = false,
   sizes = "(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1200px",
-  showArchiveLabel = true,
+  showArchiveLabel = false,
 }: {
   visual: ProjectVisualType;
   projectSlug?: string;
@@ -41,8 +29,7 @@ export function ProjectVisual({
   const pointRef = useRef({ x: 0, y: 0 });
   const finePointer = useFinePointer();
   const reducedMotion = useReducedMotion();
-  const imageSrc =
-    (projectSlug && projectImages[projectSlug]) || "/images/placeholders/placeholder-plan.svg";
+  const imageSrc = visual.src || "/images/placeholders/placeholder-plan.svg";
 
   useEffect(
     () => () => {
@@ -101,9 +88,8 @@ export function ProjectVisual({
             alt={decorative ? "" : visual.alt}
             fill
             preload={eager}
-            unoptimized
             sizes={sizes}
-            className="project-visual-image object-cover opacity-80 mix-blend-luminosity"
+            className="project-visual-image object-cover"
           />
         </div>
       </div>

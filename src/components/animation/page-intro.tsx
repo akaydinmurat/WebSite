@@ -3,12 +3,13 @@
 import Image from "next/image";
 import { useRef } from "react";
 
+import { ShowroomCoreFallback } from "@/components/showroom/showroom-core-fallback";
 import { siteConfig } from "@/config/site";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { gsap, useGSAP } from "@/lib/animation/gsap";
 
-const introSessionKey = "goknur-home-intro-v3";
-const safetyTimeoutMs = 4_200;
+const introSessionKey = "goknur-home-intro-v4";
+const safetyTimeoutMs = 5_200;
 
 export function PageIntro() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -61,6 +62,11 @@ export function PageIntro() {
 
       const restoreEnvironment = () => {
         inertSnapshots.forEach(({ element, hadInert }) => {
+          if (element.hasAttribute("data-site-footer") && body.dataset.showroomActive === "true") {
+            element.setAttribute("inert", "");
+            return;
+          }
+
           if (hadInert) {
             element.setAttribute("inert", "");
           } else {
@@ -120,6 +126,7 @@ export function PageIntro() {
       const name = root.querySelector<HTMLElement>("[data-intro-name]");
       const discipline = root.querySelector<HTMLElement>("[data-intro-discipline]");
       const statement = root.querySelector<HTMLElement>("[data-intro-statement]");
+      const core = root.querySelector<HTMLElement>("[data-intro-core]");
       const lockup = root.querySelector<HTMLElement>("[data-intro-lockup]");
       const leftCurtain = root.querySelector<HTMLElement>('[data-intro-curtain="left"]');
       const rightCurtain = root.querySelector<HTMLElement>('[data-intro-curtain="right"]');
@@ -132,20 +139,23 @@ export function PageIntro() {
       gsap.set(mark, { autoAlpha: 0, z: -160, rotateY: -12, scale: 0.72 });
       gsap.set([name, discipline], { autoAlpha: 0, y: 18 });
       gsap.set(statement, { autoAlpha: 0, clipPath: "inset(0 0 100% 0)", y: 24 });
+      gsap.set(core, { autoAlpha: 0, scale: 0.72, rotateZ: -9, z: -180 });
 
       timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
       timeline
-        .to(image, { autoAlpha: 0.56, scale: 1.04, duration: 2.65, ease: "power2.out" }, 0)
+        .to(image, { autoAlpha: 0.72, scale: 1.035, duration: 3.35, ease: "power2.out" }, 0)
         .to(horizontalLines, { scaleX: 1, duration: 0.8, stagger: 0.08 }, 0.14)
         .to(verticalLines, { scaleY: 1, duration: 0.78, stagger: 0.1 }, 0.2)
         .to(depthFrame, { autoAlpha: 1, z: -20, rotateY: 0, scale: 1, duration: 0.95 }, 0.28)
+        .to(core, { autoAlpha: 1, scale: 1, rotateZ: 0, z: 0, duration: 1.35 }, 0.18)
         .to(mark, { autoAlpha: 1, z: 0, rotateY: 0, scale: 1, duration: 0.85 }, 0.36)
         .to(name, { autoAlpha: 1, y: 0, duration: 0.52 }, 0.82)
         .to(discipline, { autoAlpha: 1, y: 0, duration: 0.5 }, 1.02)
         .to(statement, { autoAlpha: 1, clipPath: "inset(0 0 0% 0)", y: 0, duration: 0.72 }, 1.24)
-        .to(lockup, { autoAlpha: 0, y: -16, z: 80, duration: 0.46 }, 2.12)
-        .to(leftCurtain, { xPercent: -102, duration: 0.82, ease: "power3.inOut" }, 2.2)
-        .to(rightCurtain, { xPercent: 102, duration: 0.82, ease: "power3.inOut" }, 2.2)
+        .to(lockup, { autoAlpha: 0, y: -16, z: 80, duration: 0.46 }, 2.72)
+        .to(core, { autoAlpha: 0, scale: 1.32, z: 120, duration: 0.88 }, 2.74)
+        .to(leftCurtain, { xPercent: -102, duration: 0.88, ease: "power3.inOut" }, 2.82)
+        .to(rightCurtain, { xPercent: 102, duration: 0.88, ease: "power3.inOut" }, 2.82)
         .to(
           root,
           {
@@ -154,7 +164,7 @@ export function PageIntro() {
             ease: "power2.out",
             onComplete: () => finish(true),
           },
-          2.84,
+          3.56,
         );
 
       safetyTimeout = window.setTimeout(() => finish(true), safetyTimeoutMs);
@@ -185,16 +195,18 @@ export function PageIntro() {
         <div data-intro-image className="absolute inset-[-4%]">
           <Image
             alt=""
-            className="object-cover brightness-[0.34] contrast-[1.18] grayscale saturate-[0.7]"
+            className="object-cover brightness-[0.55] contrast-[1.08] saturate-[0.78]"
             fill
             preload
             sizes="100vw"
-            src="/images/placeholders/hero-architecture.svg"
-            unoptimized
+            src="/images/projects/archive/bm-evi-mutfak.jpg"
           />
         </div>
 
-        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,18,19,.94),rgba(14,18,19,.34)_54%,rgba(75,36,52,.58))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(8,11,12,.74),rgba(8,11,12,.2)_54%,rgba(75,36,52,.42))]" />
+        <div data-intro-core className="intro-showroom-core">
+          <ShowroomCoreFallback />
+        </div>
         <span
           data-intro-line-x
           className="absolute top-[24%] right-[7%] left-[7%] h-px bg-white/22"
@@ -225,11 +237,11 @@ export function PageIntro() {
 
         <span
           data-intro-curtain="left"
-          className="absolute inset-y-0 left-0 z-10 w-1/2 bg-[var(--color-night)]"
+          className="absolute inset-y-0 left-0 z-10 w-1/2 bg-[rgba(8,11,12,.48)] backdrop-blur-[2px]"
         />
         <span
           data-intro-curtain="right"
-          className="absolute inset-y-0 right-0 z-10 w-1/2 bg-[var(--color-night)]"
+          className="absolute inset-y-0 right-0 z-10 w-1/2 bg-[rgba(8,11,12,.48)] backdrop-blur-[2px]"
         />
       </div>
 

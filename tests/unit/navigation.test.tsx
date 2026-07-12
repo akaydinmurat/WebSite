@@ -5,14 +5,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { isNavigationItemActive, SiteHeader } from "@/components/navigation";
-import { primaryNavigation } from "@/config/navigation";
+import { navigationConfig, primaryNavigation } from "@/config/navigation";
 
-const { mockedUsePathname } = vi.hoisted(() => ({
+const { mockedUsePathname, mockedUseSearchParams } = vi.hoisted(() => ({
   mockedUsePathname: vi.fn<() => string>(),
+  mockedUseSearchParams: vi.fn<() => URLSearchParams>(),
 }));
 
 vi.mock("next/navigation", () => ({
   usePathname: () => mockedUsePathname(),
+  useSearchParams: () => mockedUseSearchParams(),
 }));
 
 vi.mock("next/link", () => ({
@@ -31,14 +33,17 @@ vi.mock("next/link", () => ({
 }));
 
 describe("navigation active state", () => {
-  it("matches exact routes without marking child routes active", () => {
+  it("marks home active only when no showroom scene is selected", () => {
     const homeItem = primaryNavigation[0];
+    const projectsItem = primaryNavigation[1];
 
     expect(isNavigationItemActive("/", homeItem)).toBe(true);
     expect(isNavigationItemActive("/projects", homeItem)).toBe(false);
+    expect(isNavigationItemActive("/", homeItem, "scene=projects")).toBe(false);
+    expect(isNavigationItemActive("/", projectsItem, "scene=projects")).toBe(true);
   });
 
-  it("matches prefix routes only on complete path segments", () => {
+  it("keeps direct archive and detail routes associated with their showroom scene", () => {
     const projectsItem = primaryNavigation[1];
 
     expect(isNavigationItemActive("/projects", projectsItem)).toBe(true);
@@ -46,16 +51,21 @@ describe("navigation active state", () => {
     expect(isNavigationItemActive("/projects-archive", projectsItem)).toBe(false);
   });
 
-  it("ignores trailing slashes, search parameters, and fragments", () => {
+  it("reads the scene from a pathname fallback or URLSearchParams", () => {
     const servicesItem = primaryNavigation[2];
 
-    expect(isNavigationItemActive("/services/?view=all#overview", servicesItem)).toBe(true);
+    expect(isNavigationItemActive("/?scene=services", servicesItem)).toBe(true);
+    expect(isNavigationItemActive("/", servicesItem, new URLSearchParams("scene=services"))).toBe(
+      true,
+    );
+    expect(isNavigationItemActive("/?scene=projects", servicesItem)).toBe(false);
   });
 });
 
 describe("SiteHeader", () => {
   beforeEach(() => {
     mockedUsePathname.mockReturnValue("/projects/demo-project");
+    mockedUseSearchParams.mockReturnValue(new URLSearchParams());
   });
 
   afterEach(() => {
@@ -76,6 +86,22 @@ describe("SiteHeader", () => {
       "page",
     );
     expect(within(desktopNavigation).getByRole("link", { name: "Hizmetler" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  });
+
+  it("exposes the selected showroom scene as the active route on home", () => {
+    mockedUsePathname.mockReturnValue("/");
+    mockedUseSearchParams.mockReturnValue(new URLSearchParams("scene=services"));
+
+    render(<SiteHeader />);
+
+    const desktopNavigation = screen.getByTestId("desktop-navigation");
+    expect(within(desktopNavigation).getByRole("link", { name: "Hizmetler" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(within(desktopNavigation).getByRole("link", { name: "Ana Sayfa" })).not.toHaveAttribute(
       "aria-current",
     );
   });
@@ -163,6 +189,27 @@ describe("SiteFooter", () => {
       "href",
       "/",
     );
+    expect(within(footerNavigation).getByRole("link", { name: "Projeler" })).toHaveAttribute(
+      "href",
+      "/projects",
+    );
+    expect(within(footerNavigation).getByRole("link", { name: "Hizmetler" })).toHaveAttribute(
+      "href",
+      "/services",
+    );
+    expect(within(footerNavigation).getByRole("link", { name: "Paketler" })).toHaveAttribute(
+      "href",
+      "/packages",
+    );
+    expect(within(footerNavigation).getByRole("link", { name: "Hakkımda" })).toHaveAttribute(
+      "href",
+      "/about",
+    );
+    expect(within(footerNavigation).getByRole("link", { name: "İletişim" })).toHaveAttribute(
+      "href",
+      "/contact",
+    );
+    expect(navigationConfig.contactAction.href).toBe("/?scene=contact");
     expect(screen.getByText(/Tüm hakları saklıdır/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Konut, ticari mekân ve online iç mimari danışmanlık/i),

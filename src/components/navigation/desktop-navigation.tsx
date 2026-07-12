@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import type { NavigationItem } from "@/types";
 
@@ -15,6 +16,28 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
   const pathname = usePathname() ?? "/";
 
   return (
+    <Suspense fallback={<DesktopNavigationList items={items} pathname={pathname} />}>
+      <DesktopNavigationWithScene items={items} pathname={pathname} />
+    </Suspense>
+  );
+}
+
+interface DesktopNavigationWithSceneProps extends DesktopNavigationProps {
+  pathname: string;
+}
+
+function DesktopNavigationWithScene({ items, pathname }: DesktopNavigationWithSceneProps) {
+  const searchParams = useSearchParams();
+
+  return <DesktopNavigationList items={items} pathname={pathname} searchParams={searchParams} />;
+}
+
+interface DesktopNavigationListProps extends DesktopNavigationWithSceneProps {
+  searchParams?: Pick<URLSearchParams, "get">;
+}
+
+function DesktopNavigationList({ items, pathname, searchParams }: DesktopNavigationListProps) {
+  return (
     <nav
       aria-label="Ana navigasyon"
       className="hidden items-center xl:flex"
@@ -22,7 +45,7 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
     >
       <ul className="flex items-center gap-1">
         {items.map((item) => {
-          const isActive = isNavigationItemActive(pathname, item);
+          const isActive = isNavigationItemActive(pathname, item, searchParams);
 
           return (
             <li key={item.id}>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { useFinePointer } from "@/hooks/use-pointer-capability";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { publishPointerSnapshot } from "@/lib/animation/pointer-store";
 
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -20,7 +21,7 @@ export function CustomCursor() {
     const root = document.documentElement;
     const cursor = cursorRef.current;
 
-    const setPointerVariables = ({ x, y }: { x: number; y: number }) => {
+    const setPointerVariables = ({ x, y }: { x: number; y: number }, active = false) => {
       const viewportWidth = Math.max(window.innerWidth, 1);
       const viewportHeight = Math.max(window.innerHeight, 1);
       const normalizedX = Math.min(0.5, Math.max(-0.5, x / viewportWidth - 0.5));
@@ -30,6 +31,13 @@ export function CustomCursor() {
       root.style.setProperty("--pointer-vy", `${y}px`);
       root.style.setProperty("--pointer-nx", normalizedX.toFixed(4));
       root.style.setProperty("--pointer-ny", normalizedY.toFixed(4));
+      publishPointerSnapshot({
+        x,
+        y,
+        normalizedX,
+        normalizedY,
+        active,
+      });
     };
 
     const resetPointerVariables = () => {
@@ -37,7 +45,7 @@ export function CustomCursor() {
         x: window.innerWidth / 2,
         y: window.innerHeight / 2,
       };
-      setPointerVariables(pointRef.current);
+      setPointerVariables(pointRef.current, false);
     };
 
     resetPointerVariables();
@@ -58,7 +66,7 @@ export function CustomCursor() {
     const update = () => {
       frameRef.current = null;
       root.setAttribute("data-cursor", "enhanced");
-      setPointerVariables(pointRef.current);
+      setPointerVariables(pointRef.current, true);
       cursorRef.current?.style.setProperty(
         "transform",
         `translate3d(${pointRef.current.x}px, ${pointRef.current.y}px, 0) translate(-50%, -50%)`,
@@ -110,7 +118,7 @@ export function CustomCursor() {
     };
     const handleResize = () => {
       if (cursorRef.current?.dataset.visible === "true") {
-        setPointerVariables(pointRef.current);
+        setPointerVariables(pointRef.current, true);
       } else {
         resetPointerVariables();
       }

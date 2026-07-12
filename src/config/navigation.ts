@@ -11,47 +11,84 @@ export const primaryNavigation = [
   {
     id: "projects",
     label: "Projeler",
+    href: "/?scene=projects",
+    match: "exact",
+    description: "Proje sahnesini keşfet",
+  },
+  {
+    id: "services",
+    label: "Hizmetler",
+    href: "/?scene=services",
+    match: "exact",
+    description: "Çalışma alanlarını deneyimle",
+  },
+  {
+    id: "packages",
+    label: "Paketler",
+    href: "/?scene=packages",
+    match: "exact",
+    description: "Tasarım kapsamlarını karşılaştır",
+  },
+  {
+    id: "reviews",
+    label: "Yorumlar",
+    href: "/?scene=reviews",
+    match: "exact",
+    description: "Müşteri deneyimlerini incele",
+  },
+  {
+    id: "about",
+    label: "Hakkımda",
+    href: "/?scene=about",
+    match: "exact",
+    description: "Göknur'un yaklaşımını ve deneyimini tanı",
+  },
+] as const satisfies readonly NavigationItem[];
+
+export const footerNavigation = [
+  {
+    id: "home",
+    label: "Ana Sayfa",
+    href: "/",
+    match: "exact",
+  },
+  {
+    id: "projects",
+    label: "Projeler",
     href: "/projects",
     match: "prefix",
-    description: "Gerçek proje arşivini keşfet",
   },
   {
     id: "services",
     label: "Hizmetler",
     href: "/services",
     match: "prefix",
-    description: "Çalışma alanlarını incele",
   },
   {
     id: "packages",
     label: "Paketler",
     href: "/packages",
     match: "prefix",
-    description: "Tasarım kapsamlarını karşılaştır",
   },
   {
     id: "about",
     label: "Hakkımda",
     href: "/about",
     match: "prefix",
-    description: "Göknur'un yaklaşımını ve deneyimini tanı",
   },
   {
     id: "contact",
     label: "İletişim",
     href: "/contact",
     match: "prefix",
-    description: "Yeni bir proje üzerine konuş",
   },
 ] as const satisfies readonly NavigationItem[];
-
-export const footerNavigation = primaryNavigation;
 
 export const contactNavigationItem = {
   id: "start-a-project",
   label: "Bir proje başlat",
-  href: "/contact",
-  match: "prefix",
+  href: "/?scene=contact",
+  match: "exact",
   description: "Proje ihtiyaçlarını paylaş",
 } as const satisfies NavigationItem;
 

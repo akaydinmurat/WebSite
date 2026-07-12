@@ -10,6 +10,7 @@ export function SiteFooter() {
     <footer
       className="border-t border-[var(--color-border-light)] bg-[var(--color-night)] text-[var(--color-paper)]"
       data-cursor-theme="dark"
+      data-site-footer
     >
       <div className="site-shell">
         <div className="grid gap-14 py-[clamp(4.5rem,9vw,9rem)] md:grid-cols-12 md:gap-8">
