@@ -30,7 +30,7 @@ Uygulama; erişilebilir navigasyon, filtrelenebilir proje seçkisi, dinamik proj
 - Sanity, Next Sanity, Portable Text ve Sanity Image URL
 - Vitest, React Testing Library, Playwright ve axe-core
 - ESLint 9, Prettier 3, Husky ve lint-staged
-- pnpm `11.7.0`
+- pnpm `11.13.0`
 
 Ayrıntılar için [ARCHITECTURE.md](./ARCHITECTURE.md), [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md), [ANIMATION_GUIDE.md](./ANIMATION_GUIDE.md) ve [CONTENT_GUIDE.md](./CONTENT_GUIDE.md) belgelerine bakın.
 
@@ -39,7 +39,7 @@ Ayrıntılar için [ARCHITECTURE.md](./ARCHITECTURE.md), [DESIGN_SYSTEM.md](./DE
 | Araç     | Gereksinim                                                                               |
 | -------- | ---------------------------------------------------------------------------------------- |
 | Node.js  | `>=24.0.0 <25`; depo `.node-version` ile `24.15.0`, `.nvmrc` ile ana sürüm `24` tanımlar |
-| pnpm     | `11.7.0`; `package.json#packageManager` kaynak kabul edilir                              |
+| pnpm     | `11.13.0`; `package.json#packageManager` kaynak kabul edilir                             |
 | Corepack | pnpm sürümünü etkinleştirmek için önerilir                                               |
 | Git      | Branch ve katkı akışı için gerekir                                                       |
 | Chromium | Yalnız Playwright E2E testleri için gerekir                                              |
@@ -200,7 +200,7 @@ Form hem istemcide hem `/api/contact` rotasında Zod ile doğrulanır; JSON içe
 1. Doğrulanmış feature branch'i GitHub'a gönderin ve pull request açın.
 2. İncelemeden sonra `main` ile birleştirin.
 3. Depoyu Vercel'e içe aktarın; root directory depo kökü, framework preset `Next.js` olarak kalmalıdır.
-4. Vercel, `packageManager` alanından pnpm `11.7.0` kullanmalıdır. Özel output directory tanımlamayın.
+4. Vercel, `packageManager` alanından pnpm `11.13.0` kullanmalıdır. Özel output directory tanımlamayın.
 5. En az `NEXT_PUBLIC_SITE_URL` değerini gerçek HTTPS origin'iyle tanımlayın. Sanity kullanılacaksa ilgili public değerleri; gizli değer gerekiyorsa yalnız Vercel'in Environment Variables alanını kullanın.
 6. Production ve gerekiyorsa Preview ortamlarını ayrı ayrı yapılandırıp deploy edin.
 7. Ana sayfa, proje detayı, iletişim formunun beklenen üretim davranışı, metadata, `robots.txt`, `sitemap.xml` ve `/studio` için smoke test yapın.
@@ -248,7 +248,7 @@ git push -u origin feat/premium-interior-showroom
 
 ### Node veya pnpm sürümü uyuşmuyor
 
-`node --version` çıktısı 24.x, `pnpm --version` çıktısı 11.7.0 olmalıdır. Yeni terminal açın; kullandığınız sürüm yöneticisinde `.node-version`, `.nvmrc` ve `package.json#packageManager` değerlerini kaynak alın. Ardından `pnpm install --frozen-lockfile` çalıştırın.
+`node --version` çıktısı 24.x, `pnpm --version` çıktısı 11.13.0 olmalıdır. Yeni terminal açın; kullandığınız sürüm yöneticisinde `.node-version`, `.nvmrc` ve `package.json#packageManager` değerlerini kaynak alın. Ardından `pnpm install --frozen-lockfile` çalıştırın.
 
 PowerShell `pnpm` komutunu bulamazsa Corepack üzerinden doğrudan çalıştırın:
 

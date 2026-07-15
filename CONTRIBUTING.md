@@ -8,7 +8,7 @@ Gereksinimler:
 
 - Node.js 24 (`.nvmrc` ve `.node-version` kaynak kabul edilir)
 - Corepack
-- pnpm 11.7.0 (`package.json#packageManager` kaynak kabul edilir)
+- pnpm 11.13.0 (`package.json#packageManager` kaynak kabul edilir)
 
 Kurulum ve geliştirme:
 
