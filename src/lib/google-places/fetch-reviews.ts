@@ -28,14 +28,14 @@ export async function getGoogleReviews({
   const fallbackUrl = normalizeGoogleMapsUrl(env.GOOGLE_MAPS_PLACE_URL);
 
   if (env.GOOGLE_REVIEWS_ENABLED?.trim() !== "true") {
-    return { status: "disabled" };
+    return fallbackUrl ? unavailableResult(fallbackUrl) : { status: "disabled" };
   }
 
   const apiKey = env.GOOGLE_PLACES_API_KEY?.trim();
   const placeId = env.GOOGLE_PLACE_ID?.trim();
 
   if (!apiKey || !placeId) {
-    return { status: "unconfigured" };
+    return fallbackUrl ? unavailableResult(fallbackUrl) : { status: "unconfigured" };
   }
 
   const requestUrl = new URL(GOOGLE_PLACES_ENDPOINT + "/" + encodeURIComponent(placeId));
@@ -180,7 +180,8 @@ function normalizeGoogleMapsUrl(value: string | undefined): string | undefined {
       hostname.endsWith(".google.com") ||
       hostname === "maps.app.goo.gl" ||
       hostname === "goo.gl" ||
-      hostname === "g.page";
+      hostname === "g.page" ||
+      hostname === "share.google";
 
     return url.protocol === "https:" && allowedHostname ? url.toString() : undefined;
   } catch {

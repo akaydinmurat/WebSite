@@ -42,11 +42,26 @@ describe("Google Places reviews", () => {
     vi.restoreAllMocks();
   });
 
-  it("does not call Google while the feature is disabled", async () => {
+  it("preserves a verified Maps fallback without calling Google while the feature is disabled", async () => {
     const fetchImpl = vi.fn<typeof fetch>();
 
     const result = await getGoogleReviews({
       env: { ...configuredEnv, GOOGLE_REVIEWS_ENABLED: "false" },
+      fetchImpl,
+    });
+
+    expect(result).toEqual({
+      status: "unavailable",
+      fallbackUrl: "https://www.google.com/maps/place/test-business",
+    });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("preserves the disabled state when no verified fallback is configured", async () => {
+    const fetchImpl = vi.fn<typeof fetch>();
+
+    const result = await getGoogleReviews({
+      env: { GOOGLE_REVIEWS_ENABLED: "false" },
       fetchImpl,
     });
 
@@ -59,6 +74,39 @@ describe("Google Places reviews", () => {
 
     const result = await getGoogleReviews({
       env: { GOOGLE_REVIEWS_ENABLED: "true" },
+      fetchImpl,
+    });
+
+    expect(result).toEqual({ status: "unconfigured" });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("accepts the exact share.google host as a fallback while live reviews are unconfigured", async () => {
+    const fetchImpl = vi.fn<typeof fetch>();
+
+    const result = await getGoogleReviews({
+      env: {
+        GOOGLE_REVIEWS_ENABLED: "true",
+        GOOGLE_MAPS_PLACE_URL: "https://share.google/tqKzOOjLcvQEfPicm",
+      },
+      fetchImpl,
+    });
+
+    expect(result).toEqual({
+      status: "unavailable",
+      fallbackUrl: "https://share.google/tqKzOOjLcvQEfPicm",
+    });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("does not trust hostnames that only resemble share.google", async () => {
+    const fetchImpl = vi.fn<typeof fetch>();
+
+    const result = await getGoogleReviews({
+      env: {
+        GOOGLE_REVIEWS_ENABLED: "true",
+        GOOGLE_MAPS_PLACE_URL: "https://share.google.example.com/fake-review",
+      },
       fetchImpl,
     });
 

@@ -1,3 +1,4 @@
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 import { navigationConfig } from "@/config/navigation";
@@ -14,21 +15,31 @@ export function SiteHeader() {
         Ana içeriğe geç
       </a>
       <header
-        className="fixed top-0 z-[var(--z-header)] w-full border-b border-white/15 bg-[rgba(14,18,19,.78)] text-[var(--color-paper)] backdrop-blur-xl"
-        data-cursor-theme="dark"
+        className="luminous-site-header fixed top-0 z-[var(--z-header)] w-full border-b backdrop-blur-xl"
+        data-cursor-theme="light"
         data-testid="site-header"
       >
-        <div className="site-shell flex min-h-[4.75rem] items-center justify-between gap-5">
+        <div className="site-shell luminous-header-shell">
           <SiteBrandLink />
 
-          <div className="ml-auto flex items-center gap-4 xl:gap-6">
-            <DesktopNavigation items={navigationConfig.primary} />
+          <DesktopNavigation items={navigationConfig.primary} />
+
+          <div className="luminous-header-actions">
             <div className="hidden xl:block">
               <Link
-                className="pill-button shrink-0 border-white/45 text-[var(--color-paper)] hover:bg-[var(--color-paper)] hover:text-[var(--color-night)]"
+                className="luminous-dream-action"
                 href={navigationConfig.contactAction.href}
+                data-cursor-kind="action"
+                data-cursor-label="İlk çizgiyi atalım"
               >
-                {navigationConfig.contactAction.label}
+                <span className="luminous-dream-action-orbit" aria-hidden="true">
+                  <Sparkles size={14} strokeWidth={1.8} />
+                </span>
+                <span className="luminous-dream-action-copy">
+                  <small>Yeni proje</small>
+                  <strong>{navigationConfig.contactAction.label}</strong>
+                </span>
+                <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.8} />
               </Link>
             </div>
             <MobileNavigation

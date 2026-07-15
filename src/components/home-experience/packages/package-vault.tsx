@@ -61,9 +61,9 @@ export function PackageVault({ count }: PackageVaultProps) {
   const materials = useMemo(
     () => ({
       accent: new THREE.MeshStandardMaterial({
-        color: experienceConfig.colors.blue,
-        emissive: experienceConfig.colors.blue,
-        emissiveIntensity: 0.18,
+        color: experienceConfig.colors.sunset,
+        emissive: experienceConfig.colors.sunset,
+        emissiveIntensity: 0.24,
         metalness: 0.62,
         opacity: 0,
         roughness: 0.32,
@@ -71,7 +71,7 @@ export function PackageVault({ count }: PackageVaultProps) {
       }),
       dossier: new THREE.MeshPhysicalMaterial({
         clearcoat: 0.36,
-        color: "#30343e",
+        color: experienceConfig.colors.wind,
         depthWrite: false,
         metalness: 0.22,
         opacity: 0,
@@ -82,21 +82,21 @@ export function PackageVault({ count }: PackageVaultProps) {
       frame: new THREE.MeshPhysicalMaterial({
         clearcoat: 0.62,
         clearcoatRoughness: 0.18,
-        color: experienceConfig.colors.champagne,
-        metalness: 0.92,
+        color: experienceConfig.colors.sandWhite,
+        metalness: 0.74,
         opacity: 0,
         roughness: 0.28,
         transparent: true,
       }),
       glow: new THREE.MeshBasicMaterial({
-        color: experienceConfig.colors.amber,
+        color: experienceConfig.colors.sunset,
         depthWrite: false,
         opacity: 0,
         transparent: true,
       }),
       inner: new THREE.MeshStandardMaterial({
-        color: "#7c756d",
-        metalness: 0.76,
+        color: experienceConfig.colors.river,
+        metalness: 0.58,
         opacity: 0,
         roughness: 0.4,
         transparent: true,
@@ -105,6 +105,17 @@ export function PackageVault({ count }: PackageVaultProps) {
     [],
   );
   const materialsRef = useRef(materials);
+  const dossierColors = useMemo(
+    () =>
+      [
+        experienceConfig.colors.river,
+        experienceConfig.colors.sunset,
+        experienceConfig.colors.wind,
+        experienceConfig.colors.fennelDeep,
+        experienceConfig.colors.fennelSoft,
+      ].map((color) => new THREE.Color(color)),
+    [],
+  );
 
   useEffect(() => {
     materialsRef.current = materials;
@@ -120,10 +131,11 @@ export function PackageVault({ count }: PackageVaultProps) {
     if (!root || !keyLight) return;
 
     const runtime = getExperienceRuntime();
+    if (!runtime.pageVisible) return;
     const delta = Math.min(frameDelta, 1 / 20);
-    const progress = runtime.outroProgress;
+    const progress = runtime.packagesProgress;
     const runtimeMaterials = materialsRef.current;
-    const exit = smoothstep((progress - 0.58) / 0.2);
+    const exit = smoothstep((progress - 0.8) / 0.18);
     const opacityTarget = runtime.phase === "outro" ? 1 - exit : 0;
     opacityRef.current = runtime.reducedMotion
       ? opacityTarget
@@ -144,19 +156,25 @@ export function PackageVault({ count }: PackageVaultProps) {
 
     const stageProgress = clamp01(progress / 0.56) * Math.max(1, frameCount - 1);
     const activeIndex = Math.min(frameCount - 1, Math.round(stageProgress));
+    runtimeMaterials.dossier.color.lerp(dossierColors[activeIndex] ?? dossierColors[0]!, 0.08);
     frameRefs.current.forEach((frame, index) => {
       if (!frame) return;
       const distance = index - activeIndex;
-      const targetX = distance * 1.18;
-      const targetY = Math.abs(distance) * -0.08;
-      const targetZ = -Math.abs(distance) * 0.72 - index * 0.08;
+      const targetX = distance * 1.45;
+      const targetY = Math.abs(distance) * -0.12 + (index % 2 === 0 ? 0.05 : -0.05);
+      const targetZ = -Math.abs(distance) * 0.95 - index * 0.1;
       const positionSpeed = runtime.reducedMotion ? 100 : 6.8;
       frame.position.x = damp(frame.position.x, targetX, positionSpeed, delta);
       frame.position.y = damp(frame.position.y, targetY, positionSpeed, delta);
       frame.position.z = damp(frame.position.z, targetZ, positionSpeed, delta);
-      frame.rotation.y = damp(frame.rotation.y, distance * -0.16, 6.4, delta);
-      frame.rotation.z = damp(frame.rotation.z, distance * 0.018, 6.4, delta);
-      const focusScale = index === activeIndex ? 1.08 : 0.84;
+      frame.rotation.y = damp(frame.rotation.y, distance * -0.23, 6.4, delta);
+      frame.rotation.z = damp(
+        frame.rotation.z,
+        distance * 0.026 + (index % 2 === 0 ? -0.012 : 0.012),
+        6.4,
+        delta,
+      );
+      const focusScale = index === activeIndex ? 1.12 : 0.8;
       const nextScale = damp(frame.scale.x, focusScale, 6.4, delta);
       frame.scale.setScalar(nextScale);
     });
@@ -164,10 +182,10 @@ export function PackageVault({ count }: PackageVaultProps) {
 
   return (
     <group ref={rootRef} name="package-vault" position={[0.6, 0.15, -23.7]} visible={false}>
-      <ambientLight color="#8793a2" intensity={0.24} />
+      <ambientLight color={experienceConfig.colors.wind} intensity={0.34} />
       <pointLight
         ref={keyLightRef}
-        color={experienceConfig.colors.champagne}
+        color={experienceConfig.colors.sunset}
         decay={2}
         distance={9}
         intensity={0}

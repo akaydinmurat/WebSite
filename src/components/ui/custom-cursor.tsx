@@ -31,6 +31,15 @@ export function CustomCursor() {
       root.style.setProperty("--pointer-vy", `${y}px`);
       root.style.setProperty("--pointer-nx", normalizedX.toFixed(4));
       root.style.setProperty("--pointer-ny", normalizedY.toFixed(4));
+      root.style.setProperty("--surface-shift-x", `${(normalizedX * 48).toFixed(2)}px`);
+      root.style.setProperty("--surface-shift-y", `${(normalizedY * 32).toFixed(2)}px`);
+      root.style.setProperty("--surface-shift-x-reverse", `${(normalizedX * -32).toFixed(2)}px`);
+      root.style.setProperty("--surface-shift-y-reverse", `${(normalizedY * -22).toFixed(2)}px`);
+      root.style.setProperty("--surface-tilt", `${(normalizedX * 3).toFixed(2)}deg`);
+      root.style.setProperty("--about-pointer-x", `${(normalizedX * 24).toFixed(2)}px`);
+      root.style.setProperty("--about-pointer-y", `${(normalizedY * 16).toFixed(2)}px`);
+      root.style.setProperty("--about-pointer-x-reverse", `${(normalizedX * -18).toFixed(2)}px`);
+      root.style.setProperty("--about-pointer-y-reverse", `${(normalizedY * -12).toFixed(2)}px`);
       publishPointerSnapshot({
         x,
         y,
@@ -167,7 +176,11 @@ export function CustomCursor() {
       data-visible="false"
       aria-hidden="true"
     >
-      <span className="custom-cursor-frame" />
+      <span className="custom-cursor-frame">
+        <i className="custom-cursor-axis custom-cursor-axis-x" />
+        <i className="custom-cursor-axis custom-cursor-axis-y" />
+        <i className="custom-cursor-axis custom-cursor-axis-z" />
+      </span>
       <span className="custom-cursor-dot" />
       <span ref={labelRef} className="custom-cursor-label" />
       <span ref={coordinateRef} className="custom-cursor-coordinates" />

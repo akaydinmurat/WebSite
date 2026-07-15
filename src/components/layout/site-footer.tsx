@@ -7,11 +7,7 @@ export function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      className="border-t border-[var(--color-border-light)] bg-[var(--color-night)] text-[var(--color-paper)]"
-      data-cursor-theme="dark"
-      data-site-footer
-    >
+    <footer className="luminous-site-footer border-t" data-cursor-theme="light" data-site-footer>
       <div className="site-shell">
         <div className="grid gap-14 py-[clamp(4.5rem,9vw,9rem)] md:grid-cols-12 md:gap-8">
           <div className="md:col-span-7 lg:col-span-8">

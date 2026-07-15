@@ -134,7 +134,9 @@ describe("SiteHeader", () => {
     const homeLink = within(dialog).getByRole("link", {
       name: "Göknur Uygur Akaydın ana sayfa",
     });
-    const contactLink = within(dialog).getByRole("link", { name: "Bir proje başlat" });
+    const contactLink = within(dialog).getByRole("link", {
+      name: "Hayalinizi mekâna dönüştürelim",
+    });
 
     contactLink.focus();
     await user.tab();
@@ -209,7 +211,15 @@ describe("SiteFooter", () => {
       "href",
       "/contact",
     );
-    expect(navigationConfig.contactAction.href).toBe("/?scene=contact");
+    expect(primaryNavigation.map((item) => item.href)).toEqual([
+      "/",
+      "/?scene=projects#experience-projects",
+      "/?scene=services#experience-showcase",
+      "/?scene=packages#experience-packages",
+      "/?scene=reviews#experience-reviews",
+      "/?scene=about#experience-vision",
+    ]);
+    expect(navigationConfig.contactAction.href).toBe("/?scene=contact#experience-contact");
     expect(screen.getByText(/Tüm hakları saklıdır/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Konut, ticari mekân ve online iç mimari danışmanlık/i),

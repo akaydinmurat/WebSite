@@ -1,0 +1,84 @@
+.root {
+  display: inline-flex;
+}
+
+.list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  gap: 0.55rem;
+  list-style: none;
+}
+
+.link {
+  --social-color: #1367b1;
+  --social-color-deep: #0a4f8d;
+  --social-surface: #a9dcf4;
+  display: inline-flex;
+  width: 2.75rem;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--social-color-deep) 42%, transparent);
+  border-radius: 999px;
+  background: var(--social-surface);
+  box-shadow: 0 0.45rem 1.2rem color-mix(in srgb, var(--social-color) 22%, transparent);
+  color: var(--social-color-deep);
+  transition:
+    translate 180ms ease,
+    scale 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.link[data-social="instagram"] {
+  --social-color: #dc447f;
+  --social-color-deep: #9d245c;
+  --social-surface: linear-gradient(135deg, #f7b559 0%, #f28f99 48%, #dca8ed 100%);
+}
+
+.link[data-social="linkedin"] {
+  --social-color: #1780bd;
+  --social-color-deep: #075b91;
+  --social-surface: linear-gradient(135deg, #a9dcf4 0%, #8fcfd6 100%);
+}
+
+.link:hover {
+  translate: 0 -0.2rem;
+  scale: 1.05;
+  box-shadow: 0 0.65rem 1.5rem color-mix(in srgb, var(--social-color) 30%, transparent);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--social-color-deep);
+  outline-offset: 3px;
+}
+
+.linkedinGlyph {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 1;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+
+  .link:hover {
+    translate: none;
+    scale: none;
+  }
+}

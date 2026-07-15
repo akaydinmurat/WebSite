@@ -134,7 +134,7 @@ function MobileNavigationContent({
         aria-expanded={isOpen}
         aria-haspopup="dialog"
         aria-label="Menüyü aç"
-        className="group flex min-h-11 min-w-11 items-center justify-center text-[var(--color-paper)]"
+        className="group flex min-h-11 min-w-11 items-center justify-center text-current"
         onClick={() => setIsOpen(true)}
         type="button"
       >
@@ -149,7 +149,7 @@ function MobileNavigationContent({
         aria-hidden={!isOpen}
         aria-label="Ana menü"
         aria-modal={isOpen ? "true" : undefined}
-        className={`fixed inset-0 z-[var(--z-menu)] overflow-y-auto overscroll-contain bg-[var(--color-night)] text-[var(--color-paper)] transition-[opacity,visibility] duration-[var(--duration-medium)] ease-[var(--ease-out)] motion-reduce:transition-none ${
+        className={`luminous-mobile-menu fixed inset-0 z-[var(--z-menu)] overflow-x-clip overflow-y-auto overscroll-contain transition-[opacity,visibility] duration-[var(--duration-medium)] ease-[var(--ease-out)] motion-reduce:transition-none ${
           isOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
         data-state={isOpen ? "open" : "closed"}
@@ -250,7 +250,7 @@ function MobileNavigationContent({
                 İç mimari · Görselleştirme
               </span>
               <Link
-                className="pill-button border-[var(--color-border-light)] hover:bg-[var(--color-paper)] hover:text-[var(--color-night)]"
+                className="pill-button luminous-mobile-dream-action border-[var(--color-border-light)] hover:bg-[var(--color-paper)] hover:text-[var(--color-night)]"
                 href={contactAction.href}
                 onClick={closeMenu}
               >

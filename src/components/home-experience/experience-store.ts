@@ -1,16 +1,6 @@
 import type { ExperiencePhase } from "./experience-config";
 
-const MAX_POINTER_SAMPLES = 40;
-
-export type ExperienceTrack = "intro" | "works" | "vision" | "showcase" | "outro";
-
-export type PointerTrailSample = {
-  x: number;
-  y: number;
-  createdAt: number;
-  speed: number;
-  colorIndex: number;
-};
+export type ExperienceTrack = "intro" | "works" | "vision" | "showcase" | "packages" | "outro";
 
 export type ExperienceSnapshot = Readonly<{
   phase: ExperiencePhase;
@@ -38,6 +28,7 @@ type ExperienceRuntime = {
   worksProgress: number;
   visionProgress: number;
   showcaseProgress: number;
+  packagesProgress: number;
   outroProgress: number;
   pointer: {
     x: number;
@@ -46,9 +37,6 @@ type ExperienceRuntime = {
     active: boolean;
     lastUpdatedAt: number;
   };
-  pointerTrail: PointerTrailSample[];
-  pointerSampleSequence: number;
-  pointerPulse: { x: number; y: number; createdAt: number } | null;
   orbit: OrbitRuntime;
   reducedMotion: boolean;
   pageVisible: boolean;
@@ -77,6 +65,7 @@ const runtime: ExperienceRuntime = {
   worksProgress: 0,
   visionProgress: 0,
   showcaseProgress: 0,
+  packagesProgress: 0,
   outroProgress: 0,
   pointer: {
     x: 0,
@@ -85,9 +74,6 @@ const runtime: ExperienceRuntime = {
     active: false,
     lastUpdatedAt: 0,
   },
-  pointerTrail: [],
-  pointerSampleSequence: 0,
-  pointerPulse: null,
   orbit: {
     angle: 0,
     velocity: 0,
@@ -184,41 +170,11 @@ export function updateExperiencePointer(
     active,
     lastUpdatedAt: now,
   };
-
-  const previous = runtime.pointerTrail.at(-1);
-  const shouldSample =
-    active &&
-    (!previous ||
-      now - previous.createdAt > 28 ||
-      Math.hypot(x - previous.x, y - previous.y) > 0.025);
-
-  if (shouldSample) {
-    runtime.pointerTrail.push({
-      x,
-      y,
-      createdAt: now,
-      speed,
-      colorIndex: runtime.pointerSampleSequence % 5,
-    });
-    runtime.pointerSampleSequence += 1;
-
-    if (runtime.pointerTrail.length > MAX_POINTER_SAMPLES) {
-      runtime.pointerTrail.splice(0, runtime.pointerTrail.length - MAX_POINTER_SAMPLES);
-    }
-  }
 }
 
 export function deactivateExperiencePointer() {
   runtime.pointer.active = false;
   runtime.pointer.speed = 0;
-}
-
-export function pulseExperiencePointer() {
-  runtime.pointerPulse = {
-    x: runtime.pointer.x,
-    y: runtime.pointer.y,
-    createdAt: performance.now(),
-  };
 }
 
 export function beginOrbitDrag(pointerId: number, clientX: number) {
@@ -276,11 +232,9 @@ export function resetExperienceRuntime() {
   runtime.worksProgress = 0;
   runtime.visionProgress = 0;
   runtime.showcaseProgress = 0;
+  runtime.packagesProgress = 0;
   runtime.outroProgress = 0;
   runtime.pointer.active = false;
-  runtime.pointerTrail.length = 0;
-  runtime.pointerSampleSequence = 0;
-  runtime.pointerPulse = null;
   runtime.orbit.dragging = false;
   runtime.orbit.pointerId = null;
   runtime.orbit.dragDeltaPixels = 0;

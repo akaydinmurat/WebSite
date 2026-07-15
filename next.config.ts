@@ -11,6 +11,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["127.0.0.1", "192.168.1.65"],
   poweredByHeader: false,
   reactStrictMode: true,
   images: {

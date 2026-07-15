@@ -19,14 +19,15 @@ export default function PackagesPage() {
         eyebrow="Tasarım Paketleri"
         title="İhtiyaca göre tanımlanmış yedi tasarım kapsamı."
         description="Tek bir duvardan konut ve ticari mekânlara uzanan hizmetleri; tasarım ölçeği, kapsam ve doğrulanmış sunum biçimleri üzerinden karşılaştırın."
+        tone="sun"
         aside={
           <p className="max-w-xs text-sm text-[var(--color-muted)]">
             Her dosya, hizmetin doğrulanmış içeriğini ve varsa sunum biçimini açıkça gösterir.
           </p>
         }
       />
-      <section className="section-space-sm border-t border-[var(--color-border-strong)] bg-[var(--color-paper)] pt-20">
-        <div className="site-shell package-page-grid grid gap-5 md:grid-cols-2">
+      <section className="luminous-packages-page section-space-sm border-t border-[var(--color-border-strong)] pt-20">
+        <div className="site-shell luminous-package-grid package-page-grid grid gap-5 md:grid-cols-2">
           {fallbackPackages.map((designPackage, index) => (
             <PackageCard key={designPackage.slug} designPackage={designPackage} index={index} />
           ))}

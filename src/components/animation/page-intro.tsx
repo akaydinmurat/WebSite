@@ -203,7 +203,10 @@ export function PageIntro() {
           />
         </div>
 
-        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(8,11,12,.74),rgba(8,11,12,.2)_54%,rgba(75,36,52,.42))]" />
+        <div
+          data-intro-wash
+          className="absolute inset-0 bg-[linear-gradient(115deg,rgba(8,11,12,.74),rgba(8,11,12,.2)_54%,rgba(75,36,52,.42))]"
+        />
         <div data-intro-core className="intro-showroom-core">
           <ShowroomCoreFallback />
         </div>

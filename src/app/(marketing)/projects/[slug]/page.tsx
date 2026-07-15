@@ -36,7 +36,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   return (
     <>
       <ProjectBreadcrumbJsonLd project={{ slug: project.slug, title: project.title }} />
-      <header className="relative min-h-[100svh] bg-[var(--color-night)] text-[var(--color-paper)]">
+      <header className="project-detail-hero relative min-h-[100svh]">
         <ParallaxMedia className="absolute inset-0">
           <ProjectVisual
             visual={project.cover}
@@ -45,22 +45,22 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             className="h-[112%] w-full"
           />
         </ParallaxMedia>
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(16,17,16,.86),rgba(16,17,16,.12)_70%)]" />
+        <div className="project-detail-hero-wash absolute inset-0" />
         <div className="site-shell relative z-10 flex min-h-[100svh] flex-col justify-end pt-40 pb-9">
           <Link
             href="/projects"
-            className="mb-12 flex min-h-11 w-fit items-center gap-3 text-[0.67rem] font-semibold tracking-[0.13em] text-white/70 uppercase"
+            className="project-detail-back mb-12 flex min-h-11 w-fit items-center gap-3 text-[0.67rem] font-semibold tracking-[0.13em] uppercase"
           >
             <ArrowLeft aria-hidden="true" size={15} /> Proje seçkisi
           </Link>
           <div className="editorial-grid gap-y-9">
             <div className="col-span-12 md:col-span-9">
-              <p className="mb-6 text-[0.65rem] font-semibold tracking-[0.16em] text-white/65 uppercase">
+              <p className="project-detail-kicker mb-6 text-[0.65rem] font-semibold tracking-[0.16em] uppercase">
                 Portföy Projesi · {project.facts.find((fact) => fact.id === "year")?.value}
               </p>
               <h1 className="page-title max-w-[12ch]">{project.title}</h1>
             </div>
-            <p className="col-span-12 max-w-lg text-lg text-white/76 md:col-span-4 md:col-start-9">
+            <p className="project-detail-excerpt col-span-12 max-w-lg text-lg md:col-span-4 md:col-start-9">
               {project.excerpt}
             </p>
           </div>
@@ -92,18 +92,16 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      <section className="section-space bg-[var(--color-night)] text-[var(--color-paper)]">
+      <section className="project-detail-concept section-space">
         <div className="site-shell editorial-grid gap-y-12">
-          <p className="eyebrow col-span-12 text-white/55 md:col-span-3">
-            {project.concept.eyebrow}
-          </p>
+          <p className="eyebrow col-span-12 md:col-span-3">{project.concept.eyebrow}</p>
           <div className="col-span-12 md:col-span-8 md:col-start-5">
             <FadeIn>
               <h2 className="section-title mb-14 max-w-[13ch]">{project.concept.title}</h2>
             </FadeIn>
-            <div className="grid gap-8 border-t border-white/20 pt-7 md:grid-cols-2">
+            <div className="grid gap-8 border-t border-[var(--color-border)] pt-7 md:grid-cols-2">
               {project.concept.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="text-lg leading-relaxed text-white/72">
+                <p key={paragraph} className="text-lg leading-relaxed">
                   {paragraph}
                 </p>
               ))}
@@ -130,7 +128,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       </section>
 
       {project.materials.length > 0 ? (
-        <section className="section-space bg-[var(--color-paper)]">
+        <section className="project-detail-materials section-space">
           <div className="site-shell editorial-grid gap-y-12">
             <div className="col-span-12 md:col-span-4">
               <p className="eyebrow mb-7">Malzeme Paleti</p>
@@ -179,7 +177,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </section>
       ) : null}
 
-      <section className="section-space-sm bg-[var(--color-accent)] text-[var(--color-paper)]">
+      <section className="project-detail-cta section-space-sm">
         <div className="site-shell flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <h2 className="section-title max-w-[13ch]">{project.inquiryPrompt}</h2>
           <Link href={`/contact?project=${project.slug}`} className="pill-button shrink-0">

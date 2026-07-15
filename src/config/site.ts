@@ -35,7 +35,7 @@ export const siteConfig = {
       description:
         "Konut ve ticari mekânlarda estetik, işlev ve kullanıcı ihtiyaçlarını özgün bir tasarım diliyle bir araya getiriyorum.",
       primaryActionLabel: "Projeleri keşfet",
-      secondaryActionLabel: "Projenizi anlatın",
+      secondaryActionLabel: "Tasarım görüşmesini başlat",
       scrollLabel: "Aşağı kaydır",
       visualAlt:
         "Gerçek bir proje renderı olmayan, ışık ve mimari yüzeylerden oluşan etkileşimli soyut kompozisyon",
@@ -76,11 +76,11 @@ export const siteConfig = {
       actionLabel: "Göknur'u tanıyın",
     },
     contact: {
-      eyebrow: "Yeni bir mekân üzerine konuşalım",
-      title: "Projenizin ilk sorusuyla başlayın.",
+      eyebrow: "İlk Eskiz · Yeni Proje",
+      title: "Hayalinizdeki mekânın ilk çizgisini birlikte atalım.",
       description:
-        "Mekânı, ihtiyaçlarınızı ve hedeflediğiniz hissi kısaca paylaşın; uygun kapsamı birlikte şekillendirelim.",
-      actionLabel: "Proje formunu aç",
+        "Hayalinizi, mekânın ihtiyaçlarını ve yaşam ritminizi paylaşın; ilk brief'ten mimari kurguya uzanan yolu birlikte şekillendirelim.",
+      actionLabel: "Tasarım görüşmesini başlat",
       responseNote:
         "İletişim altyapısı etkinleştirilene kadar form gönderimleri yalnızca geliştirme ortamında doğrulanır.",
     },

@@ -77,7 +77,7 @@ export function ContactForm() {
   const onSubmit = handleSubmit(async (data) => {
     setSubmissionStatus({
       state: "pending",
-      message: "Talebiniz gönderiliyor…",
+      message: "Görüşme talebiniz gönderiliyor…",
     });
 
     try {
@@ -93,14 +93,16 @@ export function ContactForm() {
 
       if (!response.ok) {
         throw new Error(
-          responseMessage ?? "Talebiniz gönderilemedi. Lütfen daha sonra yeniden deneyin.",
+          responseMessage ?? "Görüşme talebiniz gönderilemedi. Lütfen daha sonra yeniden deneyin.",
         );
       }
 
       reset();
       setSubmissionStatus({
         state: "success",
-        message: responseMessage ?? "Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
+        message:
+          responseMessage ??
+          "Görüşme talebiniz alındı. Projenizin ilk adımı için sizinle iletişime geçeceğiz.",
       });
     } catch (error) {
       setSubmissionStatus({
@@ -108,7 +110,7 @@ export function ContactForm() {
         message:
           error instanceof Error
             ? error.message
-            : "Talebiniz gönderilemedi. Lütfen daha sonra yeniden deneyin.",
+            : "Görüşme talebiniz gönderilemedi. Lütfen daha sonra yeniden deneyin.",
       });
     }
   });
@@ -124,11 +126,11 @@ export function ContactForm() {
     >
       <div className="grid gap-2">
         <h2 id="contact-form-title" className="text-2xl font-medium tracking-tight text-stone-950">
-          Projenizi anlatın
+          Mekânınızın ilk brief’ini oluşturalım.
         </h2>
         <p className="max-w-2xl text-sm leading-6 text-stone-600">
-          Yıldızla işaretlenen alanlar zorunludur. Paylaştığınız bilgiler yalnızca talebinize dönüş
-          yapmak için kullanılır.
+          Hayalinizi, mevcut mekânı ve ulaşmak istediğiniz hissi anlatın. Yıldızla işaretlenen
+          alanlar zorunludur; bilgileriniz yalnızca talebinize dönüş yapmak için kullanılır.
         </p>
       </div>
 
@@ -259,7 +261,7 @@ export function ContactForm() {
 
       <div className="grid gap-2">
         <label htmlFor="contact-message" className={labelClassName}>
-          Projeniz hakkında <span aria-hidden="true">*</span>
+          Hayalinizdeki mekân <span aria-hidden="true">*</span>
         </label>
         <textarea
           id="contact-message"
@@ -316,7 +318,7 @@ export function ContactForm() {
           aria-describedby="contact-form-status"
           className="inline-flex min-h-12 items-center justify-center bg-stone-950 px-6 py-3 text-sm font-medium text-stone-50 transition-colors hover:bg-stone-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-950 disabled:cursor-wait disabled:opacity-60"
         >
-          {isPending ? "Gönderiliyor…" : "Proje talebini gönder"}
+          {isPending ? "Görüşme talebi gönderiliyor…" : "Tasarım görüşmesini başlat"}
         </button>
 
         <div

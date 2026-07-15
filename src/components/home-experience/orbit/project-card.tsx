@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, type RefObject } from "react";
-import { useTexture } from "@react-three/drei";
+import { Edges, useTexture } from "@react-three/drei";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -100,7 +100,7 @@ function getSceneVisibilityTarget() {
   const runtime = getExperienceRuntime();
 
   if (runtime.phase === "works") return 1;
-  if (runtime.phase === "vision-transition") {
+  if (runtime.phase === "showcase-transition") {
     return 1 - smoothstep(0.04, 0.82, runtime.phaseProgress);
   }
 
@@ -146,7 +146,7 @@ function ProjectCard({
     orientationMatrix: new THREE.Matrix4(),
     parentQuaternion: new THREE.Quaternion(),
     targetQuaternion: new THREE.Quaternion(),
-    baseImageColor: new THREE.Color(texture ? "#ffffff" : "#202431"),
+    baseImageColor: new THREE.Color(texture ? "#ffffff" : "#9bcbe3"),
   });
 
   const accentColor = orbitAccentColors[index % orbitAccentColors.length];
@@ -293,15 +293,15 @@ function ProjectCard({
     imageMaterial.opacity = imageOpacity;
     imageMaterial.color.copy(scratch.baseImageColor).multiplyScalar(brightness);
     frameMaterial.opacity =
-      sceneVisibility * otherCardOpacity * (0.2 + sideWeight * 0.22 + focusWeight * 0.22);
+      sceneVisibility * otherCardOpacity * (0.48 + sideWeight * 0.18 + focusWeight * 0.32);
     accentMaterial.opacity =
       sceneVisibility *
       otherCardOpacity *
-      (0.018 +
-        sideWeight * 0.045 +
-        focusWeight * 0.2 +
-        (hoveredRef.current ? 0.055 : 0) +
-        selectionProgress * 0.12);
+      (0.08 +
+        sideWeight * 0.1 +
+        focusWeight * 0.38 +
+        (hoveredRef.current ? 0.14 : 0) +
+        selectionProgress * 0.18);
     shadowMaterial.opacity =
       sceneVisibility * otherCardOpacity * (0.035 + sideWeight * 0.04 + focusWeight * 0.12);
     overlayMaterial.opacity =
@@ -403,7 +403,7 @@ function ProjectCard({
         />
         <meshBasicMaterial
           ref={shadowMaterialRef}
-          color="#151412"
+          color="#20292d"
           transparent
           opacity={0}
           depthTest
@@ -414,21 +414,22 @@ function ProjectCard({
       <mesh position={[0, 0, -0.025]}>
         <boxGeometry
           args={[
-            experienceConfig.cards.worldWidth + 0.026,
-            experienceConfig.cards.worldHeight + 0.026,
-            0.03,
+            experienceConfig.cards.worldWidth + 0.16,
+            experienceConfig.cards.worldHeight + 0.16,
+            0.035,
           ]}
         />
         <meshStandardMaterial
           ref={frameMaterialRef}
-          color="#777166"
-          metalness={0.72}
-          roughness={0.4}
+          color={experienceConfig.colors.river}
+          metalness={0.58}
+          roughness={0.34}
           transparent
           opacity={0}
           depthTest
           depthWrite
         />
+        <Edges color={accentColor} scale={1.004} threshold={24} />
       </mesh>
 
       <mesh
@@ -438,7 +439,7 @@ function ProjectCard({
           0.012,
         ]}
       >
-        <boxGeometry args={[0.55, 0.018, 0.018]} />
+        <boxGeometry args={[0.72, 0.028, 0.028]} />
         <meshBasicMaterial
           ref={accentMaterialRef}
           color={accentColor}
@@ -464,7 +465,7 @@ function ProjectCard({
         <meshBasicMaterial
           ref={imageMaterialRef}
           map={texture}
-          color={texture ? "#ffffff" : "#202431"}
+          color={texture ? "#ffffff" : "#9bcbe3"}
           transparent
           opacity={0}
           depthTest
@@ -480,7 +481,7 @@ function ProjectCard({
         />
         <meshBasicMaterial
           ref={overlayMaterialRef}
-          color="#8e897f"
+          color="#20292d"
           depthTest
           depthWrite={false}
           opacity={0}

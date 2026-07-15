@@ -11,10 +11,8 @@ import { experienceConfig } from "./experience-config";
 import { getExperienceRuntime } from "./experience-store";
 import { ProjectOrbit } from "./orbit/project-orbit";
 import { PackageVault } from "./packages";
-import { NeonPointerField } from "./pointer/neon-pointer-field";
+import { MaterialLightSurface } from "./pointer/material-light-surface";
 import { ShowcaseCorridor } from "./showcase/showcase-corridor";
-import { SpatialSculpture } from "./sculpture/spatial-sculpture";
-import { VisionScene } from "./vision/vision-scene";
 import type { Project } from "@/types";
 
 type ExperienceCanvasProps = Readonly<{
@@ -107,7 +105,7 @@ export function ExperienceCanvas({
     (state: Parameters<NonNullable<React.ComponentProps<typeof Canvas>["onCreated"]>>[0]) => {
       state.gl.outputColorSpace = THREE.SRGBColorSpace;
       state.gl.toneMapping = THREE.ACESFilmicToneMapping;
-      state.gl.toneMappingExposure = 1.04;
+      state.gl.toneMappingExposure = 0.94;
 
       const canvas = state.gl.domElement;
       const handleContextLost = (event: Event) => {
@@ -152,10 +150,8 @@ export function ExperienceCanvas({
         <Suspense fallback={null}>
           <SceneAtmosphere />
           <ArchitecturalChamber />
-          <NeonPointerField />
-          <SpatialSculpture />
+          <MaterialLightSurface />
           <ProjectOrbit projects={projects} />
-          <VisionScene />
           <ShowcaseCorridor />
           <PackageVault count={packageCount} />
           <ExperienceCamera />

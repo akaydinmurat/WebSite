@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ArrowUpRight, Star } from "lucide-react";
+import { ArrowUpRight, Sparkles, Star } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -17,9 +17,11 @@ import { siteConfig } from "@/config/site";
 import { processStages, type ProcessStage } from "@/content/process-stages";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/animation/gsap";
+import { isWebglViewportCapable } from "@/lib/experience/webgl-capability";
 import type { DesignPackage, GoogleReviewsResult, Project, Service } from "@/types";
 
 import { experienceConfig, type ExperiencePhase } from "./experience-config";
+import { AboutMonograph } from "./about";
 import {
   beginOrbitDrag,
   deactivateExperiencePointer,
@@ -27,7 +29,6 @@ import {
   getExperienceRuntime,
   getExperienceServerSnapshot,
   getExperienceSnapshot,
-  pulseExperiencePointer,
   resetExperienceRuntime,
   setExperiencePhase,
   setPageVisibility,
@@ -72,6 +73,8 @@ const projectCategoryLabels: Record<Project["category"], string> = {
   visualization: "Görselleştirme",
 };
 
+const packageTones = ["sky", "coral", "cream", "celadon", "sun"] as const;
+
 type MetadataTransitionState = "idle" | "exit" | "enter";
 
 export function HomeExperience({
@@ -97,7 +100,7 @@ export function HomeExperience({
     getExperienceServerSnapshot,
   );
   const shouldRenderWebgl =
-    process.env.NEXT_PUBLIC_ENABLE_WEBGL_HERO !== "false" && webglCapable && !reducedMotion;
+    process.env.NEXT_PUBLIC_ENABLE_WEBGL_HERO === "true" && webglCapable && !reducedMotion;
 
   const featuredPackages = useMemo(() => {
     const preferred = packages.filter((item) => item.showOnHomepage);
@@ -114,6 +117,10 @@ export function HomeExperience({
   const setPhase = useCallback((phase: ExperiencePhase, progress: number) => {
     setExperiencePhase(phase, progress);
     document.body.dataset.experiencePhase = phase;
+    const header = document.querySelector<HTMLElement>("header[data-testid='site-header']");
+    if (header) {
+      header.dataset.cursorTheme = "light";
+    }
   }, []);
 
   useGSAP(
@@ -126,11 +133,12 @@ export function HomeExperience({
       const vision = root.querySelector<HTMLElement>("[data-experience-track='vision']");
       const showcase = root.querySelector<HTMLElement>("[data-experience-track='showcase']");
       const outro = root.querySelector<HTMLElement>("[data-experience-track='outro']");
+      const contactTrack = root.querySelector<HTMLElement>("[data-experience-track='contact']");
       const packageTrack = root.querySelector<HTMLElement>("[data-package-track]");
       const packageWindow = root.querySelector<HTMLElement>("[data-package-window]");
       const packageStrip = root.querySelector<HTMLElement>("[data-package-strip]");
 
-      if (!intro || !works || !vision || !showcase || !outro) return;
+      if (!intro || !works || !vision || !showcase || !outro || !contactTrack) return;
 
       const createTrack = (
         element: HTMLElement,
@@ -145,6 +153,12 @@ export function HomeExperience({
           onEnterBack: () => setPhase(phase, 1),
           onUpdate: (trigger) => {
             setTrackProgress(track, trigger.progress);
+            if (track === "vision") {
+              root.style.setProperty("--about-name-shift", `${trigger.progress * -3}vw`);
+              root.style.setProperty("--about-plane-shift", `${trigger.progress * -2}vw`);
+              root.style.setProperty("--about-plane-rotate", `${-7 + trigger.progress * 3}deg`);
+              root.style.setProperty("--about-folio-shift", `${(1 - trigger.progress) * -2}vw`);
+            }
             if (track === "showcase") {
               setShowcaseStage(
                 getShowcaseMotionState(trigger.progress, processStages.length).activeStageIndex,
@@ -156,9 +170,10 @@ export function HomeExperience({
 
       createTrack(intro, "intro", "intro");
       createTrack(works, "works", "works");
-      createTrack(vision, "vision", "vision");
       createTrack(showcase, "showcase", "showcase");
       createTrack(outro, "outro", "outro");
+      createTrack(vision, "vision", "vision");
+      createTrack(contactTrack, "outro", "outro");
 
       ScrollTrigger.create({
         trigger: outro,
@@ -193,7 +208,7 @@ export function HomeExperience({
         onEnter: () => setPhase("vision-transition", 0),
         onEnterBack: () => setPhase("vision-transition", 1),
         onLeave: () => setPhase("vision", 0),
-        onLeaveBack: () => setPhase("works", 1),
+        onLeaveBack: () => setPhase("outro", 1),
         onUpdate: (trigger) => {
           if (trigger.progress >= 0.999) setPhase("vision", 0);
           else setPhase("vision-transition", trigger.progress);
@@ -207,59 +222,39 @@ export function HomeExperience({
         onEnter: () => setPhase("showcase-transition", 0),
         onEnterBack: () => setPhase("showcase-transition", 1),
         onLeave: () => setPhase("showcase", 0),
-        onLeaveBack: () => setPhase("vision", 1),
+        onLeaveBack: () => setPhase("works", 1),
         onUpdate: (trigger) => {
           if (trigger.progress >= 0.999) setPhase("showcase", 0);
           else setPhase("showcase-transition", trigger.progress);
         },
       });
 
-      if (!reducedMotion) {
-        gsap.to(root.querySelector("[data-intro-wordmark]"), {
-          autoAlpha: 0.08,
-          scale: 0.88,
-          yPercent: -8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: intro,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.4,
-          },
+      ScrollTrigger.create({
+        trigger: contactTrack,
+        start: "top bottom",
+        end: "top top",
+        onEnter: () => setPhase("outro", 0),
+        onEnterBack: () => setPhase("outro", 1),
+        onLeave: () => setPhase("outro", 0),
+        onLeaveBack: () => setPhase("vision", 1),
+        onUpdate: (trigger) => {
+          setTrackProgress("outro", trigger.progress);
+          setPhase("outro", trigger.progress);
+        },
+      });
+
+      if (packageTrack) {
+        ScrollTrigger.create({
+          trigger: packageTrack,
+          start: "top top",
+          end: "bottom bottom",
+          onEnter: () => setTrackProgress("packages", 0),
+          onEnterBack: () => setTrackProgress("packages", 1),
+          onUpdate: (trigger) => setTrackProgress("packages", trigger.progress),
         });
+      }
 
-        gsap.fromTo(
-          root.querySelector("[data-projects-wordmark]"),
-          { autoAlpha: 0, scale: 1.08 },
-          {
-            autoAlpha: 0.34,
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: works,
-              start: "top bottom",
-              end: "top 35%",
-              scrub: 0.35,
-            },
-          },
-        );
-
-        gsap.fromTo(
-          root.querySelector("[data-vision-copy]"),
-          { clipPath: "inset(0 0 100% 0)", y: 48 },
-          {
-            clipPath: "inset(0 0 0% 0)",
-            y: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: vision,
-              start: "top 72%",
-              end: "top 10%",
-              scrub: 0.45,
-            },
-          },
-        );
-
+      if (!reducedMotion) {
         if (
           packageTrack &&
           packageWindow &&
@@ -311,20 +306,30 @@ export function HomeExperience({
   );
 
   useEffect(() => {
-    const finePointer = window.matchMedia(
-      "(min-width: 768px) and (hover: hover) and (pointer: fine)",
-    );
-    const updateCapability = () => setWebglCapable(finePointer.matches);
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const updateCapability = () =>
+      setWebglCapable(
+        isWebglViewportCapable({
+          hasFinePointer: finePointer.matches,
+          viewportWidth: window.innerWidth,
+        }),
+      );
     finePointer.addEventListener("change", updateCapability);
+    window.addEventListener("resize", updateCapability);
     updateCapability();
 
-    return () => finePointer.removeEventListener("change", updateCapability);
+    return () => {
+      finePointer.removeEventListener("change", updateCapability);
+      window.removeEventListener("resize", updateCapability);
+    };
   }, []);
 
   useEffect(() => {
     const body = document.body;
+    const header = document.querySelector<HTMLElement>("header[data-testid='site-header']");
     body.dataset.homeExperience = "true";
     body.dataset.experiencePhase = "intro";
+    if (header) header.dataset.cursorTheme = "light";
     setReducedMotion(reducedMotion);
 
     const handleVisibility = () => setPageVisibility(!document.hidden);
@@ -341,6 +346,7 @@ export function HomeExperience({
       window.removeEventListener("pointercancel", handlePointerCancel);
       delete body.dataset.homeExperience;
       delete body.dataset.experiencePhase;
+      if (header) header.dataset.cursorTheme = "light";
       resetExperienceRuntime();
     };
   }, [reducedMotion]);
@@ -348,12 +354,11 @@ export function HomeExperience({
   const scrollToScene = useCallback(
     (scene: ExperienceEntryScene, behavior: ScrollBehavior) => {
       const target = document.getElementById(sceneTargets[scene]);
-      target?.scrollIntoView({ behavior, block: "start" });
+      if (!target) return false;
 
-      if (
-        behavior === "auto" &&
-        (scene === "packages" || scene === "reviews" || scene === "contact")
-      ) {
+      target.scrollIntoView({ behavior, block: "start" });
+
+      if (behavior === "auto" && (scene === "packages" || scene === "reviews")) {
         ScrollTrigger.update();
         const outro = rootRef.current?.querySelector<HTMLElement>(
           "[data-experience-track='outro']",
@@ -364,7 +369,17 @@ export function HomeExperience({
           : 0;
         setTrackProgress("outro", progress);
         setPhase("outro", progress);
+      } else if (behavior === "auto" && scene === "contact") {
+        ScrollTrigger.update();
+        setTrackProgress("outro", 1);
+        setPhase("outro", 1);
+      } else if (behavior === "auto" && scene === "about") {
+        ScrollTrigger.update();
+        setTrackProgress("vision", 0);
+        setPhase("vision", 0);
       }
+
+      return true;
     },
     [setPhase],
   );
@@ -393,9 +408,11 @@ export function HomeExperience({
       const value = url.searchParams.get("scene") ?? "home";
       if (!validScenes.has(value as ExperienceEntryScene)) return;
 
-      event.preventDefault();
       const scene = value as ExperienceEntryScene;
-      const nextHref = scene === "home" ? "/" : `/?scene=${scene}`;
+      if (!document.getElementById(sceneTargets[scene])) return;
+
+      event.preventDefault();
+      const nextHref = `${url.pathname}${url.search}${url.hash}`;
       window.history.pushState({ scene }, "", nextHref);
       scrollToScene(scene, reducedMotion ? "auto" : "smooth");
     };
@@ -450,7 +467,6 @@ export function HomeExperience({
   function handlePointerDown(event: ReactPointerEvent<HTMLElement>) {
     if (!event.isPrimary) return;
     updateExperiencePointer(event.clientX, event.clientY, window.innerWidth, window.innerHeight);
-    pulseExperiencePointer();
 
     const target = event.target instanceof Element ? event.target : null;
     if (
@@ -468,7 +484,7 @@ export function HomeExperience({
     <section
       ref={rootRef}
       className="spatial-home"
-      data-cursor-theme="dark"
+      data-cursor-theme="light"
       data-home-content
       data-phase={snapshot.phase}
       data-webgl-ready={webglReady ? "true" : "false"}
@@ -478,15 +494,6 @@ export function HomeExperience({
       }}
       onPointerMove={handlePointerMove}
     >
-      <div className="experience-background-type" aria-hidden="true">
-        <div className="experience-giant-type" data-intro-wordmark>
-          <span>{experienceConfig.brand.wordmark[0]}</span>
-          <span>{experienceConfig.brand.wordmark[1]}</span>
-        </div>
-        <p className="experience-section-word" data-projects-wordmark>
-          PROJELER
-        </p>
-      </div>
       <div className="experience-fixed-scene" aria-hidden="true">
         <ExperienceFallback
           activeProjectIndex={snapshot.activeProjectIndex}
@@ -513,9 +520,17 @@ export function HomeExperience({
         <div className="experience-sticky">
           <div className="experience-intro-copy">
             <p className="experience-kicker">{experienceConfig.brand.name} · Mekânsal Deneyim</p>
-            <h1 id="experience-intro-title">Mekân, yaşamla anlam kazanır.</h1>
-            <p>Işık, malzeme ve oranı tek bir dijital galeride buluşturan iç mimari seçki.</p>
+            <h1 id="experience-intro-title">
+              <span>Mekân,</span> <span>yaşamla anlam</span> <span>kazanır.</span>
+            </h1>
           </div>
+          <p className="experience-intro-description">
+            Işık, malzeme ve oranı tek bir dijital galeride buluşturan iç mimari seçki.
+          </p>
+          <p className="experience-intro-datum" aria-hidden="true">
+            <span>01 / Giriş</span>
+            <span>{siteConfig.contact.location}</span>
+          </p>
           <div className="experience-scroll-cue" aria-hidden="true">
             <span>Keşfet</span>
             <i />
@@ -548,7 +563,9 @@ export function HomeExperience({
             <ul>
               {projects.map((project) => (
                 <li key={project.slug}>
-                  <Link href={`/projects/${project.slug}`}>{project.title}</Link>
+                  <Link href={`/projects/${project.slug}`} tabIndex={-1}>
+                    {project.title}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -558,34 +575,6 @@ export function HomeExperience({
             <span>Sürükle ve serbest bırak</span>
           </p>
           <ExperienceRail active={1} />
-        </div>
-      </section>
-
-      <section
-        id="experience-vision"
-        className="experience-track experience-vision"
-        data-experience-track="vision"
-        aria-labelledby="experience-vision-title"
-      >
-        <div className="experience-vision-surface" aria-hidden="true" />
-        <div className="experience-sticky experience-vision-sticky">
-          <div className="experience-vision-copy" data-vision-copy>
-            <p className="experience-kicker">03 · Yaklaşım</p>
-            <h2 id="experience-vision-title">
-              Bir mekânı yalnızca güzel göstermek değil, ona doğru duyguyu kazandırmak.
-            </h2>
-            <p>
-              Işık, malzeme ve oranı bir araya getirerek yaşanabilir ve karakterli iç mekânlar
-              tasarlıyorum.
-            </p>
-            <Link href="/about">
-              Tasarım yaklaşımı <ArrowUpRight aria-hidden="true" size={14} />
-            </Link>
-          </div>
-          <p className="experience-material-note" aria-hidden="true">
-            MALZEME / IŞIK / ORAN
-          </p>
-          <ExperienceRail active={2} light />
         </div>
       </section>
 
@@ -609,13 +598,18 @@ export function HomeExperience({
               </li>
             ))}
           </ol>
-          <ExperienceRail active={3} light />
+          <ExperienceRail active={2} light />
         </div>
       </section>
 
       <div className="experience-outro" data-experience-track="outro">
         <PackagesSection packages={featuredPackages} />
         <ReviewsSection reviews={reviews} />
+      </div>
+
+      <AboutMonograph />
+
+      <div className="experience-outro experience-contact-outro" data-experience-track="contact">
         <ContactSection serviceCount={services.length} />
       </div>
     </section>
@@ -640,10 +634,15 @@ function ExperienceFallback({
 
   return (
     <div className="experience-fallback" data-fallback-phase={phase} aria-hidden="true">
+      <span className="experience-fallback-material-field">
+        <i />
+        <i />
+        <i />
+      </span>
       <span className="experience-fallback-grid" />
       <span className="experience-fallback-wall experience-fallback-wall-left" />
       <span className="experience-fallback-wall experience-fallback-wall-right" />
-      <span className="experience-fallback-portal" />
+      <span className="experience-fallback-light-field" />
       <div className="experience-fallback-projects">
         {visibleProjectIndexes.map((projectIndex, slotIndex) => {
           const project = projects[projectIndex];
@@ -666,7 +665,6 @@ function ExperienceFallback({
           style={{ backgroundImage: `url(${processStage.visualSrc})` }}
         />
       </div>
-      <span className="experience-fallback-core" />
     </div>
   );
 }
@@ -687,7 +685,7 @@ function FallbackProjectVisual({ className, project }: { className: string; proj
 function ExperienceRail({ active, light = false }: { active: number; light?: boolean }) {
   return (
     <ol className="experience-rail" data-light={light ? "true" : "false"} aria-hidden="true">
-      {["Giriş", "Projeler", "Yaklaşım", "Süreç"].map((label, index) => (
+      {["Giriş", "Projeler", "Süreç"].map((label, index) => (
         <li key={label} data-active={active === index ? "true" : "false"}>
           <span>{String(index + 1).padStart(2, "0")}</span>
           <i />
@@ -699,15 +697,17 @@ function ExperienceRail({ active, light = false }: { active: number; light?: boo
 }
 
 function useTransitionedValue<T>(value: T, valueKey: string) {
+  const reducedMotion = useReducedMotion();
   const renderedKeyRef = useRef(valueKey);
   const [renderedValue, setRenderedValue] = useState(value);
   const [transitionState, setTransitionState] = useState<MetadataTransitionState>("idle");
 
   useEffect(() => {
     if (renderedKeyRef.current === valueKey) return;
+    if (reducedMotion) return;
 
-    setTransitionState("exit");
     let settleTimer: ReturnType<typeof setTimeout> | null = null;
+    const exitTimer = setTimeout(() => setTransitionState("exit"), 0);
     const swapTimer = setTimeout(() => {
       renderedKeyRef.current = valueKey;
       setRenderedValue(value);
@@ -716,12 +716,16 @@ function useTransitionedValue<T>(value: T, valueKey: string) {
     }, 170);
 
     return () => {
+      clearTimeout(exitTimer);
       clearTimeout(swapTimer);
       if (settleTimer) clearTimeout(settleTimer);
     };
-  }, [value, valueKey]);
+  }, [reducedMotion, value, valueKey]);
 
-  return { renderedValue, transitionState };
+  return {
+    renderedValue: reducedMotion ? value : renderedValue,
+    transitionState: reducedMotion ? "idle" : transitionState,
+  };
 }
 
 function ProjectMetadata({
@@ -756,6 +760,15 @@ function ProjectMetadata({
         <span>{projectCategoryLabels[displayedProject.category]}</span>
         <span>İç Mimari</span>
       </div>
+      <Link
+        className="experience-project-open-link"
+        href={`/projects/${displayedProject.slug}`}
+        data-cursor-kind="project"
+        data-cursor-label="Projeyi aç"
+        data-no-orbit-drag
+      >
+        Aktif projeyi incele <ArrowUpRight aria-hidden="true" size={13} />
+      </Link>
     </div>
   );
 }
@@ -767,7 +780,7 @@ function ProcessMetadata({ stage, index }: { stage: ProcessStage; index: number 
   return (
     <div className="experience-showcase-copy" data-transition={transitionState} aria-live="polite">
       <p className="experience-kicker experience-process-number">
-        04 · Süreç / {String(renderedValue.index + 1).padStart(2, "0")}
+        03 · Süreç / {String(renderedValue.index + 1).padStart(2, "0")}
       </p>
       <h2 id="experience-showcase-title">{renderedValue.stage.title}</h2>
       <p className="experience-process-description">{renderedValue.stage.description}</p>
@@ -791,8 +804,10 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
           <span />
         </div>
         <header className="experience-content-heading">
-          <p className="experience-kicker">05 · Tasarım Kapsamları</p>
-          <h2 id="experience-packages-title">Kapsamı aç. Mekânı dönüştür.</h2>
+          <p className="experience-kicker">04 · Tasarım Kapsamları</p>
+          <h2 id="experience-packages-title">
+            Kapsam, renk ve ritim. Mekân için yeni bir başlangıç.
+          </h2>
           <p>
             Doğrulanmış hizmet kapsamları; mekânın ihtiyacına göre ayrışan, okunaklı proje dosyaları
             olarak sunulur.
@@ -809,18 +824,17 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
                   className="experience-package-card"
                   data-package-card
                   data-package-index={String(index + 1).padStart(2, "0")}
+                  data-package-tone={packageTones[index % packageTones.length]}
                 >
                   <span className="experience-package-card-index" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <span className="experience-package-scan" aria-hidden="true" />
-                  <span className="experience-package-corners" aria-hidden="true">
-                    <i />
+                  <span className="experience-package-aperture" aria-hidden="true">
                     <i />
                     <i />
                     <i />
                   </span>
-                  <div className="experience-package-schema" aria-hidden="true">
+                  <div className="experience-package-plan" aria-hidden="true">
                     <i />
                     <i />
                     <i />
@@ -839,7 +853,11 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
                   </ul>
                   <footer>
                     <span>{item.presentationFormats?.join(" + ") ?? "Tanımlı kapsam"}</span>
-                    <Link href={item.inquiry.href}>
+                    <Link
+                      href={item.inquiry.href}
+                      data-cursor-kind="action"
+                      data-cursor-label="Görüşelim"
+                    >
                       Görüşelim <ArrowUpRight aria-hidden="true" size={13} />
                     </Link>
                   </footer>
@@ -855,6 +873,7 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
 
 function ReviewsSection({ reviews }: { reviews: GoogleReviewsResult }) {
   const readyReviews = reviews.status === "ready" ? reviews.reviews.slice(0, 3) : [];
+  const fallbackUrl = reviews.status === "unavailable" ? reviews.fallbackUrl : undefined;
   const principles = [
     {
       title: "Doğrulanmış kaynak",
@@ -877,7 +896,7 @@ function ReviewsSection({ reviews }: { reviews: GoogleReviewsResult }) {
       aria-labelledby="experience-reviews-title"
     >
       <header>
-        <p className="experience-kicker">06 · Deneyimler</p>
+        <p className="experience-kicker">05 · Deneyimler</p>
         <h2 id="experience-reviews-title">
           {readyReviews.length
             ? "Mekânın ardından kalan sözler."
@@ -894,7 +913,9 @@ function ReviewsSection({ reviews }: { reviews: GoogleReviewsResult }) {
                 </p>
                 <blockquote>{review.text}</blockquote>
                 <footer>
-                  <span>{review.author.displayName}</span>
+                  <a href={review.author.profileUrl} target="_blank" rel="noopener noreferrer">
+                    {review.author.displayName}
+                  </a>
                   <a href={review.googleMapsUrl} target="_blank" rel="noopener noreferrer">
                     Google Maps <ArrowUpRight aria-hidden="true" size={12} />
                   </a>
@@ -909,6 +930,38 @@ function ReviewsSection({ reviews }: { reviews: GoogleReviewsResult }) {
               </article>
             ))}
       </div>
+      {readyReviews.length ? (
+        <div className="experience-review-source-note">
+          <p>
+            Yorumlar ilgililiğe göre sıralanır; ilk {readyReviews.length} kayıt gösterilir. Kaynak:{" "}
+            <span translate="no">Google Maps</span>.
+          </p>
+          {reviews.status === "ready" && reviews.providerAttributions.length ? (
+            <ul aria-label="Yorum sağlayıcı atıfları">
+              {reviews.providerAttributions.map((attribution) => (
+                <li key={attribution.providerUrl}>
+                  <a href={attribution.providerUrl} target="_blank" rel="noopener noreferrer">
+                    {attribution.provider}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : fallbackUrl ? (
+        <a
+          className="experience-google-review-link"
+          href={fallbackUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>
+            <small>Doğrulanmış kaynak</small>
+            <strong>Google’daki yorumları inceleyin</strong>
+          </span>
+          <ArrowUpRight aria-hidden="true" size={19} />
+        </a>
+      ) : null}
     </section>
   );
 }
@@ -920,12 +973,24 @@ function ContactSection({ serviceCount }: { serviceCount: number }) {
       className="experience-content-section experience-contact"
       aria-labelledby="experience-contact-title"
     >
-      <p className="experience-kicker">07 · Yeni Proje</p>
-      <h2 id="experience-contact-title">Yeni bir mekân, doğru soruyla başlar.</h2>
+      <p className="experience-kicker">07 · İlk Eskiz · Yeni Proje</p>
+      <h2 id="experience-contact-title">Hayalinizdeki mekânın ilk çizgisini birlikte atalım.</h2>
       <p>{siteConfig.copy.contact.description}</p>
       <div>
-        <Link href="/contact" className="experience-contact-action">
-          Projenizi anlatın <ArrowUpRight aria-hidden="true" size={16} />
+        <Link
+          href="/contact"
+          className="experience-contact-action experience-dream-portal"
+          data-cursor-kind="action"
+          data-cursor-label="İlk çizgiyi atalım"
+        >
+          <span className="experience-dream-portal-mark" aria-hidden="true">
+            <Sparkles size={19} strokeWidth={1.7} />
+          </span>
+          <span className="experience-dream-portal-copy">
+            <small>Hayalden mekâna</small>
+            <strong>{siteConfig.copy.contact.actionLabel}</strong>
+          </span>
+          <ArrowUpRight aria-hidden="true" size={18} />
         </Link>
         <span>
           {serviceCount} çalışma alanı · {siteConfig.contact.location}

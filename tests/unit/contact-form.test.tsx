@@ -20,7 +20,7 @@ async function fillValidForm() {
   await user.type(screen.getByRole("textbox", { name: /yaklaşık alan/i }), "120");
   await user.selectOptions(screen.getByRole("combobox", { name: /bütçe aralığı/i }), "500k-1m");
   await user.type(
-    screen.getByRole("textbox", { name: /projeniz hakkında/i }),
+    screen.getByRole("textbox", { name: /hayalinizdeki mekân/i }),
     "Yeni evimizin yaşam alanları için tasarım desteği istiyoruz.",
   );
   await user.click(screen.getByRole("checkbox", { name: /bilgilerimin bu talebe/i }));
@@ -33,7 +33,7 @@ describe("ContactForm", () => {
     const user = userEvent.setup();
 
     render(<ContactForm />);
-    await user.click(screen.getByRole("button", { name: /proje talebini gönder/i }));
+    await user.click(screen.getByRole("button", { name: /tasarım görüşmesini başlat/i }));
 
     expect(await screen.findByText("Adınız en az 2 karakter olmalıdır.")).toHaveAttribute(
       "role",
@@ -69,7 +69,7 @@ describe("ContactForm", () => {
     render(<ContactForm />);
     const user = await fillValidForm();
 
-    await user.click(screen.getByRole("button", { name: /proje talebini gönder/i }));
+    await user.click(screen.getByRole("button", { name: /tasarım görüşmesini başlat/i }));
 
     expect(
       await screen.findByText("Form doğrulandı. Geliştirme modunda e-posta gönderilmedi."),
@@ -103,13 +103,13 @@ describe("ContactForm", () => {
     render(<ContactForm />);
     const user = await fillValidForm();
 
-    await user.click(screen.getByRole("button", { name: /proje talebini gönder/i }));
+    await user.click(screen.getByRole("button", { name: /tasarım görüşmesini başlat/i }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "İletişim hizmeti şu anda kullanılamıyor.",
     );
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: /proje talebini gönder/i })).toBeEnabled();
+      expect(screen.getByRole("button", { name: /tasarım görüşmesini başlat/i })).toBeEnabled();
     });
     expect(screen.getByRole("textbox", { name: /ad soyad/i })).toHaveValue("Ayşe Yılmaz");
   });

@@ -210,7 +210,7 @@ export function ShowcaseCorridor() {
   const gridMaterial = useMemo(
     () =>
       new THREE.LineBasicMaterial({
-        color: "#555957",
+        color: experienceConfig.colors.river,
         depthWrite: false,
         opacity: 0,
         transparent: true,
@@ -220,7 +220,7 @@ export function ShowcaseCorridor() {
   const frameMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: experienceConfig.colors.champagne,
+        color: experienceConfig.colors.river,
         depthWrite: true,
         metalness: 0.72,
         opacity: 0,
@@ -233,7 +233,7 @@ export function ShowcaseCorridor() {
     () =>
       new THREE.MeshPhysicalMaterial({
         clearcoat: 0.22,
-        color: "#59605f",
+        color: experienceConfig.colors.sunset,
         depthWrite: true,
         metalness: 0.3,
         opacity: 0,
@@ -245,13 +245,36 @@ export function ShowcaseCorridor() {
   const lightRailMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: experienceConfig.colors.ivory,
-        emissive: "#d8c8af",
-        emissiveIntensity: 0.24,
+        color: experienceConfig.colors.wind,
+        emissive: experienceConfig.colors.fennelSoft,
+        emissiveIntensity: 0.34,
         opacity: 0,
         roughness: 0.38,
         transparent: true,
       }),
+    [],
+  );
+  const bayMaterials = useMemo(
+    () =>
+      [
+        experienceConfig.colors.wind,
+        experienceConfig.colors.sunset,
+        experienceConfig.colors.fennelSoft,
+        experienceConfig.colors.river,
+        experienceConfig.colors.sandWhite,
+      ].map(
+        (color) =>
+          new THREE.MeshPhysicalMaterial({
+            clearcoat: 0.12,
+            color,
+            depthWrite: false,
+            metalness: 0.04,
+            opacity: 0,
+            roughness: 0.78,
+            side: THREE.DoubleSide,
+            transparent: true,
+          }),
+      ),
     [],
   );
   const imageMaterials = useMemo(
@@ -279,6 +302,7 @@ export function ShowcaseCorridor() {
     grid: gridMaterial,
     images: imageMaterials,
     lightRail: lightRailMaterial,
+    bays: bayMaterials,
   });
 
   useEffect(() => {
@@ -290,9 +314,11 @@ export function ShowcaseCorridor() {
       grid: gridMaterial,
       images: imageMaterials,
       lightRail: lightRailMaterial,
+      bays: bayMaterials,
     };
   }, [
     backingMaterial,
+    bayMaterials,
     corridorMaterial,
     floorMaterial,
     frameMaterial,
@@ -348,11 +374,13 @@ export function ShowcaseCorridor() {
       gridMaterial.dispose();
       frameMaterial.dispose();
       lightRailMaterial.dispose();
+      bayMaterials.forEach((material) => material.dispose());
       imageMaterials.forEach((material) => material.dispose());
       textures.forEach((texture) => texture.dispose());
     };
   }, [
     backingMaterial,
+    bayMaterials,
     bentPanelGeometry,
     corridorGridGeometry,
     corridorMaterial,
@@ -382,11 +410,11 @@ export function ShowcaseCorridor() {
   const stageAccentColors = useMemo(
     () =>
       [
-        experienceConfig.colors.champagne,
-        experienceConfig.colors.amber,
-        experienceConfig.colors.olive,
-        experienceConfig.colors.blue,
-        experienceConfig.colors.violet,
+        experienceConfig.colors.sunset,
+        experienceConfig.colors.river,
+        experienceConfig.colors.fennelDeep,
+        experienceConfig.colors.wind,
+        experienceConfig.colors.sunset,
       ].map((color) => new THREE.Color(color)),
     [],
   );
@@ -409,10 +437,10 @@ export function ShowcaseCorridor() {
     const materials = materialsRef.current;
     materials.corridor.opacity = opacity * 0.96;
     materials.floor.opacity = opacity * 0.98;
-    materials.grid.opacity = opacity * 0.15;
-    materials.frame.opacity = opacity * 0.7;
-    materials.backing.opacity = opacity * 0.18;
-    materials.lightRail.opacity = opacity * 0.72;
+    materials.grid.opacity = opacity * 0.22;
+    materials.frame.opacity = opacity * 0.88;
+    materials.backing.opacity = opacity * 0.34;
+    materials.lightRail.opacity = opacity * 0.86;
 
     let moving = Math.abs(previousOpacity - opacityTarget) > 0.001;
     const motion = getShowcaseMotionState(runtime.showcaseProgress, PANEL_COUNT);
@@ -441,6 +469,9 @@ export function ShowcaseCorridor() {
       4.8,
       delta,
     );
+    materials.bays.forEach((material, index) => {
+      material.opacity = opacity * (index === motion.activeStageIndex ? 0.82 : 0.42);
+    });
 
     materials.images.forEach((material, index) => {
       const panel = panelRefs.current[index];
@@ -511,7 +542,7 @@ export function ShowcaseCorridor() {
         ? Math.max(0.74, reveal)
         : Math.max(ambientVisibility, reveal * 0.68);
       material.opacity = opacity * hierarchyVisibility;
-      material.color.setScalar(0.66 + reveal * 0.13 + focus * 0.21);
+      material.color.setScalar(0.9 + reveal * 0.04 + focus * 0.06);
       panel.visible = isActive || (reveal > 0.72 && stageDistance < 0.7);
       moving =
         moving ||
@@ -527,21 +558,27 @@ export function ShowcaseCorridor() {
 
   return (
     <group ref={rootRef} visible={false}>
-      <ambientLight color="#d8cfc1" intensity={0.72} />
-      <hemisphereLight args={["#f3eee5", "#756d63", 1.05]} />
+      <ambientLight color={experienceConfig.colors.sandWhite} intensity={0.9} />
+      <hemisphereLight
+        args={[experienceConfig.colors.wind, experienceConfig.colors.fennelDeep, 1.24]}
+      />
       <directionalLight
         castShadow
-        color="#fff4df"
-        intensity={1.72}
+        color={experienceConfig.colors.sandWhite}
+        intensity={1.92}
         position={[3.8, 6.2, 4.8]}
         shadow-bias={-0.00015}
         shadow-mapSize-height={1024}
         shadow-mapSize-width={1024}
       />
-      <directionalLight color="#87949a" intensity={0.38} position={[-4.5, 2.4, -8]} />
+      <directionalLight
+        color={experienceConfig.colors.sunset}
+        intensity={0.48}
+        position={[-4.5, 2.4, -8]}
+      />
       <pointLight
         ref={stageLightRef}
-        color={experienceConfig.colors.champagne}
+        color={experienceConfig.colors.sunset}
         decay={2}
         distance={7.5}
         intensity={0}
@@ -561,6 +598,25 @@ export function ShowcaseCorridor() {
       <mesh receiveShadow material={corridorMaterial} position={[0, 0.2, endZ - 0.08]}>
         <planeGeometry args={[halfWidth * 2, 7.5]} />
       </mesh>
+
+      {GALLERY_FRAME_DEPTHS.map((z, index) => (
+        <group key={`color-bay-${z}`} name="chromatic-material-bay">
+          <mesh
+            material={bayMaterials[index]!}
+            position={[-halfWidth + 0.035, 0.45, z - 2.4]}
+            rotation={[0, Math.PI / 2, 0]}
+          >
+            <planeGeometry args={[4.65, 5.65]} />
+          </mesh>
+          <mesh
+            material={bayMaterials[(index + 2) % bayMaterials.length]!}
+            position={[halfWidth - 0.035, 0.45, z - 2.4]}
+            rotation={[0, -Math.PI / 2, 0]}
+          >
+            <planeGeometry args={[4.65, 5.65]} />
+          </mesh>
+        </group>
+      ))}
 
       {GALLERY_FRAME_DEPTHS.map((z) => (
         <group key={z} name="gallery-architectural-frame">

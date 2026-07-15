@@ -30,6 +30,7 @@ export default function ProjectsPage() {
         eyebrow="Proje Seçkisi"
         title="Her mekân, kendi yaşam biçiminden doğar."
         description="Sekiz proje kaydı; sabit bir görsel kesit ve doğal kaydırma içinde, yıl, konum ve mekân türüyle birlikte okunur."
+        tone="sky"
         aside={
           <div className="max-w-xs border-l border-[var(--color-accent)] pl-5">
             <strong className="block font-serif text-4xl font-normal">08</strong>
@@ -39,7 +40,7 @@ export default function ProjectsPage() {
           </div>
         }
       />
-      <section className="section-space-sm border-t border-[var(--color-border-strong)] pt-10 md:pt-14">
+      <section className="luminous-projects-page section-space-sm border-t border-[var(--color-border-strong)] pt-10 md:pt-14">
         <ProjectIndex projects={projectSummaries} categories={projectCategories} />
       </section>
     </>

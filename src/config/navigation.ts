@@ -11,35 +11,35 @@ export const primaryNavigation = [
   {
     id: "projects",
     label: "Projeler",
-    href: "/?scene=projects",
+    href: "/?scene=projects#experience-projects",
     match: "exact",
     description: "Proje sahnesini keşfet",
   },
   {
     id: "services",
     label: "Hizmetler",
-    href: "/?scene=services",
+    href: "/?scene=services#experience-showcase",
     match: "exact",
     description: "Çalışma alanlarını deneyimle",
   },
   {
     id: "packages",
     label: "Paketler",
-    href: "/?scene=packages",
+    href: "/?scene=packages#experience-packages",
     match: "exact",
     description: "Tasarım kapsamlarını karşılaştır",
   },
   {
     id: "reviews",
     label: "Yorumlar",
-    href: "/?scene=reviews",
+    href: "/?scene=reviews#experience-reviews",
     match: "exact",
     description: "Müşteri deneyimlerini incele",
   },
   {
     id: "about",
     label: "Hakkımda",
-    href: "/?scene=about",
+    href: "/?scene=about#experience-vision",
     match: "exact",
     description: "Göknur'un yaklaşımını ve deneyimini tanı",
   },
@@ -86,10 +86,10 @@ export const footerNavigation = [
 
 export const contactNavigationItem = {
   id: "start-a-project",
-  label: "Bir proje başlat",
-  href: "/?scene=contact",
+  label: "Hayalinizi mekâna dönüştürelim",
+  href: "/?scene=contact#experience-contact",
   match: "exact",
-  description: "Proje ihtiyaçlarını paylaş",
+  description: "Yeni proje görüşmesini başlat",
 } as const satisfies NavigationItem;
 
 export const navigationConfig = {

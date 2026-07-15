@@ -20,9 +20,10 @@ export default function ServicesPage() {
         eyebrow="Hizmetler"
         title="Her ölçeğe, ihtiyacına uygun bir tasarım kapsamı."
         description="Konut, ofis ve mağaza tasarımından online danışmanlığa; proje kapsamını mekânın gereksinimleri ve beklenen çıktı üzerinden birlikte tanımlıyorum."
+        tone="celadon"
       />
-      <section className="section-space-sm pt-0">
-        <div className="site-shell border-t border-[var(--color-border)]">
+      <section className="luminous-services-page section-space-sm pt-0">
+        <div className="site-shell luminous-service-list border-t border-[var(--color-border)]">
           {fallbackServices.map((service, index) => (
             <article
               key={service.slug}

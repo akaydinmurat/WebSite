@@ -34,6 +34,8 @@ export function ExperienceCamera() {
     () => ({
       desiredPosition: new THREE.Vector3(),
       desiredQuaternion: new THREE.Quaternion(),
+      corridorAnchorPosition: new THREE.Vector3(),
+      corridorAnchorTarget: new THREE.Vector3(),
       introPosition: new THREE.Vector3(...experienceConfig.camera.intro),
       lookMatrix: new THREE.Matrix4(),
       lookTarget: new THREE.Vector3(),
@@ -61,6 +63,8 @@ export function ExperienceCamera() {
     const {
       desiredPosition,
       desiredQuaternion,
+      corridorAnchorPosition,
+      corridorAnchorTarget,
       introPosition,
       lookMatrix,
       lookTarget,
@@ -83,15 +87,32 @@ export function ExperienceCamera() {
         break;
       case "vision-transition": {
         const progress = smoothstep(runtime.phaseProgress);
-        desiredPosition.lerpVectors(worksPosition, visionPosition, progress);
-        lookTarget.lerpVectors(worksTarget, visionTarget, progress);
+        curve.getPointAt(1, corridorAnchorPosition);
+        curve.getTangentAt(1, tangent).normalize();
+        corridorAnchorTarget.copy(corridorAnchorPosition).addScaledVector(tangent, 4.2);
+        desiredPosition.lerpVectors(corridorAnchorPosition, visionPosition, progress);
+        lookTarget.lerpVectors(corridorAnchorTarget, visionTarget, progress);
         break;
       }
-      case "vision":
-        desiredPosition.copy(visionPosition);
-        lookTarget.copy(visionTarget);
+      case "vision": {
+        const progress = smoothstep(runtime.visionProgress);
+        desiredPosition.set(
+          visionPosition.x + THREE.MathUtils.lerp(-0.34, 0.44, progress),
+          visionPosition.y + THREE.MathUtils.lerp(0.08, -0.06, progress),
+          visionPosition.z + THREE.MathUtils.lerp(0.22, -0.34, progress),
+        );
+        lookTarget.set(THREE.MathUtils.lerp(-0.28, 0.42, progress), visionTarget.y, visionTarget.z);
         break;
-      case "showcase-transition":
+      }
+      case "showcase-transition": {
+        const progress = smoothstep(runtime.phaseProgress);
+        curve.getPointAt(0, corridorAnchorPosition);
+        curve.getTangentAt(0, tangent).normalize();
+        corridorAnchorTarget.copy(corridorAnchorPosition).addScaledVector(tangent, 4.2);
+        desiredPosition.lerpVectors(worksPosition, corridorAnchorPosition, progress);
+        lookTarget.lerpVectors(worksTarget, corridorAnchorTarget, progress);
+        break;
+      }
       case "showcase":
       case "outro": {
         const progress =
@@ -112,9 +133,7 @@ export function ExperienceCamera() {
             activePanel.position[1],
             activePanel.position[2],
           );
-          const sceneReveal =
-            runtime.phase === "showcase-transition" ? smoothstep(runtime.phaseProgress) : 1;
-          lookTarget.lerp(panelTarget, activePanelMotion.focusWeight * sceneReveal * 0.62);
+          lookTarget.lerp(panelTarget, activePanelMotion.focusWeight * 0.62);
         }
         break;
       }

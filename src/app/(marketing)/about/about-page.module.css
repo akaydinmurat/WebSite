@@ -1,0 +1,563 @@
+.cover {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--luminous-cream, #fff8e8);
+  color: var(--luminous-ink, #20292d);
+}
+
+.cover::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 16%, rgb(255 255 255 / 72%), transparent 28%),
+    linear-gradient(90deg, rgb(255 255 255 / 18%), transparent 52% 82%, rgb(32 41 45 / 7%));
+  content: "";
+  pointer-events: none;
+}
+
+.coverPlanes,
+.coverPlanes span {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.coverPlanes span:nth-child(1) {
+  inset: -12% 6% -12% 63%;
+  background: var(--luminous-coral, #e9785f);
+  box-shadow: -3rem 0 0 var(--luminous-sky, #9bcbe3);
+  transform: rotate(7deg);
+}
+
+.coverPlanes span:nth-child(2) {
+  inset: -8% 38% -8% 56%;
+  background: var(--luminous-sun, #f4ce63);
+  box-shadow: -1.4rem 0 0 rgb(155 203 227 / 56%);
+  transform: rotate(-3deg);
+}
+
+.coverPlanes span:nth-child(3) {
+  inset: 62% -8% -14% 30%;
+  background: var(--luminous-celadon, #a7cdb0);
+  transform: rotate(-8deg);
+}
+
+.coverInner {
+  position: relative;
+  z-index: 3;
+  min-height: 100svh;
+  padding-block: clamp(8rem, 15vh, 11rem) 2rem;
+}
+
+.socialCorner {
+  position: absolute;
+  z-index: 4;
+  top: 5.25rem;
+  left: var(--space-gutter);
+}
+
+.coverKicker,
+.sectionIndex,
+.folioLabel,
+.coverCredits dt,
+.chapterHeading > p,
+.chapterStory > p:first-child,
+.contactInner > p {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.coverKicker {
+  margin: 1rem 0 0;
+  color: var(--luminous-ink, #20292d);
+}
+
+.coverTitle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  margin: clamp(3rem, 7vh, 5rem) 0 0;
+  flex-direction: column;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(6.5rem, 16vw, 18rem);
+  font-weight: 400;
+  line-height: 0.61;
+  letter-spacing: -0.085em;
+}
+
+.coverTitle span {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.coverTitle span:last-child {
+  margin-left: 0.13em;
+}
+
+.coverFolio {
+  position: absolute;
+  z-index: 3;
+  top: 19svh;
+  right: 0;
+  display: flex;
+  width: min(33vw, 29rem);
+  min-height: 64svh;
+  padding: clamp(1.5rem, 2.8vw, 2.6rem);
+  flex-direction: column;
+  background: var(--luminous-cream, #fff8e8);
+  box-shadow: -2rem 2rem 0 var(--luminous-sky, #9bcbe3);
+  color: var(--luminous-ink, #20292d);
+}
+
+.folioLabel {
+  margin: 0;
+  color: var(--luminous-ink, #20292d);
+}
+
+.folioStatement {
+  max-width: 10ch;
+  margin: auto 0 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(2.5rem, 4.1vw, 4.7rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+}
+
+.folioArrow {
+  margin: 2rem 0 0 auto;
+}
+
+.coverCredits {
+  position: absolute;
+  right: 0;
+  bottom: 2rem;
+  left: 0;
+  display: grid;
+  margin: 0;
+  border-top: 1px solid rgb(32 41 45 / 28%);
+  padding-top: 0.9rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.coverCredits div {
+  min-width: 0;
+}
+
+.coverCredits dt {
+  color: var(--luminous-ink, #20292d);
+}
+
+.coverCredits dd {
+  margin: 0.42rem 0 0;
+  color: var(--luminous-ink, #20292d);
+  font-size: 0.7rem;
+}
+
+.manifesto {
+  background: var(--luminous-cream, #fff8e8);
+  color: var(--luminous-ink, #20292d);
+  padding-block: clamp(7rem, 13vw, 12rem);
+}
+
+.manifestoGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.sectionIndex {
+  margin: 0;
+  color: var(--luminous-ink, #20292d);
+}
+
+.manifestoGrid > .sectionIndex {
+  grid-column: 1 / 4;
+}
+
+.manifestoTitle {
+  grid-column: 4 / -1;
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(3.8rem, 7.4vw, 8.8rem);
+  font-weight: 400;
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+}
+
+.manifestoCopy {
+  display: grid;
+  grid-column: 4 / -1;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  border-top: 1px solid rgb(32 41 45 / 30%);
+  padding-top: 1.2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 6vw, 7rem);
+}
+
+.manifestoCopy p {
+  margin: 0;
+  color: rgb(32 41 45 / 78%);
+  line-height: 1.75;
+}
+
+.manifestoCopy p:first-child {
+  color: var(--luminous-ink, #20292d);
+  font-size: clamp(1.2rem, 1.7vw, 1.65rem);
+  line-height: 1.55;
+}
+
+.journey {
+  background: var(--luminous-sky, #9bcbe3);
+  color: var(--luminous-ink, #20292d);
+  padding-block: clamp(7rem, 12vw, 11rem);
+}
+
+.journeyGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.journeyHeader {
+  position: sticky;
+  top: 8rem;
+  align-self: start;
+  grid-column: 1 / 5;
+}
+
+.journeyHeader h2 {
+  max-width: 9ch;
+  margin: 1.5rem 0 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(3rem, 4.8vw, 5.8rem);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+}
+
+.journeyList {
+  grid-column: 6 / -1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journeyList li {
+  display: grid;
+  min-height: 23rem;
+  border-top: 1px solid rgb(32 41 45 / 34%);
+  padding-block: 1.25rem 4rem;
+  grid-template-columns: 4.5rem minmax(10rem, 0.8fr) minmax(14rem, 1.2fr);
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+}
+
+.journeyList li:last-child {
+  border-bottom: 1px solid rgb(32 41 45 / 34%);
+}
+
+.chapterNumber {
+  margin: 0;
+  color: var(--luminous-ink, #20292d);
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 3rem;
+  line-height: 0.9;
+}
+
+.chapterHeading > p,
+.chapterStory > p:first-child {
+  margin: 0;
+  color: var(--luminous-ink, #20292d);
+}
+
+.chapterHeading h3 {
+  margin: 2.5rem 0 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(2rem, 3vw, 3.5rem);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+}
+
+.chapterHeading > p:last-child {
+  margin-top: 0.65rem;
+  color: var(--luminous-ink, #20292d);
+  font-size: 0.78rem;
+}
+
+.chapterStory {
+  align-self: end;
+}
+
+.chapterStory > p:first-child {
+  color: var(--luminous-ink, #20292d);
+}
+
+.chapterStory > p:last-child {
+  margin: 1rem 0 0;
+  color: rgb(32 41 45 / 82%);
+  line-height: 1.7;
+}
+
+.method {
+  background: var(--luminous-sun, #f4ce63);
+  color: var(--luminous-ink, #20292d);
+  padding-block: clamp(7rem, 12vw, 11rem);
+}
+
+.method .sectionIndex {
+  color: var(--luminous-ink, #20292d);
+}
+
+.methodHeader {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.methodHeader .sectionIndex {
+  grid-column: 1 / 4;
+}
+
+.methodHeader h2 {
+  grid-column: 4 / -1;
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(3.5rem, 6.4vw, 7.5rem);
+  font-weight: 400;
+  line-height: 0.87;
+  letter-spacing: -0.06em;
+}
+
+.methodList {
+  margin: clamp(5rem, 10vw, 9rem) 0 0;
+  padding: 0;
+  border-bottom: 1px solid rgb(32 41 45 / 30%);
+  list-style: none;
+}
+
+.methodList li {
+  display: grid;
+  min-height: 9.5rem;
+  border-top: 1px solid rgb(32 41 45 / 30%);
+  padding-block: 1.4rem;
+  grid-template-columns: 4rem minmax(12rem, 0.8fr) minmax(16rem, 1fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 5rem);
+}
+
+.methodList span {
+  color: var(--luminous-ink, #20292d);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+}
+
+.methodList h3 {
+  margin: 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(2.2rem, 3.5vw, 4rem);
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.methodList p {
+  max-width: 32rem;
+  margin: 0;
+  color: rgb(32 41 45 / 82%);
+  line-height: 1.7;
+}
+
+.contact {
+  background: var(--luminous-coral, #e9785f);
+  color: var(--luminous-ink, #20292d);
+  padding-block: clamp(6rem, 11vw, 10rem);
+}
+
+.contactInner > p {
+  margin: 0;
+  color: var(--luminous-ink, #20292d);
+}
+
+.contactInner h2 {
+  max-width: 13ch;
+  margin: clamp(2.5rem, 5vw, 4.5rem) 0 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(3.8rem, 7.5vw, 8.6rem);
+  font-weight: 400;
+  line-height: 0.84;
+  letter-spacing: -0.065em;
+}
+
+.contactLink {
+  display: inline-flex;
+  min-height: 3rem;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  align-items: center;
+  gap: 0.45rem;
+  border-bottom: 1px solid currentColor;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1023px) {
+  .coverTitle {
+    font-size: clamp(5.75rem, 16vw, 10.5rem);
+  }
+
+  .coverFolio {
+    width: min(38vw, 26rem);
+  }
+
+  .journeyHeader {
+    grid-column: 1 / 6;
+  }
+
+  .journeyList {
+    grid-column: 6 / -1;
+  }
+
+  .journeyList li {
+    grid-template-columns: 3.5rem 1fr;
+  }
+
+  .chapterStory {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .cover,
+  .coverInner {
+    min-height: 58rem;
+  }
+
+  .coverInner {
+    padding-block: 7.5rem 1.5rem;
+  }
+
+  .socialCorner {
+    top: 5.1rem;
+  }
+
+  .coverPlanes span:nth-child(1) {
+    inset: -4% -28% 18% 56%;
+  }
+
+  .coverPlanes span:nth-child(2) {
+    inset: -4% 23% 11% 69%;
+  }
+
+  .coverPlanes span:nth-child(3) {
+    inset: 70% -18% -10% 18%;
+  }
+
+  .coverTitle {
+    margin-top: 3.5rem;
+    font-size: clamp(4.9rem, 24vw, 7.1rem);
+  }
+
+  .coverFolio {
+    top: auto;
+    right: 0;
+    bottom: 9.5rem;
+    width: calc(100% - 2.2rem);
+    min-height: 19rem;
+    padding: 1.3rem;
+    box-shadow: -0.8rem 0.8rem 0 var(--luminous-sky, #9bcbe3);
+  }
+
+  .folioStatement {
+    font-size: clamp(2.2rem, 10vw, 3rem);
+  }
+
+  .coverCredits {
+    bottom: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem 1rem;
+  }
+
+  .coverCredits div:last-child {
+    display: none;
+  }
+
+  .manifestoGrid,
+  .journeyGrid,
+  .methodHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .manifestoGrid > .sectionIndex,
+  .manifestoTitle,
+  .manifestoCopy,
+  .journeyHeader,
+  .journeyList,
+  .methodHeader .sectionIndex,
+  .methodHeader h2 {
+    grid-column: 1;
+  }
+
+  .manifestoTitle,
+  .methodHeader h2 {
+    margin-top: 2rem;
+    font-size: clamp(3.2rem, 14vw, 5rem);
+  }
+
+  .manifestoCopy {
+    grid-template-columns: 1fr;
+    margin-top: 4rem;
+    gap: 2rem;
+  }
+
+  .journeyHeader {
+    position: static;
+  }
+
+  .journeyHeader h2 {
+    margin-bottom: 4rem;
+    font-size: clamp(3rem, 13vw, 4.5rem);
+  }
+
+  .journeyList li {
+    min-height: 0;
+    padding-block: 1.2rem 3rem;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.25rem;
+  }
+
+  .chapterStory {
+    margin-top: 2rem;
+    grid-column: 2;
+  }
+
+  .methodList li {
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1.1rem;
+  }
+
+  .methodList p {
+    margin-top: 1.2rem;
+    grid-column: 2;
+  }
+
+  .contactInner h2 {
+    font-size: clamp(3.4rem, 15vw, 5.2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journeyHeader {
+    position: static;
+  }
+}

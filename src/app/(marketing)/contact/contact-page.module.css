@@ -1,0 +1,23 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.heroSocialSlot {
+  position: absolute;
+  z-index: 20;
+  top: 6.25rem;
+  right: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.heroSocialSlot > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  .heroSocialSlot {
+    top: 5.45rem;
+  }
+}
