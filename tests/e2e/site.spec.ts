@@ -588,11 +588,29 @@ test.describe("core visitor journeys", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "B.M. Evi Mutfak Projesi" }),
     ).toBeVisible();
-    await expect(page.getByText("Arşiv notu:", { exact: true })).toBeVisible();
+    await expect(page.getByText("Arşiv bilgisi", { exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: /Proje seçkisi/i })).toHaveAttribute(
       "href",
       "/projects",
     );
+
+    const detailFrame = page.locator(".project-detail-frame");
+    await expect(detailFrame).toBeVisible();
+    await expect(detailFrame).toHaveCSS("border-top-style", "solid");
+    await expect(page.locator(".project-detail-overview")).toBeVisible();
+    await expect(page.locator(".project-detail-facts > div")).toHaveCount(4);
+    await expect(
+      page.getByRole("heading", { level: 2, name: "E.S. Evi Banyo Projesi" }),
+    ).toBeVisible();
+
+    const projectDetailAccessibilityScan = await new AxeBuilder({ page })
+      .include(".project-detail-page")
+      .analyze();
+    expect(
+      projectDetailAccessibilityScan.violations.filter(
+        (violation) => violation.impact === "serious" || violation.impact === "critical",
+      ),
+    ).toEqual([]);
   });
 
   test("announces contact form validation errors without serious accessibility violations", async ({

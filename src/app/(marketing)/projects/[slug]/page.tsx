@@ -32,159 +32,195 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   if (!project) notFound();
 
   const relatedProject = getFallbackProjectBySlug(project.relatedProjectSlug);
+  const year = project.facts.find((fact) => fact.id === "year")?.value;
+  const location = project.facts.find((fact) => fact.id === "location")?.value;
+  const projectType = project.facts.find((fact) => fact.id === "type")?.value;
+  const additionalVisuals = project.gallery.filter(
+    (visual) => !visual.src || visual.src !== project.cover.src,
+  );
 
   return (
     <>
       <ProjectBreadcrumbJsonLd project={{ slug: project.slug, title: project.title }} />
-      <header className="project-detail-hero relative min-h-[100svh]">
-        <ParallaxMedia className="absolute inset-0">
-          <ProjectVisual
-            visual={project.cover}
-            projectSlug={project.slug}
-            eager
-            className="h-[112%] w-full"
-          />
-        </ParallaxMedia>
-        <div className="project-detail-hero-wash absolute inset-0" />
-        <div className="site-shell relative z-10 flex min-h-[100svh] flex-col justify-end pt-40 pb-9">
-          <Link
-            href="/projects"
-            className="project-detail-back mb-12 flex min-h-11 w-fit items-center gap-3 text-[0.67rem] font-semibold tracking-[0.13em] uppercase"
-          >
-            <ArrowLeft aria-hidden="true" size={15} /> Proje seçkisi
-          </Link>
-          <div className="editorial-grid gap-y-9">
-            <div className="col-span-12 md:col-span-9">
-              <p className="project-detail-kicker mb-6 text-[0.65rem] font-semibold tracking-[0.16em] uppercase">
-                Portföy Projesi · {project.facts.find((fact) => fact.id === "year")?.value}
-              </p>
-              <h1 className="page-title max-w-[12ch]">{project.title}</h1>
-            </div>
-            <p className="project-detail-excerpt col-span-12 max-w-lg text-lg md:col-span-4 md:col-start-9">
-              {project.excerpt}
-            </p>
-          </div>
-        </div>
-      </header>
+      <article className="project-detail-page">
+        <header className="project-detail-hero">
+          <div className="site-shell">
+            <div className="project-detail-masthead">
+              <Link href="/projects" className="project-detail-back">
+                <ArrowLeft aria-hidden="true" size={15} /> Proje seçkisi
+              </Link>
 
-      <section className="section-space-sm">
-        <div className="site-shell">
-          <div className="mb-20 border border-[var(--color-border)] p-5 text-sm text-[var(--color-ink-soft)]">
-            <strong className="mr-2 font-semibold text-[var(--color-ink)]">Arşiv notu:</strong>
-            {project.demoNotice}
+              <div className="project-detail-heading">
+                <p className="project-detail-kicker">Portföy Projesi · {year}</p>
+                <h1>{project.title}</h1>
+                <p className="project-detail-excerpt">{project.excerpt}</p>
+              </div>
+            </div>
+
+            <figure className="project-detail-frame" aria-labelledby="project-visual-caption">
+              <div className="project-detail-frame-bar" aria-hidden="true">
+                <span>01 / Seçili mekân</span>
+                <span>{location}</span>
+              </div>
+              <ParallaxMedia className="project-detail-frame-media">
+                <ProjectVisual
+                  visual={project.cover}
+                  projectSlug={project.slug}
+                  eager
+                  sizes="(max-width: 768px) 100vw, (max-width: 1440px) 94vw, 1500px"
+                  className="h-full w-full"
+                />
+              </ParallaxMedia>
+              <figcaption id="project-visual-caption" className="project-detail-frame-caption">
+                <span>Proje görünümü</span>
+                <span>
+                  {year} · {projectType}
+                </span>
+              </figcaption>
+            </figure>
           </div>
-          <div className="editorial-grid gap-y-12">
-            <p className="eyebrow col-span-12 md:col-span-3">Proje Özeti</p>
-            <div className="col-span-12 md:col-span-8 md:col-start-5">
-              <h2 className="section-title mb-12 max-w-[13ch]">{project.description}</h2>
-              <dl className="grid gap-x-8 gap-y-7 border-t border-[var(--color-border)] pt-6 sm:grid-cols-2 lg:grid-cols-3">
-                {project.facts.map((fact) => (
+        </header>
+
+        <section className="project-detail-overview" aria-labelledby="project-overview-title">
+          <div className="site-shell">
+            <div className="project-detail-section-heading">
+              <span aria-hidden="true">02</span>
+              <p>Proje hakkında</p>
+              <i aria-hidden="true" />
+              <span>{String(project.facts.length).padStart(2, "0")} bilgi</span>
+            </div>
+
+            <div className="project-detail-overview-grid">
+              <FadeIn className="project-detail-story-copy">
+                <p className="eyebrow">{project.concept.eyebrow}</p>
+                <h2 id="project-overview-title">{project.concept.title}</h2>
+                <div className="project-detail-story-paragraphs">
+                  {project.concept.paragraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              </FadeIn>
+
+              <dl className="project-detail-facts">
+                {project.facts.map((fact, index) => (
                   <div key={fact.id}>
-                    <dt className="mb-1 text-[0.61rem] font-semibold tracking-[0.13em] text-[var(--color-muted)] uppercase">
-                      {fact.label}
-                    </dt>
+                    <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                    <dt>{fact.label}</dt>
                     <dd>{fact.value}</dd>
                   </div>
                 ))}
               </dl>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="project-detail-concept section-space">
-        <div className="site-shell editorial-grid gap-y-12">
-          <p className="eyebrow col-span-12 md:col-span-3">{project.concept.eyebrow}</p>
-          <div className="col-span-12 md:col-span-8 md:col-start-5">
-            <FadeIn>
-              <h2 className="section-title mb-14 max-w-[13ch]">{project.concept.title}</h2>
-            </FadeIn>
-            <div className="grid gap-8 border-t border-[var(--color-border)] pt-7 md:grid-cols-2">
-              {project.concept.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="text-lg leading-relaxed">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-space-sm">
-        <div className="site-shell space-y-8 md:space-y-14">
-          {project.gallery.map((visual, index) => (
-            <figure
-              key={visual.id}
-              className={index % 3 === 1 ? "md:mr-[24%]" : index % 3 === 2 ? "md:ml-[24%]" : ""}
-            >
-              <ProjectVisual visual={visual} projectSlug={project.slug} className="w-full" />
-              <figcaption className="mt-3 flex justify-between gap-5 text-[0.62rem] font-semibold tracking-[0.12em] text-[var(--color-muted)] uppercase">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <span>{visual.caption}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      {project.materials.length > 0 ? (
-        <section className="project-detail-materials section-space">
-          <div className="site-shell editorial-grid gap-y-12">
-            <div className="col-span-12 md:col-span-4">
-              <p className="eyebrow mb-7">Malzeme Paleti</p>
-              <h2 className="section-title max-w-[10ch]">Dokunun sessiz katmanları.</h2>
-            </div>
-            <div className="col-span-12 grid gap-8 sm:grid-cols-2 md:col-span-7 md:col-start-6">
-              {project.materials.map((material) => (
-                <article key={material.name} className="border-t border-[var(--color-border)] pt-4">
-                  <span
-                    className="mb-8 block aspect-[5/2] w-full"
-                    style={{ backgroundColor: material.swatch }}
-                    aria-hidden="true"
-                  />
-                  <h3 className="mb-2 font-serif text-2xl">{material.name}</h3>
-                  <p className="text-sm text-[var(--color-muted)]">{material.description}</p>
-                </article>
-              ))}
-            </div>
+            <aside className="project-detail-archive-note">
+              <strong>Arşiv bilgisi</strong>
+              <p>{project.demoNotice}</p>
+            </aside>
           </div>
         </section>
-      ) : null}
 
-      {relatedProject ? (
-        <section className="section-space">
-          <div className="site-shell">
-            <p className="eyebrow mb-10">Sonraki Proje</p>
-            <Link
-              href={`/projects/${relatedProject.slug}`}
-              className="project-link group editorial-grid items-end gap-y-8"
-              data-cursor-label="Projeyi İncele"
-            >
-              <ProjectVisual
-                visual={relatedProject.cover}
-                projectSlug={relatedProject.slug}
-                className="col-span-12 aspect-[16/10] md:col-span-8"
-              />
-              <div className="col-span-12 md:col-span-4">
-                <h2 className="card-title mb-5">{relatedProject.title}</h2>
-                <p className="mb-7 text-[var(--color-ink-soft)]">{relatedProject.excerpt}</p>
-                <span className="text-link">
-                  Projeyi İncele <ArrowUpRight aria-hidden="true" size={15} />
-                </span>
+        {additionalVisuals.length > 0 ? (
+          <section className="project-detail-gallery" aria-label="Proje görselleri">
+            <div className="site-shell">
+              <div className="project-detail-section-heading">
+                <span aria-hidden="true">03</span>
+                <p>Görsel hikâye</p>
+                <i aria-hidden="true" />
+                <span>{String(additionalVisuals.length).padStart(2, "0")} kare</span>
               </div>
+              <div className="project-detail-gallery-grid">
+                {additionalVisuals.map((visual, index) => (
+                  <FadeIn key={visual.id}>
+                    <figure>
+                      <ProjectVisual
+                        visual={visual}
+                        projectSlug={project.slug}
+                        className="w-full"
+                      />
+                      <figcaption>
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <span>{visual.caption}</span>
+                      </figcaption>
+                    </figure>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {project.materials.length > 0 ? (
+          <section className="project-detail-materials" aria-labelledby="project-materials-title">
+            <div className="site-shell">
+              <div className="project-detail-section-heading">
+                <span aria-hidden="true">04</span>
+                <p>Malzeme paleti</p>
+                <i aria-hidden="true" />
+                <span>{String(project.materials.length).padStart(2, "0")} seçim</span>
+              </div>
+              <div className="project-detail-materials-grid">
+                <div>
+                  <p className="eyebrow">Malzeme Paleti</p>
+                  <h2 id="project-materials-title">Dokunun sessiz katmanları.</h2>
+                </div>
+                <div className="project-detail-material-list">
+                  {project.materials.map((material) => (
+                    <article key={material.name}>
+                      <span style={{ backgroundColor: material.swatch }} aria-hidden="true" />
+                      <h3>{material.name}</h3>
+                      <p>{material.description}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {relatedProject ? (
+          <section className="project-detail-next" aria-labelledby="next-project-title">
+            <div className="site-shell">
+              <div className="project-detail-section-heading">
+                <span aria-hidden="true">→</span>
+                <p>Sonraki proje</p>
+                <i aria-hidden="true" />
+                <span>Portföye devam et</span>
+              </div>
+
+              <Link
+                href={`/projects/${relatedProject.slug}`}
+                className="project-detail-next-link"
+                data-cursor-label="Projeyi İncele"
+              >
+                <ProjectVisual
+                  visual={relatedProject.cover}
+                  projectSlug={relatedProject.slug}
+                  sizes="(max-width: 768px) 100vw, 56vw"
+                  className="project-detail-next-visual"
+                />
+                <div className="project-detail-next-copy">
+                  <p className="eyebrow">Sıradaki mekân</p>
+                  <h2 id="next-project-title">{relatedProject.title}</h2>
+                  <p>{relatedProject.excerpt}</p>
+                  <span className="text-link">
+                    Projeyi incele <ArrowUpRight aria-hidden="true" size={15} />
+                  </span>
+                </div>
+              </Link>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="project-detail-cta" aria-labelledby="project-inquiry-title">
+          <div className="site-shell project-detail-cta-inner">
+            <p className="eyebrow">Yeni bir mekân</p>
+            <h2 id="project-inquiry-title">{project.inquiryPrompt}</h2>
+            <Link href={`/contact?project=${project.slug}`} className="pill-button">
+              Proje talebi oluştur <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
           </div>
         </section>
-      ) : null}
-
-      <section className="project-detail-cta section-space-sm">
-        <div className="site-shell flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <h2 className="section-title max-w-[13ch]">{project.inquiryPrompt}</h2>
-          <Link href={`/contact?project=${project.slug}`} className="pill-button shrink-0">
-            Proje Talebi Oluştur <ArrowUpRight aria-hidden="true" className="ml-2" size={16} />
-          </Link>
-        </div>
-      </section>
+      </article>
     </>
   );
 }
