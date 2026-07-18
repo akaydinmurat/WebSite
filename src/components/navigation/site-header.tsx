@@ -1,6 +1,7 @@
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
+import { SocialIconLinks } from "@/components/ui/social-icon-links";
 import { navigationConfig } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 
@@ -25,6 +26,7 @@ export function SiteHeader() {
           <DesktopNavigation items={navigationConfig.primary} />
 
           <div className="luminous-header-actions">
+            <SocialIconLinks className="luminous-header-socials" label="Sosyal medya profilleri" />
             <div className="hidden xl:block">
               <Link
                 className="luminous-dream-action"
@@ -32,8 +34,8 @@ export function SiteHeader() {
                 data-cursor-kind="action"
                 data-cursor-label="İlk çizgiyi atalım"
               >
-                <span className="luminous-dream-action-orbit" aria-hidden="true">
-                  <Sparkles size={14} strokeWidth={1.8} />
+                <span className="luminous-dream-action-index" aria-hidden="true">
+                  07
                 </span>
                 <span className="luminous-dream-action-copy">
                   <small>Yeni proje</small>

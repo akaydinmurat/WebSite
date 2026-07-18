@@ -88,6 +88,18 @@ describe("SiteHeader", () => {
     expect(within(desktopNavigation).getByRole("link", { name: "Hizmetler" })).not.toHaveAttribute(
       "aria-current",
     );
+
+    const socialNavigation = screen.getByRole("navigation", { name: "Sosyal medya profilleri" });
+    expect(
+      within(socialNavigation).getByRole("link", {
+        name: "Instagram profilini yeni sekmede aç",
+      }),
+    ).toBeVisible();
+    expect(
+      within(socialNavigation).getByRole("link", {
+        name: "LinkedIn profilini yeni sekmede aç",
+      }),
+    ).toBeVisible();
   });
 
   it("exposes the selected showroom scene as the active route on home", () => {

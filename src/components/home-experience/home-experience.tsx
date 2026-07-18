@@ -132,7 +132,6 @@ export function HomeExperience({
       const packageTrack = root.querySelector<HTMLElement>("[data-package-track]");
       const packageWindow = root.querySelector<HTMLElement>("[data-package-window]");
       const packageStrip = root.querySelector<HTMLElement>("[data-package-strip]");
-      const introAperture = root.querySelector<HTMLElement>("[data-intro-aperture]");
       const introChrome = root.querySelector<HTMLElement>("[data-intro-chrome]");
       const introCopy = root.querySelector<HTMLElement>("[data-intro-copy]");
       const introReveal = gsap.utils.toArray<HTMLElement>("[data-intro-reveal]", root);
@@ -257,26 +256,6 @@ export function HomeExperience({
       if (!reducedMotion) {
         const introTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-        if (introAperture) {
-          introTimeline.fromTo(
-            introAperture,
-            {
-              autoAlpha: 0,
-              rotateY: -16,
-              scale: 0.92,
-              xPercent: 10,
-            },
-            {
-              autoAlpha: 1,
-              duration: 1.65,
-              rotateY: 0,
-              scale: 1,
-              xPercent: 0,
-            },
-            0.08,
-          );
-        }
-
         if (introChrome) {
           introTimeline.fromTo(
             introChrome,
@@ -293,7 +272,7 @@ export function HomeExperience({
           0.42,
         );
 
-        gsap.to([introCopy, introAperture, introChrome].filter(Boolean), {
+        gsap.to([introCopy, introChrome].filter(Boolean), {
           autoAlpha: 0,
           ease: "none",
           yPercent: -14,
@@ -526,19 +505,7 @@ export function HomeExperience({
       true,
     );
 
-    const runtime = getExperienceRuntime();
-    const root = rootRef.current;
-
-    if (runtime.phase === "intro" && !runtime.reducedMotion && root) {
-      const pointerX = (event.clientX / Math.max(window.innerWidth, 1) - 0.5) * 2;
-      const pointerY = (event.clientY / Math.max(window.innerHeight, 1) - 0.5) * 2;
-      root.style.setProperty("--intro-depth-rotate-x", `${pointerY * -3.5}deg`);
-      root.style.setProperty("--intro-depth-rotate-y", `${pointerX * 4.5}deg`);
-      root.style.setProperty("--intro-depth-shift-x", `${pointerX * -9}px`);
-      root.style.setProperty("--intro-depth-shift-y", `${pointerY * -6}px`);
-    }
-
-    if (runtime.phase === "works") {
+    if (getExperienceRuntime().phase === "works") {
       updateOrbitDrag(event.pointerId, event.clientX);
     }
   }
@@ -557,7 +524,6 @@ export function HomeExperience({
   }
 
   const activeProject = projects[snapshot.activeProjectIndex % Math.max(1, projects.length)];
-  const introProject = projects[0];
   const activeStage = processStages[snapshot.showcaseStage] ?? processStages[0];
 
   return (
@@ -572,10 +538,6 @@ export function HomeExperience({
       onPointerLeave={(event) => {
         if (event.pointerType === "mouse") {
           deactivateExperiencePointer();
-          rootRef.current?.style.setProperty("--intro-depth-rotate-x", "0deg");
-          rootRef.current?.style.setProperty("--intro-depth-rotate-y", "0deg");
-          rootRef.current?.style.setProperty("--intro-depth-shift-x", "0px");
-          rootRef.current?.style.setProperty("--intro-depth-shift-y", "0px");
         }
       }}
       onPointerMove={handlePointerMove}
@@ -611,30 +573,6 @@ export function HomeExperience({
             <span className="experience-intro-chrome-axis experience-intro-chrome-axis-y" />
             <span className="experience-intro-chrome-sun" />
           </div>
-          {introProject?.cover.kind === "image" && introProject.cover.src ? (
-            <div className="experience-intro-aperture-stage" data-intro-aperture aria-hidden="true">
-              <div className="experience-intro-depth-shell">
-                <span className="experience-intro-depth-plane experience-intro-depth-plane-back" />
-                <span className="experience-intro-depth-plane experience-intro-depth-plane-middle" />
-                <span className="experience-intro-depth-plane experience-intro-depth-plane-front" />
-                <div className="experience-intro-aperture">
-                  <Image
-                    src={introProject.cover.src}
-                    alt=""
-                    fill
-                    fetchPriority="high"
-                    loading="eager"
-                    sizes="(max-width: 767px) 100vw, 52vw"
-                  />
-                  <span className="experience-intro-aperture-wash" />
-                  <span className="experience-intro-aperture-caption">
-                    <b>Seçili mekân</b>
-                    <i>{introProject.title}</i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          ) : null}
           <div className="experience-intro-copy" data-intro-copy>
             <p className="experience-kicker" data-intro-reveal>
               {experienceConfig.brand.name} · Mekânsal Deneyim

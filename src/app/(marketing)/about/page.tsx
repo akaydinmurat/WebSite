@@ -2,7 +2,6 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { SocialIconLinks } from "@/components/ui/social-icon-links";
 import { siteConfig } from "@/config/site";
 import { aboutStory } from "@/content/about-story";
 import { createMetadata } from "@/lib/seo";
@@ -34,10 +33,6 @@ export default function AboutPage() {
         </div>
 
         <div className={`site-shell ${styles.coverInner}`}>
-          <SocialIconLinks
-            className={`about-social-links ${styles.socialCorner}`}
-            label="Göknur Uygur sosyal medya hesapları"
-          />
           <p className={styles.coverKicker}>Monografi · 01</p>
           <h1 id="about-page-title" className={styles.coverTitle}>
             <span>Göknur</span>

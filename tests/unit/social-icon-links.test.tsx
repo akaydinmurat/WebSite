@@ -21,5 +21,11 @@ describe("SocialIconLinks", () => {
         rel: "noopener noreferrer",
       });
     }
+
+    expect(
+      screen
+        .getByRole("link", { name: "Instagram profilini yeni sekmede aç" })
+        .querySelector("svg"),
+    ).toHaveClass("instagram-mark");
   });
 });

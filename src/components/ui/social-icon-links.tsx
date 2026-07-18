@@ -1,5 +1,3 @@
-import { Camera } from "lucide-react";
-
 import { siteConfig } from "@/config/site";
 
 import styles from "./social-icon-links.module.css";
@@ -34,7 +32,7 @@ export function SocialIconLinks({
                 aria-label={`${socialLink.label} profilini yeni sekmede aç`}
               >
                 {isInstagram ? (
-                  <Camera aria-hidden="true" size={19} strokeWidth={2} />
+                  <InstagramMark />
                 ) : (
                   <span className={styles.linkedinGlyph} aria-hidden="true">
                     in
@@ -47,5 +45,30 @@ export function SocialIconLinks({
         })}
       </ul>
     </nav>
+  );
+}
+
+function InstagramMark() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="instagram-mark"
+      fill="none"
+      height="19"
+      viewBox="0 0 24 24"
+      width="19"
+    >
+      <rect
+        height="17"
+        rx="4.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        width="17"
+        x="3.5"
+        y="3.5"
+      />
+      <circle cx="12" cy="12" r="3.8" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.35" cy="6.7" fill="currentColor" r="1.05" />
+    </svg>
   );
 }

@@ -191,13 +191,8 @@ test.describe("core visitor journeys", () => {
       "B.M. Evi Mutfak Projesi",
     );
     await expect(page.locator(".experience-stage-list li")).toHaveCount(5);
-    await expect(page.locator(".experience-intro-aperture")).toBeVisible();
-    await expect(page.locator(".experience-intro-depth-plane")).toHaveCount(3);
+    await expect(page.locator(".experience-intro-aperture")).toHaveCount(0);
     await expect(page.locator(".experience-intro-chrome")).toBeVisible();
-    await expect(page.locator(".experience-intro-aperture img")).toHaveCSS(
-      "animation-name",
-      "none",
-    );
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
 
     const accessibilityScan = await new AxeBuilder({ page }).include("main").analyze();
@@ -671,6 +666,47 @@ test.describe("mobile journeys at 360px", () => {
     await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
     await expect(page.locator(".experience-project-meta-title")).toBeVisible();
     expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  });
+
+  test("keeps the fixed social access and home chapters available on mobile", async ({
+    page,
+  }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "mobile-chromium");
+    await page.goto("/");
+
+    const header = page.getByTestId("site-header");
+    await expect(header).toHaveCSS("position", "fixed");
+
+    const socialNavigation = page.getByRole("navigation", { name: "Sosyal medya profilleri" });
+    await expect(socialNavigation).toBeVisible();
+    await expect(
+      socialNavigation.getByRole("link", {
+        name: "Instagram profilini yeni sekmede aç",
+      }),
+    ).toBeVisible();
+    await expect(
+      socialNavigation.getByRole("link", {
+        name: "LinkedIn profilini yeni sekmede aç",
+      }),
+    ).toBeVisible();
+    await expect(page.locator(".experience-intro-aperture")).toHaveCount(0);
+    await expectNoHorizontalOverflow(page, "Mobile fixed header");
+
+    const chapters = [
+      ["projects", "#experience-projects", "works"],
+      ["services", "#experience-showcase", "showcase"],
+      ["packages", "#experience-packages", "outro"],
+      ["reviews", "#experience-reviews", "outro"],
+      ["about", "#experience-vision", "vision"],
+      ["contact", "#experience-contact", "outro"],
+    ] as const;
+
+    for (const [scene, selector, phase] of chapters) {
+      await page.goto(`/?scene=${scene}`);
+      await expect(page.locator("body")).toHaveAttribute("data-experience-phase", phase);
+      await expect(page.locator(selector)).toBeVisible();
+      await expectNoHorizontalOverflow(page, `Mobile ${scene} scene`);
+    }
   });
 
   test("keeps key pages and home chapters within the 360px viewport", async ({

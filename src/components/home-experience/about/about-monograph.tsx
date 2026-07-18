@@ -1,7 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-import { SocialIconLinks } from "@/components/ui/social-icon-links";
 import { siteConfig } from "@/config/site";
 
 export function AboutMonograph() {
@@ -22,10 +21,6 @@ export function AboutMonograph() {
       </div>
 
       <div className="experience-sticky experience-about-sticky" data-about-journey>
-        <SocialIconLinks
-          className="experience-about-socials"
-          label="Göknur Uygur sosyal medya hesapları"
-        />
         <article className="experience-about-folio">
           <p className="experience-about-folio-index">
             <span>06 / Hakkımda</span>

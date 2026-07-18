@@ -51,13 +51,6 @@
   padding-block: clamp(8rem, 15vh, 11rem) 2rem;
 }
 
-.socialCorner {
-  position: absolute;
-  z-index: 4;
-  top: 5.25rem;
-  left: var(--space-gutter);
-}
-
 .coverKicker,
 .sectionIndex,
 .folioLabel,
@@ -445,10 +438,6 @@
 
   .coverInner {
     padding-block: 7.5rem 1.5rem;
-  }
-
-  .socialCorner {
-    top: 5.1rem;
   }
 
   .coverPlanes span:nth-child(1) {
