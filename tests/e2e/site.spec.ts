@@ -192,6 +192,7 @@ test.describe("core visitor journeys", () => {
     );
     await expect(page.locator(".experience-stage-list li")).toHaveCount(5);
     await expect(page.locator(".experience-intro-aperture")).toBeVisible();
+    await expect(page.locator(".experience-intro-depth-plane")).toHaveCount(3);
     await expect(page.locator(".experience-intro-chrome")).toBeVisible();
     await expect(page.locator(".experience-intro-aperture img")).toHaveCSS(
       "animation-name",
@@ -529,6 +530,13 @@ test.describe("core visitor journeys", () => {
     await expect(page.locator(".experience-package-benefit")).toHaveCount(11);
     await expect(page.locator(".experience-package-pricing")).toHaveCount(11);
     await expect(page.locator(".experience-package-grid")).toHaveCSS("display", "grid");
+
+    const packageSurfaceColors = await packageCards.evaluateAll((cards) =>
+      cards
+        .slice(0, 7)
+        .map((card) => getComputedStyle(card).getPropertyValue("--package-surface").trim()),
+    );
+    expect(new Set(packageSurfaceColors).size).toBeGreaterThanOrEqual(6);
   });
 
   test("filters the project collection and opens a project detail", async ({ page }, testInfo) => {

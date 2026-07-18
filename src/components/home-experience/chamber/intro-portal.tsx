@@ -48,13 +48,15 @@ export function IntroPortal() {
   const rootRef = useRef<THREE.Group>(null);
   const frameGroupRef = useRef<THREE.Group>(null);
   const haloRef = useRef<THREE.Group>(null);
+  const tunnelRef = useRef<THREE.Group>(null);
   const visibilityRef = useRef(0);
 
   useFrame(({ clock }, frameDelta) => {
     const root = rootRef.current;
     const frames = frameGroupRef.current;
     const halo = haloRef.current;
-    if (!root || !frames || !halo) return;
+    const tunnel = tunnelRef.current;
+    if (!root || !frames || !halo || !tunnel) return;
 
     const runtime = getExperienceRuntime();
     const delta = Math.min(frameDelta, 1 / 20);
@@ -75,6 +77,9 @@ export function IntroPortal() {
     frames.rotation.z = Math.sin(clock.elapsedTime * 0.22) * 0.012 - pointerX * 0.008;
     frames.scale.setScalar(1 + scrollProgress * 0.12);
     halo.rotation.z = clock.elapsedTime * 0.025;
+    tunnel.position.z = damp(tunnel.position.z, -scrollProgress * 0.7, 3.2, delta);
+    tunnel.rotation.y = damp(tunnel.rotation.y, pointerX * -0.032, 3.8, delta);
+    tunnel.rotation.x = damp(tunnel.rotation.x, pointerY * 0.018, 3.8, delta);
 
     root.traverse((child) => {
       if (!(child instanceof THREE.Mesh) || !(child.material instanceof THREE.Material)) return;
@@ -124,6 +129,66 @@ export function IntroPortal() {
           rotation={0.036}
           width={6.38}
         />
+      </group>
+
+      <group ref={tunnelRef} position={[0, 0, -0.18]}>
+        <mesh
+          position={[-3.45, 0.05, -1.35]}
+          rotation={[0, 0.38, 0]}
+          userData={{ portalOpacity: 0.075 }}
+        >
+          <planeGeometry args={[2.7, 6.4]} />
+          <meshBasicMaterial
+            color="#e9785f"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh
+          position={[3.42, 0.05, -1.45]}
+          rotation={[0, -0.38, 0]}
+          userData={{ portalOpacity: 0.07 }}
+        >
+          <planeGeometry args={[2.7, 6.4]} />
+          <meshBasicMaterial
+            color="#a7cdb0"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh
+          position={[0, -2.75, -1.42]}
+          rotation={[-Math.PI * 0.5, 0, 0]}
+          userData={{ portalOpacity: 0.12 }}
+        >
+          <planeGeometry args={[7.8, 5.4]} />
+          <meshBasicMaterial
+            color="#fff8e8"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        {[-2.45, -0.82, 0.82, 2.45].map((positionX, index) => (
+          <mesh
+            key={positionX}
+            position={[positionX, 0.15, -2.35 - index * 0.12]}
+            userData={{ portalOpacity: index % 2 === 0 ? 0.26 : 0.16 }}
+          >
+            <boxGeometry args={[0.028, 5.5, 0.035]} />
+            <meshBasicMaterial
+              color={index % 2 === 0 ? "#fff8e8" : "#f4ce63"}
+              depthWrite={false}
+              opacity={0}
+              transparent
+            />
+          </mesh>
+        ))}
       </group>
 
       <mesh position={[-2.55, 0, 0.3]} userData={{ portalOpacity: 0.32 }}>

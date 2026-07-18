@@ -32,7 +32,7 @@ export function ProjectSpatialField() {
     return values;
   }, []);
 
-  useFrame((_, frameDelta) => {
+  useFrame(({ clock }, frameDelta) => {
     const root = rootRef.current;
     if (!root) return;
 
@@ -46,16 +46,16 @@ export function ProjectSpatialField() {
     visibilityRef.current = visibility;
     root.visible = visibility > 0.008;
     if (pointMaterialRef.current) {
-      pointMaterialRef.current.opacity = visibility * 0.42;
+      pointMaterialRef.current.opacity = visibility * 0.22;
     }
     for (const child of ringGroupRef.current?.children ?? []) {
       if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
-        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.34);
+        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.24);
       }
     }
     for (const child of shardGroupRef.current?.children ?? []) {
       if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
-        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.24);
+        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.1);
       }
     }
     for (const child of backdropGroupRef.current?.children ?? []) {
@@ -65,10 +65,12 @@ export function ProjectSpatialField() {
     }
 
     if (!runtime.reducedMotion && root.visible) {
-      root.rotation.z += delta * 0.006;
-      root.rotation.y = Math.sin(runtime.orbit.angle * 0.24) * 0.032;
+      root.rotation.y = Math.sin(runtime.orbit.angle * 0.24) * 0.02;
+      if (ringGroupRef.current) {
+        ringGroupRef.current.rotation.z = clock.elapsedTime * 0.0025;
+      }
       if (backdropGroupRef.current) {
-        backdropGroupRef.current.rotation.z -= delta * 0.009;
+        backdropGroupRef.current.position.x = Math.sin(runtime.orbit.angle * 0.18) * 0.08;
       }
     }
   });
@@ -142,7 +144,7 @@ export function ProjectSpatialField() {
         <mesh
           position={[-5.8, 1.9, -4.6]}
           rotation={[0.2, 0.48, 0.64]}
-          userData={{ fieldOpacity: 0.3 }}
+          userData={{ fieldOpacity: 0.1 }}
         >
           <circleGeometry args={[1.55, 3]} />
           <meshBasicMaterial
@@ -157,7 +159,7 @@ export function ProjectSpatialField() {
         <mesh
           position={[5.5, -1.6, -6.1]}
           rotation={[-0.3, -0.56, -0.38]}
-          userData={{ fieldOpacity: 0.28 }}
+          userData={{ fieldOpacity: 0.09 }}
         >
           <circleGeometry args={[1.9, 3]} />
           <meshBasicMaterial
@@ -172,7 +174,7 @@ export function ProjectSpatialField() {
         <mesh
           position={[3.9, 2.7, -9.2]}
           rotation={[0.48, 0.22, 0.92]}
-          userData={{ fieldOpacity: 0.24 }}
+          userData={{ fieldOpacity: 0.08 }}
         >
           <circleGeometry args={[1.2, 3]} />
           <meshBasicMaterial
@@ -187,18 +189,68 @@ export function ProjectSpatialField() {
       </group>
 
       <group ref={backdropGroupRef}>
-        <mesh position={[-2.8, 1.2, -9.8]} userData={{ fieldOpacity: 0.34 }}>
-          <circleGeometry args={[2.45, 64]} />
+        <mesh position={[-3.75, 1.55, -9.85]} userData={{ fieldOpacity: 0.18 }}>
+          <circleGeometry args={[1.5, 64]} />
           <meshBasicMaterial
-            color="#f4ce63"
+            color="#d9b89f"
             depthWrite={false}
             opacity={0}
             side={THREE.DoubleSide}
             transparent
           />
         </mesh>
-        <mesh position={[-2.8, 1.2, -9.72]} userData={{ fieldOpacity: 0.72 }}>
-          <ringGeometry args={[2.72, 2.76, 96]} />
+        <mesh position={[-3.75, 1.55, -9.77]} userData={{ fieldOpacity: 0.48 }}>
+          <ringGeometry args={[1.72, 1.75, 96]} />
+          <meshBasicMaterial
+            color="#f2e7d2"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[-4.85, 0, -9.72]} userData={{ fieldOpacity: 0.2 }}>
+          <boxGeometry args={[1.5, 7.8, 0.08]} />
+          <meshBasicMaterial
+            color="#d9b89f"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[-1.82, -0.1, -9.92]} userData={{ fieldOpacity: 0.46 }}>
+          <boxGeometry args={[0.42, 8, 0.08]} />
+          <meshBasicMaterial
+            color="#f2e7d2"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[3.9, 0.18, -10.18]} userData={{ fieldOpacity: 0.16 }}>
+          <boxGeometry args={[2.2, 8.4, 0.08]} />
+          <meshBasicMaterial
+            color="#708c83"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[5.25, 0, -9.68]} userData={{ fieldOpacity: 0.42 }}>
+          <boxGeometry args={[0.24, 7.8, 0.08]} />
+          <meshBasicMaterial
+            color="#f2e7d2"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[0, -0.75, -9.42]} userData={{ fieldOpacity: 0.54 }}>
+          <ringGeometry args={[3.25, 3.29, 96, 1, 0, Math.PI]} />
           <meshBasicMaterial
             color="#fff8e8"
             depthWrite={false}
@@ -207,15 +259,19 @@ export function ProjectSpatialField() {
             transparent
           />
         </mesh>
-        <mesh position={[3.4, -0.5, -10.4]} userData={{ fieldOpacity: 0.3 }}>
-          <ringGeometry args={[2.9, 3.62, 3]} />
-          <meshBasicMaterial
-            color="#e9785f"
-            depthWrite={false}
-            opacity={0}
-            side={THREE.DoubleSide}
-            transparent
-          />
+        {[-3.27, 3.27].map((positionX) => (
+          <mesh
+            key={positionX}
+            position={[positionX, -2.45, -9.42]}
+            userData={{ fieldOpacity: 0.5 }}
+          >
+            <boxGeometry args={[0.04, 3.4, 0.04]} />
+            <meshBasicMaterial color="#fff8e8" depthWrite={false} opacity={0} transparent />
+          </mesh>
+        ))}
+        <mesh position={[0, -3.98, -9.5]} userData={{ fieldOpacity: 0.2 }}>
+          <boxGeometry args={[8.8, 0.08, 0.08]} />
+          <meshBasicMaterial color="#8f705f" depthWrite={false} opacity={0} transparent />
         </mesh>
         <mesh
           position={[0, -3.32, -3.4]}

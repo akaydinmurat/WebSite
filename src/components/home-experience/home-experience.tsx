@@ -262,14 +262,16 @@ export function HomeExperience({
             introAperture,
             {
               autoAlpha: 0,
-              clipPath: "polygon(48% 8%, 52% 8%, 52% 92%, 48% 92%)",
-              scale: 1.08,
+              rotateY: -16,
+              scale: 0.92,
+              xPercent: 10,
             },
             {
               autoAlpha: 1,
-              clipPath: "polygon(9% 0, 100% 0, 92% 100%, 0 91%)",
               duration: 1.65,
+              rotateY: 0,
               scale: 1,
+              xPercent: 0,
             },
             0.08,
           );
@@ -524,7 +526,19 @@ export function HomeExperience({
       true,
     );
 
-    if (getExperienceRuntime().phase === "works") {
+    const runtime = getExperienceRuntime();
+    const root = rootRef.current;
+
+    if (runtime.phase === "intro" && !runtime.reducedMotion && root) {
+      const pointerX = (event.clientX / Math.max(window.innerWidth, 1) - 0.5) * 2;
+      const pointerY = (event.clientY / Math.max(window.innerHeight, 1) - 0.5) * 2;
+      root.style.setProperty("--intro-depth-rotate-x", `${pointerY * -3.5}deg`);
+      root.style.setProperty("--intro-depth-rotate-y", `${pointerX * 4.5}deg`);
+      root.style.setProperty("--intro-depth-shift-x", `${pointerX * -9}px`);
+      root.style.setProperty("--intro-depth-shift-y", `${pointerY * -6}px`);
+    }
+
+    if (runtime.phase === "works") {
       updateOrbitDrag(event.pointerId, event.clientX);
     }
   }
@@ -556,7 +570,13 @@ export function HomeExperience({
       data-webgl-ready={webglReady ? "true" : "false"}
       onPointerDown={handlePointerDown}
       onPointerLeave={(event) => {
-        if (event.pointerType === "mouse") deactivateExperiencePointer();
+        if (event.pointerType === "mouse") {
+          deactivateExperiencePointer();
+          rootRef.current?.style.setProperty("--intro-depth-rotate-x", "0deg");
+          rootRef.current?.style.setProperty("--intro-depth-rotate-y", "0deg");
+          rootRef.current?.style.setProperty("--intro-depth-shift-x", "0px");
+          rootRef.current?.style.setProperty("--intro-depth-shift-y", "0px");
+        }
       }}
       onPointerMove={handlePointerMove}
     >
@@ -592,20 +612,27 @@ export function HomeExperience({
             <span className="experience-intro-chrome-sun" />
           </div>
           {introProject?.cover.kind === "image" && introProject.cover.src ? (
-            <div className="experience-intro-aperture" data-intro-aperture aria-hidden="true">
-              <Image
-                src={introProject.cover.src}
-                alt=""
-                fill
-                fetchPriority="high"
-                loading="eager"
-                sizes="(max-width: 767px) 100vw, 52vw"
-              />
-              <span className="experience-intro-aperture-wash" />
-              <span className="experience-intro-aperture-caption">
-                <b>Seçili mekân</b>
-                <i>{introProject.title}</i>
-              </span>
+            <div className="experience-intro-aperture-stage" data-intro-aperture aria-hidden="true">
+              <div className="experience-intro-depth-shell">
+                <span className="experience-intro-depth-plane experience-intro-depth-plane-back" />
+                <span className="experience-intro-depth-plane experience-intro-depth-plane-middle" />
+                <span className="experience-intro-depth-plane experience-intro-depth-plane-front" />
+                <div className="experience-intro-aperture">
+                  <Image
+                    src={introProject.cover.src}
+                    alt=""
+                    fill
+                    fetchPriority="high"
+                    loading="eager"
+                    sizes="(max-width: 767px) 100vw, 52vw"
+                  />
+                  <span className="experience-intro-aperture-wash" />
+                  <span className="experience-intro-aperture-caption">
+                    <b>Seçili mekân</b>
+                    <i>{introProject.title}</i>
+                  </span>
+                </div>
+              </div>
             </div>
           ) : null}
           <div className="experience-intro-copy" data-intro-copy>

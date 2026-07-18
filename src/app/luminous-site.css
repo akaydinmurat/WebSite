@@ -1813,6 +1813,108 @@ body[data-home-experience="true"] main#main-content {
   color: #f2f5f1;
 }
 
+.experience-packages {
+  background:
+    linear-gradient(rgb(244 240 231 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(244 240 231 / 5%) 1px, transparent 1px),
+    radial-gradient(circle at 14% 22%, rgb(116 162 174 / 24%), transparent 29%),
+    radial-gradient(circle at 50% 8%, rgb(194 139 115 / 18%), transparent 25%),
+    radial-gradient(circle at 84% 67%, rgb(159 181 164 / 22%), transparent 31%),
+    linear-gradient(112deg, #182d35 0%, #392f33 36%, #2b3a34 68%, #243139 100%);
+  background-size:
+    5rem 5rem,
+    5rem 5rem,
+    auto,
+    auto,
+    auto,
+    auto;
+}
+
+.experience-packages .experience-package-card {
+  --package-surface: #244652;
+  --package-surface-deep: #172d34;
+  background:
+    radial-gradient(
+      circle at 88% 9%,
+      color-mix(in srgb, var(--package-tone) 32%, transparent),
+      transparent 36%
+    ),
+    linear-gradient(145deg, var(--package-surface), var(--package-surface-deep));
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 5%),
+    -0.65rem 0.65rem 0 color-mix(in srgb, var(--package-tone) 76%, transparent),
+    0 2rem 7rem rgb(3 12 17 / 42%);
+}
+
+.experience-packages .experience-package-card[data-package-tone="sky"] {
+  --package-surface: #244652;
+  --package-surface-deep: #172d34;
+}
+
+.experience-packages .experience-package-card[data-package-tone="clay"] {
+  --package-surface: #53372f;
+  --package-surface-deep: #2e211f;
+}
+
+.experience-packages .experience-package-card[data-package-tone="sand"] {
+  --package-surface: #4d452e;
+  --package-surface-deep: #2b291f;
+}
+
+.experience-packages .experience-package-card[data-package-tone="sage"] {
+  --package-surface: #2e4538;
+  --package-surface-deep: #1c2e28;
+}
+
+.experience-packages .experience-package-card[data-package-tone="blue"] {
+  --package-surface: #263f50;
+  --package-surface-deep: #172a36;
+}
+
+.experience-packages .experience-package-card[data-package-tone="linen"] {
+  --package-surface: #494039;
+  --package-surface-deep: #292622;
+}
+
+.experience-packages .experience-package-card[data-package-tone="coral"] {
+  --package-surface: #503137;
+  --package-surface-deep: #2d2025;
+}
+
+.experience-packages .experience-package-card:hover,
+.experience-packages .experience-package-card:focus-within {
+  background:
+    radial-gradient(
+      circle at 88% 9%,
+      color-mix(in srgb, var(--package-tone) 42%, transparent),
+      transparent 41%
+    ),
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--package-surface) 91%, white),
+      var(--package-surface-deep)
+    );
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 8%),
+    -0.9rem 0.9rem 0 color-mix(in srgb, var(--package-tone) 88%, transparent),
+    0 2.8rem 8rem rgb(3 12 17 / 52%);
+}
+
+.experience-package-visual::after {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--package-tone) 22%, transparent),
+      transparent 46%
+    ),
+    linear-gradient(180deg, transparent 48%, rgb(13 25 31 / 70%));
+}
+
+.experience-package-benefit-label,
+.experience-package-pricing small {
+  color: color-mix(in srgb, var(--package-tone) 66%, #fff8e8);
+}
+
 .package-dossier {
   overflow: hidden;
   background: #f4f0e7;
@@ -2189,21 +2291,64 @@ body[data-home-experience="true"] main#main-content {
   animation: experience-portal-pulse 5.5s ease-in-out infinite;
 }
 
-.experience-intro-aperture {
+.experience-intro-aperture-stage {
   position: absolute;
   z-index: 3;
   top: 12.5vh;
   right: 3.5vw;
   width: min(52vw, 63rem);
   height: min(73vh, 51rem);
+  perspective: 1200px;
+  transform-origin: center;
+  transform-style: preserve-3d;
+}
+
+.experience-intro-depth-shell {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(var(--intro-depth-shift-x, 0), var(--intro-depth-shift-y, 0), 0)
+    rotateX(var(--intro-depth-rotate-x, 0deg)) rotateY(var(--intro-depth-rotate-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+
+.experience-intro-depth-plane {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 248 232 / 36%);
+  clip-path: polygon(9% 0, 100% 0, 92% 100%, 0 91%);
+  pointer-events: none;
+}
+
+.experience-intro-depth-plane-back {
+  background: linear-gradient(145deg, #35545b, #253a3f);
+  box-shadow: -1.8rem 2.2rem 4.5rem rgb(32 41 45 / 24%);
+  transform: translate3d(-1.7rem, 1.65rem, -140px) scale(1.035);
+}
+
+.experience-intro-depth-plane-middle {
+  background: linear-gradient(145deg, #b96856, #8e5147);
+  transform: translate3d(-1.08rem, 1rem, -82px) scale(1.018);
+}
+
+.experience-intro-depth-plane-front {
+  border-color: rgb(244 206 99 / 90%);
+  background: transparent;
+  transform: translate3d(-0.48rem, 0.48rem, -28px) scale(1.008);
+}
+
+.experience-intro-aperture {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   border: 1px solid rgb(255 248 232 / 78%);
   background: #8ea59e;
   box-shadow:
-    -1.1rem 1.1rem 0 rgb(244 206 99 / 88%),
-    -2.2rem 2.2rem 5rem rgb(32 41 45 / 18%);
+    0 1.5rem 5rem rgb(32 41 45 / 20%),
+    inset 0 0 0 1px rgb(255 248 232 / 12%);
   clip-path: polygon(9% 0, 100% 0, 92% 100%, 0 91%);
-  transform-origin: center;
+  transform: translateZ(28px);
 }
 
 .experience-intro-aperture img {
@@ -2345,7 +2490,7 @@ body[data-experience-phase="works"]
     .experience-intro-copy,
     .experience-intro-description,
     .experience-intro-datum,
-    .experience-intro-aperture,
+    .experience-intro-aperture-stage,
     .experience-intro-chrome
   ) {
   visibility: hidden;
@@ -2354,9 +2499,16 @@ body[data-experience-phase="works"]
 
 .experience-fallback[data-fallback-phase="works"] {
   background:
-    radial-gradient(circle at 18% 22%, rgb(244 206 99 / 72%), transparent 24%),
-    radial-gradient(circle at 82% 68%, rgb(233 120 95 / 32%), transparent 30%),
-    linear-gradient(132deg, #dcd4c2 0%, #a9bdb4 42%, #d3b08f 72%, #eef0e8 100%);
+    linear-gradient(
+      90deg,
+      transparent 0 18%,
+      rgb(255 248 232 / 34%) 18% 18.15%,
+      transparent 18.15% 74%,
+      rgb(65 91 86 / 18%) 74% 74.2%,
+      transparent 74.2%
+    ),
+    radial-gradient(ellipse at 18% 18%, rgb(242 231 210 / 54%), transparent 26%),
+    linear-gradient(122deg, #c9bda7 0%, #ddd4c5 48%, #9aada5 100%);
 }
 
 .experience-fallback[data-fallback-phase="works"] .experience-fallback-grid {
@@ -2385,9 +2537,9 @@ body[data-experience-phase="works"]
   z-index: 0;
   inset: 0;
   background:
-    linear-gradient(90deg, rgb(255 248 232 / 22%), transparent 28% 76%, rgb(32 41 45 / 8%)),
-    radial-gradient(circle at 18% 16%, rgb(244 206 99 / 22%), transparent 25%),
-    radial-gradient(circle at 84% 72%, rgb(233 120 95 / 18%), transparent 30%);
+    linear-gradient(90deg, rgb(32 54 59 / 9%), transparent 24% 78%, rgb(32 41 45 / 11%)),
+    linear-gradient(180deg, transparent 64%, rgb(55 79 75 / 20%)),
+    repeating-linear-gradient(90deg, transparent 0 12.45vw, rgb(255 248 232 / 9%) 12.45vw 12.52vw);
   content: "";
   pointer-events: none;
 }
@@ -2415,12 +2567,14 @@ body[data-experience-phase="works"]
 
 .experience-project-stage-identity strong {
   display: block;
-  color: rgb(32 54 59 / 16%);
+  color: transparent;
   font-family: var(--font-serif, Georgia, serif);
   font-size: clamp(7rem, 14vw, 16rem);
   font-weight: 400;
   line-height: 0.72;
   letter-spacing: -0.07em;
+  text-shadow: 0 1.1rem 3.4rem rgb(32 54 59 / 9%);
+  -webkit-text-stroke: 1px rgb(32 54 59 / 28%);
   white-space: nowrap;
 }
 
@@ -2543,7 +2697,7 @@ body[data-experience-phase="works"]
     width: min(57rem, 62vw);
   }
 
-  .experience-intro-aperture {
+  .experience-intro-aperture-stage {
     right: -5vw;
     width: 58vw;
   }
@@ -2569,13 +2723,21 @@ body[data-experience-phase="works"]
     inset: 5.2rem 0.75rem 0.75rem;
   }
 
-  .experience-intro-aperture {
+  .experience-intro-aperture-stage {
     top: 5.2rem;
     right: -8vw;
     width: 108vw;
     height: 68svh;
+  }
+
+  .experience-intro-aperture {
     box-shadow: none;
     clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+  }
+
+  .experience-intro-depth-plane {
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+    opacity: 0.58;
   }
 
   .experience-intro-aperture-wash {
@@ -2662,7 +2824,8 @@ body[data-experience-phase="works"]
   }
 
   .experience-intro-chrome,
-  .experience-intro-aperture,
+  .experience-intro-aperture-stage,
+  .experience-intro-depth-shell,
   [data-intro-reveal],
   [data-project-stage-word] {
     opacity: 1;

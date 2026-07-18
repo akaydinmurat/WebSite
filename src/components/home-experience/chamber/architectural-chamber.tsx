@@ -31,11 +31,11 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
   const phaseColors = useMemo(
     () => ({
       ceilingDefault: new THREE.Color(colors.smokedNavy),
-      ceilingProjects: new THREE.Color("#c89a78"),
+      ceilingProjects: new THREE.Color("#8f705f"),
       floorDefault: new THREE.Color(colors.warmStone),
-      floorProjects: new THREE.Color("#86a39a"),
+      floorProjects: new THREE.Color("#667f78"),
       wallDefault: new THREE.Color(colors.mineral),
-      wallProjects: new THREE.Color("#d8d1c1"),
+      wallProjects: new THREE.Color("#c9bea9"),
     }),
     [colors.mineral, colors.smokedNavy, colors.warmStone],
   );
@@ -162,7 +162,7 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
     projectLight.position.y = damp(projectLight.position.y, 2.2 + pointerY * 0.8, 3.8, delta);
     projectLight.intensity = damp(
       projectLight.intensity,
-      projectsActive && runtime.pageVisible ? 1.85 : 0,
+      projectsActive && runtime.pageVisible ? 1.65 : 0,
       4.4,
       delta,
     );
