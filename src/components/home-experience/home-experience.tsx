@@ -17,7 +17,7 @@ import { siteConfig } from "@/config/site";
 import { processStages, type ProcessStage } from "@/content/process-stages";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/animation/gsap";
-import { isWebglViewportCapable } from "@/lib/experience/webgl-capability";
+import { isWebglHeroEnabled, isWebglViewportCapable } from "@/lib/experience/webgl-capability";
 import type { DesignPackage, GoogleReviewsResult, Project, Service } from "@/types";
 
 import { experienceConfig, type ExperiencePhase } from "./experience-config";
@@ -100,7 +100,7 @@ export function HomeExperience({
     getExperienceServerSnapshot,
   );
   const shouldRenderWebgl =
-    process.env.NEXT_PUBLIC_ENABLE_WEBGL_HERO === "true" && webglCapable && !reducedMotion;
+    isWebglHeroEnabled(process.env.NEXT_PUBLIC_ENABLE_WEBGL_HERO) && webglCapable && !reducedMotion;
 
   const featuredPackages = useMemo(() => {
     const preferred = packages.filter((item) => item.showOnHomepage);

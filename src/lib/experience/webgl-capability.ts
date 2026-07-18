@@ -1,5 +1,9 @@
 export const WEBGL_MIN_VIEWPORT_WIDTH = 560;
 
+export function isWebglHeroEnabled(value: string | undefined) {
+  return value?.trim().toLowerCase() !== "false";
+}
+
 export function isWebglViewportCapable({
   hasFinePointer,
   viewportWidth,
