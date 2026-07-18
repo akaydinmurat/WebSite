@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, Star } from "lucide-react";
 import {
@@ -73,7 +74,7 @@ const projectCategoryLabels: Record<Project["category"], string> = {
   visualization: "Görselleştirme",
 };
 
-const packageTones = ["sky", "coral", "cream", "celadon", "sun"] as const;
+const packageTones = ["sky", "clay", "sand", "sage", "blue", "linen", "coral"] as const;
 
 type MetadataTransitionState = "idle" | "exit" | "enter";
 
@@ -102,17 +103,10 @@ export function HomeExperience({
   const shouldRenderWebgl =
     isWebglHeroEnabled(process.env.NEXT_PUBLIC_ENABLE_WEBGL_HERO) && webglCapable && !reducedMotion;
 
-  const featuredPackages = useMemo(() => {
-    const preferred = packages.filter((item) => item.showOnHomepage);
-    const additions = packages.filter(
-      (item) => item.slug === "space-design-2d" || item.slug === "online-design-consulting",
-    );
-    return [...preferred, ...additions]
-      .filter(
-        (item, index, items) => items.findIndex((entry) => entry.slug === item.slug) === index,
-      )
-      .sort((a, b) => a.order - b.order);
-  }, [packages]);
+  const featuredPackages = useMemo(
+    () => [...packages].sort((a, b) => a.order - b.order),
+    [packages],
+  );
 
   const setPhase = useCallback((phase: ExperiencePhase, progress: number) => {
     setExperiencePhase(phase, progress);
@@ -804,14 +798,9 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
           <span />
         </div>
         <header className="experience-content-heading">
-          <p className="experience-kicker">04 · Tasarım Kapsamları</p>
-          <h2 id="experience-packages-title">
-            Kapsam, renk ve ritim. Mekân için yeni bir başlangıç.
-          </h2>
-          <p>
-            Doğrulanmış hizmet kapsamları; mekânın ihtiyacına göre ayrışan, okunaklı proje dosyaları
-            olarak sunulur.
-          </p>
+          <p className="experience-kicker">04 · Size ne katacak?</p>
+          <h2 id="experience-packages-title">Fikri, yaşayacağınız mekâna dönüştüren kapsamlar.</h2>
+          <p>İhtiyacınızı seçin; kazanımı, kapsamı ve fiyatlandırma yöntemini tek bakışta görün.</p>
           <Link href="/packages">
             Tüm kapsamlar <ArrowUpRight aria-hidden="true" size={14} />
           </Link>
@@ -829,36 +818,44 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
                   <span className="experience-package-card-index" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <span className="experience-package-aperture" aria-hidden="true">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
-                  <div className="experience-package-plan" aria-hidden="true">
-                    <i />
-                    <i />
-                    <i />
-                    <i />
+                  <div className="experience-package-visual">
+                    <Image
+                      src={item.image.src}
+                      alt={item.image.alt}
+                      width={item.image.width}
+                      height={item.image.height}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1199px) 60vw, 42vw"
+                    />
+                    <span>{item.presentationFormats?.join(" + ") ?? "Özel kapsam"}</span>
                   </div>
-                  <p>
+                  <p className="experience-package-scope">
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <span>{item.scopeLabel}</span>
                   </p>
-                  <h3>{item.title}</h3>
-                  <p>{item.summary}</p>
+                  <div className="experience-package-copy">
+                    <p className="experience-package-benefit-label">Size ne katar?</p>
+                    <p className="experience-package-benefit">{item.benefit}</p>
+                    <h3>{item.title}</h3>
+                    <p className="experience-package-summary">{item.summary}</p>
+                  </div>
                   <ul aria-label={`${item.title} kapsamında öne çıkanlar`}>
                     {item.scopeItems.slice(0, 3).map((scope) => (
                       <li key={scope}>{scope}</li>
                     ))}
                   </ul>
                   <footer>
-                    <span>{item.presentationFormats?.join(" + ") ?? "Tanımlı kapsam"}</span>
+                    <span className="experience-package-pricing">
+                      <small>Fiyatlandırma</small>
+                      <strong>{item.pricingLabel}</strong>
+                      <em>{item.pricingNote}</em>
+                    </span>
                     <Link
                       href={item.inquiry.href}
                       data-cursor-kind="action"
                       data-cursor-label="Görüşelim"
                     >
-                      Görüşelim <ArrowUpRight aria-hidden="true" size={13} />
+                      Teklif alın <ArrowUpRight aria-hidden="true" size={13} />
                     </Link>
                   </footer>
                 </article>

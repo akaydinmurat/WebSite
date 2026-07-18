@@ -1,4 +1,5 @@
 import { ArrowUpRight, Check, Minus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import type { DesignPackage } from "@/types";
@@ -22,12 +23,34 @@ export function PackageCard({
         <span>{designPackage.scopeLabel}</span>
       </header>
 
+      <div className="package-dossier-visual">
+        <Image
+          src={designPackage.image.src}
+          alt={designPackage.image.alt}
+          width={designPackage.image.width}
+          height={designPackage.image.height}
+          sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1199px) 50vw, 42vw"
+        />
+        <span>{designPackage.presentationFormats?.join(" + ") ?? "Özel kapsam"}</span>
+      </div>
+
       <div className="package-dossier-intro">
         <h3 className="card-title">{designPackage.title}</h3>
         <p>{designPackage.summary}</p>
       </div>
 
       <div className="package-dossier-body">
+        <div className="package-dossier-block package-dossier-benefit">
+          <h4>Size ne katar?</h4>
+          <p>{designPackage.benefit}</p>
+        </div>
+
+        <div className="package-dossier-block package-dossier-pricing">
+          <h4>Fiyatlandırma</h4>
+          <strong>{designPackage.pricingLabel}</strong>
+          <p>{designPackage.pricingNote}</p>
+        </div>
+
         <PackageList title="Kapsam" items={designPackage.scopeItems} />
 
         {designPackage.examples?.length ? (
@@ -77,7 +100,7 @@ export function PackageCard({
         className="package-dossier-action"
         aria-label={designPackage.inquiry.label}
       >
-        <span>Kapsamı görüşün</span>
+        <span>Teklif alın</span>
         <ArrowUpRight aria-hidden="true" size={18} />
       </Link>
     </article>

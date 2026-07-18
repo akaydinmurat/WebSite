@@ -41,6 +41,17 @@ WebGL yetenekli masaüstü cihazlarda varsayılan olarak etkindir. Dağıtımda 
 NEXT_PUBLIC_ENABLE_WEBGL_HERO=false
 ```
 
+Google yorumlarını Hostinger üzerinde etkinleştirmek için Google Cloud'da **Places API (New)** servisini ve faturalandırmayı etkinleştirin. İşletmenin Place ID değerini Google'ın Place ID aracından alın; normal Google Maps paylaşım bağlantısını Place ID alanına yazmayın. Ardından sunucu tarafında kullanılacak API anahtarını yalnız **Places API (New)** ile sınırlandırın ve Hostinger projesine şu değişkenleri ekleyin:
+
+```text
+GOOGLE_REVIEWS_ENABLED=true
+GOOGLE_PLACES_API_KEY=<server-side-secret>
+GOOGLE_PLACE_ID=<verified-place-id>
+GOOGLE_MAPS_PLACE_URL=<public-listing-url>
+```
+
+Bu değerlerde `NEXT_PUBLIC_` öneki kullanılmaz. Hostinger sabit çıkış IP'si sağlıyorsa anahtara IP kısıtlaması da ekleyin; sunucu isteğinde HTTP referrer kısıtlaması kullanmayın. Değişkenleri kaydettikten sonra uygulamayı yeniden build/deploy edin. Site, Google API'nin döndürdüğü yorumlardan ilk üçünü gösterir; bağlantı kurulamazsa doğrulanmış Google Maps bağlantısına geri döner.
+
 `NEXT_PUBLIC_SITE_URL` son slash içermez. `SANITY_API_READ_TOKEN` ve `SANITY_REVALIDATE_SECRET` yalnız server-side secret olarak kalır. E-posta provider'ı eklenirse onun değişkenleri `.env.example` ve `SECURITY.md` içinde ayrıca belgelenmelidir.
 
 ## Wix DNS

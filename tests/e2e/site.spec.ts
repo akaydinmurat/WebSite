@@ -307,7 +307,9 @@ test.describe("core visitor journeys", () => {
 
     await page.getByTestId("desktop-navigation").getByRole("link", { name: "Projeler" }).click();
     await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
-    await expect(lightField).toHaveCSS("opacity", "0");
+    await expect
+      .poll(() => lightField.evaluate((element) => Number(getComputedStyle(element).opacity)))
+      .toBeGreaterThan(0.95);
   });
 
   test("navigates to Projects without remounting the home experience", async ({
@@ -495,11 +497,13 @@ test.describe("core visitor journeys", () => {
     await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "outro");
     await expect(packageTrack).toBeVisible();
     await expect(packageTrack.getByRole("heading", { level: 2 })).toHaveText(
-      "Kapsam, renk ve ritim. Mekân için yeni bir başlangıç.",
+      "Fikri, yaşayacağınız mekâna dönüştüren kapsamlar.",
     );
-    await expect(packageCards).toHaveCount(5);
-    await expect(packageCards.first().getByRole("link", { name: "Görüşelim" })).toBeVisible();
+    await expect(packageCards).toHaveCount(7);
+    await expect(packageCards.first().getByRole("link", { name: "Teklif alın" })).toBeVisible();
     await expect(packageCards.first().getByRole("heading", { level: 3 })).toBeVisible();
+    await expect(page.locator(".experience-package-benefit")).toHaveCount(7);
+    await expect(page.locator(".experience-package-pricing")).toHaveCount(7);
     await expect(page.locator(".experience-package-grid")).toHaveCSS("display", "grid");
   });
 

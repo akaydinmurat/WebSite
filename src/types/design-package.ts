@@ -5,6 +5,15 @@ export interface DesignPackage {
   title: string;
   scopeLabel: string;
   summary: string;
+  benefit: string;
+  pricingLabel: string;
+  pricingNote: string;
+  image: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
   scopeItems: readonly string[];
   examples?: readonly string[];
   presentationFormats?: readonly PresentationFormat[];

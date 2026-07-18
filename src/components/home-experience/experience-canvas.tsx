@@ -10,6 +10,7 @@ import { ArchitecturalChamber } from "./chamber/architectural-chamber";
 import { experienceConfig } from "./experience-config";
 import { getExperienceRuntime } from "./experience-store";
 import { ProjectOrbit } from "./orbit/project-orbit";
+import { ProjectSpatialField } from "./orbit/project-spatial-field";
 import { PackageVault } from "./packages";
 import { MaterialLightSurface } from "./pointer/material-light-surface";
 import { ShowcaseCorridor } from "./showcase/showcase-corridor";
@@ -151,6 +152,7 @@ export function ExperienceCanvas({
           <SceneAtmosphere />
           <ArchitecturalChamber />
           <MaterialLightSurface />
+          <ProjectSpatialField />
           <ProjectOrbit projects={projects} />
           <ShowcaseCorridor />
           <PackageVault count={packageCount} />

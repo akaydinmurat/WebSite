@@ -270,7 +270,7 @@ function ProjectCard({
         : size.width < 1024
           ? experienceConfig.cards.tabletMaxWidth
           : experienceConfig.cards.desktopMaxWidth;
-    const maxHeightRatio = size.width < 768 ? 0.38 : size.width < 1024 ? 0.42 : 0.46;
+    const maxHeightRatio = size.width < 768 ? 0.4 : size.width < 1024 ? 0.46 : 0.52;
     const widthLimit =
       (currentViewport.width * (maxWidthPixels / Math.max(1, size.width))) /
       experienceConfig.cards.worldWidth;
@@ -288,7 +288,7 @@ function ProjectCard({
       isActive ? experienceConfig.orbit.frontOpacity : 0.76,
     );
     const imageOpacity = baseOpacity * sceneVisibility * otherCardOpacity;
-    const brightness = 0.67 + sideWeight * 0.15 + focusWeight * 0.18 + selectionProgress * 0.05;
+    const brightness = 0.72 + sideWeight * 0.16 + focusWeight * 0.2 + selectionProgress * 0.05;
 
     imageMaterial.opacity = imageOpacity;
     imageMaterial.color.copy(scratch.baseImageColor).multiplyScalar(brightness);
@@ -305,7 +305,7 @@ function ProjectCard({
     shadowMaterial.opacity =
       sceneVisibility * otherCardOpacity * (0.035 + sideWeight * 0.04 + focusWeight * 0.12);
     overlayMaterial.opacity =
-      sceneVisibility * otherCardOpacity * Math.max(0, 0.16 - focusWeight * 0.15);
+      sceneVisibility * otherCardOpacity * Math.max(0, 0.1 - focusWeight * 0.095);
 
     card.visible = imageOpacity > 0.008;
   });
@@ -414,16 +414,16 @@ function ProjectCard({
       <mesh position={[0, 0, -0.025]}>
         <boxGeometry
           args={[
-            experienceConfig.cards.worldWidth + 0.16,
-            experienceConfig.cards.worldHeight + 0.16,
-            0.035,
+            experienceConfig.cards.worldWidth + 0.2,
+            experienceConfig.cards.worldHeight + 0.2,
+            0.055,
           ]}
         />
         <meshStandardMaterial
           ref={frameMaterialRef}
-          color={experienceConfig.colors.river}
-          metalness={0.58}
-          roughness={0.34}
+          color={experienceConfig.colors.graphite}
+          metalness={0.42}
+          roughness={0.46}
           transparent
           opacity={0}
           depthTest

@@ -85,25 +85,26 @@ const fragmentShader = `
   }
 
   vec3 projectField(vec2 uv) {
-    float wave = sin((uv.y * 1.28 + uv.x * 0.34) * 3.14159265) * 0.075;
-    float coralPlane = smoothstep(0.16, 0.55, uv.x + wave);
-    float pomegranateStart = smoothstep(0.34, 0.46, uv.x - uv.y * 0.17 + wave * 0.34);
-    float pomegranateEnd =
-      1.0 - smoothstep(0.61, 0.73, uv.x - uv.y * 0.17 + wave * 0.34);
-    float pomegranateRibbon = pomegranateStart * pomegranateEnd;
-    float sunPlane = smoothstep(0.59, 0.72, uv.x + uv.y * 0.16 - wave * 0.42);
-    float celadonCut =
-      (1.0 - smoothstep(0.22, 0.48, uv.y + uv.x * 0.08)) *
-      smoothstep(0.54, 0.78, uv.x);
+    float diagonalPlane = smoothstep(0.28, 0.72, uv.x + uv.y * 0.34);
+    float mineralRibbon =
+      smoothstep(0.31, 0.43, uv.x - uv.y * 0.22) *
+      (1.0 - smoothstep(0.58, 0.7, uv.x - uv.y * 0.22));
+    float sandFacet = smoothstep(0.62, 0.76, uv.x + uv.y * 0.12);
+    float sageFacet =
+      (1.0 - smoothstep(0.24, 0.5, uv.y + uv.x * 0.1)) *
+      smoothstep(0.48, 0.72, uv.x);
+    float fractureA = 1.0 - smoothstep(0.008, 0.018, abs(uv.y - (0.18 + uv.x * 0.46)));
+    float fractureB = 1.0 - smoothstep(0.006, 0.015, abs(uv.y - (0.82 - uv.x * 0.31)));
 
-    vec3 color = uProjectPalette[3];
-    color = mix(color, uProjectPalette[1], coralPlane * 0.86);
-    color = mix(color, uProjectPalette[0], pomegranateRibbon * 0.94);
-    color = mix(color, uProjectPalette[2], sunPlane * 0.96);
-    color = mix(color, uProjectPalette[4], celadonCut * 0.3);
+    vec3 color = mix(uProjectPalette[3], uProjectPalette[1], diagonalPlane * 0.34);
+    color = mix(color, uProjectPalette[0], mineralRibbon * 0.78);
+    color = mix(color, uProjectPalette[2], sandFacet * 0.46);
+    color = mix(color, uProjectPalette[4], sageFacet * 0.42);
+    color = mix(color, uProjectPalette[3], (fractureA + fractureB) * 0.2);
 
-    float grain = hash21(floor(uv * vec2(460.0, 280.0)));
-    color += (grain - 0.5) * 0.014;
+    float grain = hash21(floor(uv * vec2(520.0, 320.0)));
+    float star = step(0.994, hash21(floor(uv * vec2(120.0, 72.0))));
+    color += (grain - 0.5) * 0.012 + star * 0.12;
     return color;
   }
 
