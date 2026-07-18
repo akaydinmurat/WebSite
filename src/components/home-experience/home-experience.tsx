@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
@@ -789,6 +790,7 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
       className="experience-content-section experience-packages"
       aria-labelledby="experience-packages-title"
       data-package-track
+      style={{ "--package-count": packages.length } as CSSProperties}
     >
       <div className="experience-packages-stage">
         <div className="experience-package-vault-lines" aria-hidden="true">
@@ -800,9 +802,9 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
         <header className="experience-content-heading">
           <p className="experience-kicker">04 · Size ne katacak?</p>
           <h2 id="experience-packages-title">Fikri, yaşayacağınız mekâna dönüştüren kapsamlar.</h2>
-          <p>İhtiyacınızı seçin; kazanımı, kapsamı ve fiyatlandırma yöntemini tek bakışta görün.</p>
+          <p>İhtiyacınızı seçin; kazanımı, kapsamı ve güncel Shopier fiyatını tek bakışta görün.</p>
           <Link href="/packages">
-            Tüm kapsamlar <ArrowUpRight aria-hidden="true" size={14} />
+            11 ürünü karşılaştır <ArrowUpRight aria-hidden="true" size={14} />
           </Link>
         </header>
         <div className="experience-package-window" data-package-window>
@@ -827,7 +829,7 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
                       loading={index === 0 ? "eager" : "lazy"}
                       sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1199px) 60vw, 42vw"
                     />
-                    <span>{item.presentationFormats?.join(" + ") ?? "Özel kapsam"}</span>
+                    <span>{item.presentationFormats?.join(" + ") ?? item.deliveryMode}</span>
                   </div>
                   <p className="experience-package-scope">
                     <span>{String(index + 1).padStart(2, "0")}</span>
@@ -851,11 +853,13 @@ function PackagesSection({ packages }: { packages: readonly DesignPackage[] }) {
                       <em>{item.pricingNote}</em>
                     </span>
                     <Link
-                      href={item.inquiry.href}
+                      href={item.shopierUrl}
                       data-cursor-kind="action"
-                      data-cursor-label="Görüşelim"
+                      data-cursor-label="Shopier"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      Teklif alın <ArrowUpRight aria-hidden="true" size={13} />
+                      Shopier&apos;da incele <ArrowUpRight aria-hidden="true" size={13} />
                     </Link>
                   </footer>
                 </article>

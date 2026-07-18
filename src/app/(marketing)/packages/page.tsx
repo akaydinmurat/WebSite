@@ -6,9 +6,9 @@ import { fallbackPackages } from "@/content/fallback-packages";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata({
-  title: "Tasarım Paketleri",
+  title: "Dijital Tasarım Ürünleri",
   description:
-    "Mekân, ürün, duvar, konut, ticari mekân ve online danışmanlık için tasarım paketleri.",
+    "Online danışmanlık, ürün ve mekân tasarımı için fiyatı ve kapsamı açık 11 dijital tasarım ürünü.",
   path: "/packages",
 });
 
@@ -16,13 +16,13 @@ export default function PackagesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Tasarım Paketleri"
-        title="İhtiyaca göre tanımlanmış yedi tasarım kapsamı."
-        description="Tek bir duvardan konut ve ticari mekânlara uzanan hizmetleri; tasarım ölçeği, kapsam ve doğrulanmış sunum biçimleri üzerinden karşılaştırın."
+        eyebrow="Dijital Tasarım Ürünleri"
+        title="İhtiyacınıza göre tanımlanmış 11 tasarım ürünü."
+        description="Üç soruluk hızlı destekten bütüncül konut tasarımına uzanan ürünleri; gerçek Shopier fiyatı, kapsamı ve sunum biçimi üzerinden karşılaştırın."
         tone="sun"
         aside={
           <p className="max-w-xs text-sm text-[var(--color-muted)]">
-            Her dosya, hizmetin doğrulanmış içeriğini ve varsa sunum biçimini açıkça gösterir.
+            Fiyatlar ve ürün kapsamları Shopier mağazasındaki güncel ilanlardan alınmıştır.
           </p>
         }
       />

@@ -66,7 +66,7 @@ export const siteConfig = {
       title: "İhtiyaca göre tanımlanmış profesyonel kapsamlar.",
       description:
         "Tek bir duvardan konut ve ticari mekânlara uzanan hizmetler; ölçek, kapsam ve doğrulanmış sunum biçimleriyle ayrışır.",
-      actionLabel: "Tüm kapsamları incele",
+      actionLabel: "11 ürünü karşılaştır",
     },
     about: {
       eyebrow: "Göknur Uygur Akaydın",

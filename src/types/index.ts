@@ -1,4 +1,4 @@
-export type { DesignPackage, PresentationFormat } from "./design-package";
+export type { DesignPackage, PackagePriceOption, PresentationFormat } from "./design-package";
 export type {
   GoogleReview,
   GoogleReviewAuthor,

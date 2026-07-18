@@ -1460,7 +1460,7 @@ body[data-home-experience="true"] main#main-content {
 }
 
 .experience-packages {
-  min-height: 520svh;
+  min-height: calc(100svh + var(--package-count, 7) * 62svh);
   background:
     linear-gradient(rgb(221 230 227 / 5%) 1px, transparent 1px),
     linear-gradient(90deg, rgb(221 230 227 / 5%) 1px, transparent 1px),
@@ -1847,6 +1847,75 @@ body[data-home-experience="true"] main#main-content {
 .package-dossier-pricing p {
   margin-top: 0.45rem;
   color: var(--color-muted);
+}
+
+.package-price-options {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.package-price-options a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.55rem;
+}
+
+.package-price-options span {
+  color: var(--color-ink-soft);
+  font-size: 0.68rem;
+}
+
+.package-price-options strong {
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.luminous-packages-page {
+  background:
+    radial-gradient(circle at 12% 12%, rgb(157 190 194 / 28%), transparent 30%),
+    radial-gradient(circle at 88% 52%, rgb(194 145 119 / 18%), transparent 34%), #e9e5dc;
+}
+
+.luminous-package-grid .package-dossier {
+  border-color: rgb(54 71 75 / 24%);
+  background: #f7f4ed;
+  box-shadow: -0.75rem 0.75rem 0 var(--dossier-tone);
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 1) {
+  --dossier-tone: #a8c2c7;
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 2) {
+  --dossier-tone: #c8957d;
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 3) {
+  --dossier-tone: #b5c4ad;
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 4) {
+  --dossier-tone: #d2bf96;
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 5) {
+  --dossier-tone: #89a8b5;
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 6) {
+  --dossier-tone: #c7b9a5;
+}
+
+.luminous-package-grid .package-dossier:nth-child(7n + 7) {
+  --dossier-tone: #bd8578;
+}
+
+.luminous-package-grid .package-dossier-header {
+  background: color-mix(in srgb, var(--dossier-tone) 76%, #f7f4ed);
 }
 
 @media (max-width: 1199px) {

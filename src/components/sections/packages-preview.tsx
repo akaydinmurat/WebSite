@@ -21,7 +21,7 @@ export function PackagesPreview() {
       data-home-scene="packages"
     >
       <div className="site-shell section-frame">
-        <SectionMarker index="03" label="Tasarım Kapsamları" meta="07 dosya" />
+        <SectionMarker index="03" label="Dijital Tasarım Ürünleri" meta="11 ürün" />
         <SectionHeading
           headingId="packages-preview-title"
           className="mt-14 md:mt-20"

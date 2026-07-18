@@ -499,11 +499,13 @@ test.describe("core visitor journeys", () => {
     await expect(packageTrack.getByRole("heading", { level: 2 })).toHaveText(
       "Fikri, yaşayacağınız mekâna dönüştüren kapsamlar.",
     );
-    await expect(packageCards).toHaveCount(7);
-    await expect(packageCards.first().getByRole("link", { name: "Teklif alın" })).toBeVisible();
+    await expect(packageCards).toHaveCount(11);
+    await expect(
+      packageCards.first().getByRole("link", { name: "Shopier'da incele" }),
+    ).toBeVisible();
     await expect(packageCards.first().getByRole("heading", { level: 3 })).toBeVisible();
-    await expect(page.locator(".experience-package-benefit")).toHaveCount(7);
-    await expect(page.locator(".experience-package-pricing")).toHaveCount(7);
+    await expect(page.locator(".experience-package-benefit")).toHaveCount(11);
+    await expect(page.locator(".experience-package-pricing")).toHaveCount(11);
     await expect(page.locator(".experience-package-grid")).toHaveCSS("display", "grid");
   });
 

@@ -544,6 +544,10 @@ function ShowroomCard({
             >
               Sahneyi aç <ArrowUpRight aria-hidden="true" size={14} />
             </button>
+          ) : item.href?.startsWith("http") ? (
+            <a href={item.href} target="_blank" rel="noopener noreferrer" data-cursor-kind="action">
+              {item.actionLabel ?? "İncele"} <ArrowUpRight aria-hidden="true" size={14} />
+            </a>
           ) : item.href ? (
             <Link href={item.href} data-cursor-kind="action">
               {item.actionLabel ?? "İncele"} <ArrowUpRight aria-hidden="true" size={14} />
@@ -642,16 +646,16 @@ function createSceneItems(
   }
 
   if (scene === "packages") {
-    return packages.map((designPackage, index) => ({
+    return packages.map((designPackage) => ({
       id: designPackage.slug,
       kind: "package",
       kicker: designPackage.scopeLabel,
       title: designPackage.title,
       summary: designPackage.summary,
-      imageSrc: imageAt(index + 1),
-      imageAlt: `${designPackage.title} kapsamını temsil eden mevcut portföy görseli`,
-      href: designPackage.inquiry.href,
-      actionLabel: "Kapsamı görüş",
+      imageSrc: designPackage.image.src,
+      imageAlt: designPackage.image.alt,
+      href: designPackage.shopierUrl,
+      actionLabel: "Shopier'da incele",
       tags: [...(designPackage.presentationFormats ?? []), ...designPackage.scopeItems].slice(0, 3),
     }));
   }

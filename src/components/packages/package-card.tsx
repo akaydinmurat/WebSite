@@ -31,7 +31,7 @@ export function PackageCard({
           height={designPackage.image.height}
           sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1199px) 50vw, 42vw"
         />
-        <span>{designPackage.presentationFormats?.join(" + ") ?? "Özel kapsam"}</span>
+        <span>{designPackage.presentationFormats?.join(" + ") ?? designPackage.deliveryMode}</span>
       </div>
 
       <div className="package-dossier-intro">
@@ -49,6 +49,18 @@ export function PackageCard({
           <h4>Fiyatlandırma</h4>
           <strong>{designPackage.pricingLabel}</strong>
           <p>{designPackage.pricingNote}</p>
+          {designPackage.priceOptions?.length ? (
+            <ul className="package-price-options" aria-label={`${designPackage.title} seçenekleri`}>
+              {designPackage.priceOptions.map((option) => (
+                <li key={option.href}>
+                  <Link href={option.href} target="_blank" rel="noopener noreferrer">
+                    <span>{option.label}</span>
+                    <strong>{option.price}</strong>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
 
         <PackageList title="Kapsam" items={designPackage.scopeItems} />
@@ -96,11 +108,13 @@ export function PackageCard({
       </div>
 
       <Link
-        href={designPackage.inquiry.href}
+        href={designPackage.shopierUrl}
         className="package-dossier-action"
-        aria-label={designPackage.inquiry.label}
+        aria-label={`${designPackage.title} ürününü Shopier'da inceleyin`}
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        <span>Teklif alın</span>
+        <span>Shopier&apos;da incele</span>
         <ArrowUpRight aria-hidden="true" size={18} />
       </Link>
     </article>
