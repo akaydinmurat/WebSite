@@ -253,12 +253,14 @@ export function MaterialLightSurface({ visible = true, z = -8.55 }: MaterialLigh
 
     const projectSurfaceActive = runtime.phase === "works";
     const targetSurfaceStrength = runtime.phase === "intro" && runtime.pageVisible ? 1 : 0;
-    runtimeMaterial.uniforms.uSurfaceStrength.value = damp(
-      runtimeMaterial.uniforms.uSurfaceStrength.value,
-      targetSurfaceStrength,
-      targetSurfaceStrength > 0 ? 4.2 : 3.2,
-      delta,
-    );
+    runtimeMaterial.uniforms.uSurfaceStrength.value = projectSurfaceActive
+      ? 0
+      : damp(
+          runtimeMaterial.uniforms.uSurfaceStrength.value,
+          targetSurfaceStrength,
+          targetSurfaceStrength > 0 ? 4.2 : 3.2,
+          delta,
+        );
     fieldMesh.visible =
       runtime.pageVisible &&
       (targetSurfaceStrength > 0 || runtimeMaterial.uniforms.uSurfaceStrength.value > 0.012);

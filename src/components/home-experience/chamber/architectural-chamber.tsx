@@ -27,6 +27,17 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
   const pointerLightRef = useRef<THREE.PointLight>(null);
   const { chamber, colors } = experienceConfig;
   const radialSegments = quality === "high" ? 64 : 36;
+  const phaseColors = useMemo(
+    () => ({
+      ceilingDefault: new THREE.Color(colors.smokedNavy),
+      ceilingProjects: new THREE.Color("#172c33"),
+      floorDefault: new THREE.Color(colors.warmStone),
+      floorProjects: new THREE.Color("#203940"),
+      wallDefault: new THREE.Color(colors.mineral),
+      wallProjects: new THREE.Color("#29474d"),
+    }),
+    [colors.mineral, colors.smokedNavy, colors.warmStone],
+  );
 
   const materials = useMemo(
     () => ({
@@ -116,6 +127,21 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
     const pointerStrength = runtime.pointer.active && !runtime.reducedMotion ? 1 : 0;
     const pointerX = runtime.pointer.x * pointerStrength;
     const pointerY = runtime.pointer.y * pointerStrength;
+    const colorBlend = 1 - Math.exp(-4.2 * delta);
+    const projectsActive = runtime.phase === "works";
+
+    materials.wall.color.lerp(
+      projectsActive ? phaseColors.wallProjects : phaseColors.wallDefault,
+      colorBlend,
+    );
+    materials.floor.color.lerp(
+      projectsActive ? phaseColors.floorProjects : phaseColors.floorDefault,
+      colorBlend,
+    );
+    materials.ceiling.color.lerp(
+      projectsActive ? phaseColors.ceilingProjects : phaseColors.ceilingDefault,
+      colorBlend,
+    );
 
     planes.visible = runtime.phase === "intro";
     planes.position.x = damp(planes.position.x, pointerX * -0.14, 4.2, delta);

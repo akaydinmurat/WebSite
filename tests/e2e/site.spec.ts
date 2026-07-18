@@ -248,6 +248,14 @@ test.describe("core visitor journeys", () => {
     await page.mouse.move(240, 320);
     await page.mouse.move(980, 430);
     await expect(canvas).toBeVisible();
+    await expect(page.locator(".experience-project-meta-title")).toHaveCSS(
+      "color",
+      "rgb(255, 248, 232)",
+    );
+    await expect(page.locator(".experience-project-meta")).not.toHaveCSS(
+      "background-image",
+      "none",
+    );
   });
 
   test("keeps the editorial hero readable while its material surface reacts to a fine pointer", async ({
@@ -504,6 +512,13 @@ test.describe("core visitor journeys", () => {
       packageCards.first().getByRole("link", { name: "Shopier'da incele" }),
     ).toBeVisible();
     await expect(packageCards.first().getByRole("heading", { level: 3 })).toBeVisible();
+    await expect(packageCards.first().getByRole("heading", { level: 3 })).toHaveCSS(
+      "color",
+      "rgb(255, 248, 232)",
+    );
+    await expect(
+      packageTrack.locator(".experience-content-heading > p:not(.experience-kicker)"),
+    ).toHaveCSS("grid-column-start", "1");
     await expect(page.locator(".experience-package-benefit")).toHaveCount(11);
     await expect(page.locator(".experience-package-pricing")).toHaveCount(11);
     await expect(page.locator(".experience-package-grid")).toHaveCSS("display", "grid");
