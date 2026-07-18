@@ -183,7 +183,7 @@ Proje adları, yılları, konumları, hizmetler ve paket kapsamları mevcut canl
 Mevcut tek ürün bayrağı `NEXT_PUBLIC_ENABLE_WEBGL_HERO`'dur.
 
 - `false`: Varsayılan ve önerilen durumdur; pointer konumunu CSS custom property ile güncelleyen iki katmanlı hero çalışır.
-- `true`: WebGL destekli, fine-pointer bir cihazda ve reduced motion kapalıysa dinamik React Three Fiber katmanı yüklenir.
+- `true`: Desteklenen masaüstü ve dokunmatik ekranlarda, reduced motion kapalıysa dinamik React Three Fiber katmanı yüklenir.
 
 Bayrağın `true` olması CSS fallback'i kaldırmaz. Gerçek render varlıkları, düşük kabiliyetli cihaz testleri ve performans ölçümü tamamlanmadan üretimde etkinleştirmeyin.
 
@@ -272,7 +272,7 @@ Bu durumda `NEXT_PUBLIC_SITE_URL` değerini de kullandığınız origin ile eşl
 
 ### WebGL katmanı görünmüyor
 
-Bayrağın tam olarak `true` olduğundan emin olun. Katman; touch/coarse-pointer cihazlarda, `prefers-reduced-motion` açıkken veya WebGL desteği yokken bilinçli olarak devre dışı kalır. CSS hero'nun görünmesi beklenen fallback davranışıdır.
+Bayrağın tam olarak `true` olduğundan emin olun. Katman; `prefers-reduced-motion` açıkken, viewport desteklenen alt sınırın altındayken veya WebGL desteği yokken devre dışı kalır. CSS hero'nun görünmesi beklenen fallback davranışıdır.
 
 ### Playwright tarayıcı yürütülebilir dosyası bulunamıyor
 

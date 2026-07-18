@@ -127,6 +127,19 @@ test.describe("core visitor journeys", () => {
     }
   });
 
+  test("keeps the new project action legible on hover", async ({ page }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "chromium");
+    await page.goto("/");
+
+    const action = page.locator(".luminous-dream-action");
+    await expect(action).toBeVisible();
+    await action.hover();
+
+    await expect(action).toHaveCSS("background-color", "rgb(32, 41, 45)");
+    await expect(action.locator("strong")).toHaveCSS("color", "rgb(255, 248, 232)");
+    await expect(action.locator("small")).toHaveCSS("color", "rgb(255, 248, 232)");
+  });
+
   test("keeps every luminous home chapter accessible", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "chromium");
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -707,6 +720,25 @@ test.describe("mobile journeys at 360px", () => {
       await expect(page.locator(selector)).toBeVisible();
       await expectNoHorizontalOverflow(page, `Mobile ${scene} scene`);
     }
+  });
+
+  test("runs the same WebGL project surface on touch layouts when enabled", async ({
+    page,
+  }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "mobile-chromium");
+    test.skip(
+      process.env.PLAYWRIGHT_EXPECT_WEBGL !== "true",
+      "The cross-device WebGL assertion only runs against an explicitly enabled server.",
+    );
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/?scene=projects");
+
+    expect(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches)).toBe(true);
+    await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
+    await expect(page.locator(".spatial-home")).toHaveAttribute("data-webgl-ready", "true");
+    await expect(page.locator(".experience-canvas canvas")).toBeVisible();
+    await expect(page.locator(".experience-fallback")).toHaveCSS("opacity", "0");
+    await expect(page.getByRole("link", { name: "Aktif projeyi incele" })).toBeVisible();
   });
 
   test("keeps key pages and home chapters within the 360px viewport", async ({

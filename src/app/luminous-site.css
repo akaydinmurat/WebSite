@@ -213,6 +213,12 @@ body {
   translate: 0 -0.08rem;
 }
 
+header.luminous-site-header
+  .luminous-dream-action:hover
+  :is(.luminous-dream-action-index, .luminous-dream-action-copy, small, strong, svg) {
+  color: var(--luminous-cream);
+}
+
 .luminous-dream-action:hover::after {
   transform: scaleX(1);
 }

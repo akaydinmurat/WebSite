@@ -211,8 +211,14 @@ function ProjectCard({
     frontnessRef.current = frontness;
     visibilityRef.current = sceneVisibility;
 
+    const responsiveRadiusX =
+      size.width < 768
+        ? experienceConfig.orbit.mobileRadiusX
+        : size.width < 1024
+          ? experienceConfig.orbit.tabletRadiusX
+          : experienceConfig.orbit.radiusX;
     scratch.basePosition.set(
-      Math.sin(phase) * experienceConfig.orbit.radiusX,
+      Math.sin(phase) * responsiveRadiusX,
       0,
       Math.cos(phase) * experienceConfig.orbit.radiusZ,
     );

@@ -352,20 +352,16 @@ export function HomeExperience({
   );
 
   useEffect(() => {
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const updateCapability = () =>
       setWebglCapable(
         isWebglViewportCapable({
-          hasFinePointer: finePointer.matches,
           viewportWidth: window.innerWidth,
         }),
       );
-    finePointer.addEventListener("change", updateCapability);
     window.addEventListener("resize", updateCapability);
     updateCapability();
 
     return () => {
-      finePointer.removeEventListener("change", updateCapability);
       window.removeEventListener("resize", updateCapability);
     };
   }, []);

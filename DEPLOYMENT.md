@@ -35,7 +35,7 @@ SANITY_API_READ_TOKEN=
 SANITY_REVALIDATE_SECRET=
 ```
 
-WebGL yetenekli masaüstü cihazlarda varsayılan olarak etkindir. Dağıtımda zorla kapatmak için:
+WebGL desteklenen masaüstü ve dokunmatik ekranlarda varsayılan olarak etkindir. Dağıtımda zorla kapatmak için:
 
 ```text
 NEXT_PUBLIC_ENABLE_WEBGL_HERO=false

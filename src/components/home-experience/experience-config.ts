@@ -18,6 +18,8 @@ export const experienceConfig = {
   },
   orbit: {
     radiusX: 6.15,
+    tabletRadiusX: 4.1,
+    mobileRadiusX: 1.8,
     radiusZ: 3.9,
     inclinationDegrees: 31,
     centerX: 0.42,
