@@ -1492,7 +1492,7 @@ body[data-home-experience="true"] main#main-content {
 
 .experience-packages .experience-content-heading > p:not(.experience-kicker) {
   max-width: 20rem;
-  color: rgb(230 237 233 / 68%);
+  color: #dce7e2;
   font-size: clamp(0.76rem, 0.9vw, 0.95rem);
 }
 
@@ -1603,7 +1603,7 @@ body[data-home-experience="true"] main#main-content {
   z-index: 3 !important;
   top: 1rem;
   right: 1.35rem;
-  color: rgb(255 255 255 / 12%);
+  color: rgb(255 255 255 / 20%);
   font-size: clamp(4rem, 7vw, 7rem);
 }
 
@@ -1660,7 +1660,7 @@ body[data-home-experience="true"] main#main-content {
   gap: 1rem;
   border-bottom: 1px solid rgb(232 239 235 / 11%);
   padding: 0.8rem 1.2rem;
-  color: rgb(232 239 235 / 56%);
+  color: #c8d7d1;
   font-size: 0.55rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1696,7 +1696,7 @@ body[data-home-experience="true"] main#main-content {
 
 .experience-package-summary {
   margin: 0.65rem 0 0;
-  color: rgb(232 239 235 / 58%);
+  color: #d2dfda;
   font-size: 0.72rem;
   line-height: 1.55;
 }
@@ -1712,7 +1712,7 @@ body[data-home-experience="true"] main#main-content {
 
 .experience-packages .experience-package-card > ul li {
   border-top-color: rgb(232 239 235 / 13%);
-  color: rgb(232 239 235 / 72%);
+  color: #dce6e1;
   font-size: 0.62rem;
 }
 
@@ -1749,7 +1749,7 @@ body[data-home-experience="true"] main#main-content {
 
 .experience-package-pricing em {
   max-width: 28rem;
-  color: rgb(232 239 235 / 48%);
+  color: #c8d6d0;
   font-size: 0.56rem;
   font-style: normal;
   line-height: 1.4;

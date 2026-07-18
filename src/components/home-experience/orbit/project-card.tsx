@@ -411,7 +411,7 @@ function ProjectCard({
         />
       </mesh>
 
-      <mesh position={[0, 0, -0.025]}>
+      <mesh position={[0, 0, -0.06]}>
         <boxGeometry
           args={[
             experienceConfig.cards.worldWidth + 0.2,

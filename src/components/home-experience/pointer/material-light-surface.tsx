@@ -252,8 +252,7 @@ export function MaterialLightSurface({ visible = true, z = -8.55 }: MaterialLigh
     }
 
     const projectSurfaceActive = runtime.phase === "works";
-    const targetSurfaceStrength =
-      (runtime.phase === "intro" || projectSurfaceActive) && runtime.pageVisible ? 1 : 0;
+    const targetSurfaceStrength = runtime.phase === "intro" && runtime.pageVisible ? 1 : 0;
     runtimeMaterial.uniforms.uSurfaceStrength.value = damp(
       runtimeMaterial.uniforms.uSurfaceStrength.value,
       targetSurfaceStrength,
