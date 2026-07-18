@@ -7,6 +7,7 @@ import * as THREE from "three";
 
 import { ExperienceCamera } from "./camera/experience-camera";
 import { ArchitecturalChamber } from "./chamber/architectural-chamber";
+import { IntroPortal } from "./chamber/intro-portal";
 import { experienceConfig } from "./experience-config";
 import { getExperienceRuntime } from "./experience-store";
 import { ProjectOrbit } from "./orbit/project-orbit";
@@ -151,6 +152,7 @@ export function ExperienceCanvas({
         <Suspense fallback={null}>
           <SceneAtmosphere />
           <ArchitecturalChamber />
+          <IntroPortal />
           <MaterialLightSurface />
           <ProjectSpatialField />
           <ProjectOrbit projects={projects} />

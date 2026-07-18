@@ -25,16 +25,17 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
   const rootRef = useRef<THREE.Group>(null);
   const planesRef = useRef<THREE.Group>(null);
   const pointerLightRef = useRef<THREE.PointLight>(null);
+  const projectLightRef = useRef<THREE.PointLight>(null);
   const { chamber, colors } = experienceConfig;
   const radialSegments = quality === "high" ? 64 : 36;
   const phaseColors = useMemo(
     () => ({
       ceilingDefault: new THREE.Color(colors.smokedNavy),
-      ceilingProjects: new THREE.Color("#172c33"),
+      ceilingProjects: new THREE.Color("#c89a78"),
       floorDefault: new THREE.Color(colors.warmStone),
-      floorProjects: new THREE.Color("#203940"),
+      floorProjects: new THREE.Color("#86a39a"),
       wallDefault: new THREE.Color(colors.mineral),
-      wallProjects: new THREE.Color("#29474d"),
+      wallProjects: new THREE.Color("#d8d1c1"),
     }),
     [colors.mineral, colors.smokedNavy, colors.warmStone],
   );
@@ -114,7 +115,8 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
     const root = rootRef.current;
     const planes = planesRef.current;
     const pointerLight = pointerLightRef.current;
-    if (!root || !planes || !pointerLight) return;
+    const projectLight = projectLightRef.current;
+    if (!root || !planes || !pointerLight || !projectLight) return;
 
     const runtime = getExperienceRuntime();
     root.visible =
@@ -154,6 +156,14 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
       pointerLight.intensity,
       runtime.phase === "intro" && runtime.pageVisible ? 0.34 : 0.12,
       4.2,
+      delta,
+    );
+    projectLight.position.x = damp(projectLight.position.x, -2.4 + pointerX * 1.8, 3.8, delta);
+    projectLight.position.y = damp(projectLight.position.y, 2.2 + pointerY * 0.8, 3.8, delta);
+    projectLight.intensity = damp(
+      projectLight.intensity,
+      projectsActive && runtime.pageVisible ? 1.85 : 0,
+      4.4,
       delta,
     );
   });
@@ -246,6 +256,14 @@ export function ArchitecturalChamber({ quality = "high" }: ArchitecturalChamberP
         distance={8.5}
         intensity={0.34}
         position={[0, 0.8, 1.6]}
+      />
+      <pointLight
+        ref={projectLightRef}
+        color="#fff0c7"
+        decay={1.7}
+        distance={15}
+        intensity={0}
+        position={[-2.4, 2.2, 2.8]}
       />
     </group>
   );

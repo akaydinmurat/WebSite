@@ -147,6 +147,8 @@ function ProjectCard({
     parentQuaternion: new THREE.Quaternion(),
     targetQuaternion: new THREE.Quaternion(),
     baseImageColor: new THREE.Color(texture ? "#ffffff" : "#9bcbe3"),
+    frameFocusColor: new THREE.Color("#f4ead4"),
+    frameRestColor: new THREE.Color("#29444a"),
   });
 
   const accentColor = orbitAccentColors[index % orbitAccentColors.length];
@@ -294,6 +296,11 @@ function ProjectCard({
     imageMaterial.color.copy(scratch.baseImageColor).multiplyScalar(brightness);
     frameMaterial.opacity =
       sceneVisibility * otherCardOpacity * (0.48 + sideWeight * 0.18 + focusWeight * 0.32);
+    frameMaterial.color.lerpColors(
+      scratch.frameRestColor,
+      scratch.frameFocusColor,
+      focusWeight * 0.9 + (hoveredRef.current ? 0.08 : 0),
+    );
     accentMaterial.opacity =
       sceneVisibility *
       otherCardOpacity *
@@ -422,8 +429,8 @@ function ProjectCard({
         <meshStandardMaterial
           ref={frameMaterialRef}
           color={experienceConfig.colors.graphite}
-          metalness={0.42}
-          roughness={0.46}
+          metalness={0.16}
+          roughness={0.68}
           transparent
           opacity={0}
           depthTest

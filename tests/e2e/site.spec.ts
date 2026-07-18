@@ -191,6 +191,12 @@ test.describe("core visitor journeys", () => {
       "B.M. Evi Mutfak Projesi",
     );
     await expect(page.locator(".experience-stage-list li")).toHaveCount(5);
+    await expect(page.locator(".experience-intro-aperture")).toBeVisible();
+    await expect(page.locator(".experience-intro-chrome")).toBeVisible();
+    await expect(page.locator(".experience-intro-aperture img")).toHaveCSS(
+      "animation-name",
+      "none",
+    );
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
 
     const accessibilityScan = await new AxeBuilder({ page }).include("main").analyze();
@@ -238,6 +244,7 @@ test.describe("core visitor journeys", () => {
     const canvas = page.locator(".experience-canvas canvas");
     await expect(experience).toHaveAttribute("data-webgl-ready", "true");
     await expect(canvas).toBeVisible();
+    await expect(page.locator(".experience-project-stage-identity")).toBeVisible();
 
     await page.getByTestId("desktop-navigation").getByRole("link", { name: "Projeler" }).click();
     await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");

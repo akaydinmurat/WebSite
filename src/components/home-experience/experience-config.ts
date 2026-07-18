@@ -67,7 +67,7 @@ export const experienceConfig = {
     sandWhite: "#fff8e8",
     sunset: "#e9785f",
     night: "#fff8e8",
-    projects: "#6f8d94",
+    projects: "#aebbb2",
     vision: "#a7cdb0",
     showcase: "#f4ce63",
     packages: "#fff8e8",

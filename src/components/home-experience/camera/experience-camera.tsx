@@ -78,8 +78,16 @@ export function ExperienceCamera() {
 
     switch (runtime.phase) {
       case "intro":
-        desiredPosition.copy(introPosition);
-        lookTarget.set(0, 0.08, 0);
+        desiredPosition.set(
+          introPosition.x + runtime.pointer.x * 0.08 - runtime.introProgress * 0.22,
+          introPosition.y + runtime.pointer.y * 0.055 + runtime.introProgress * 0.08,
+          introPosition.z - runtime.introProgress * 0.72,
+        );
+        lookTarget.set(
+          0.32 + runtime.pointer.x * 0.06,
+          0.08 + runtime.pointer.y * 0.035,
+          -runtime.introProgress * 0.2,
+        );
         break;
       case "works":
         desiredPosition.copy(worksPosition);

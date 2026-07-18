@@ -13,6 +13,7 @@ const POINT_COUNT = 150;
 export function ProjectSpatialField() {
   const rootRef = useRef<THREE.Group>(null);
   const pointMaterialRef = useRef<THREE.PointsMaterial>(null);
+  const backdropGroupRef = useRef<THREE.Group>(null);
   const ringGroupRef = useRef<THREE.Group>(null);
   const shardGroupRef = useRef<THREE.Group>(null);
   const visibilityRef = useRef(0);
@@ -49,18 +50,26 @@ export function ProjectSpatialField() {
     }
     for (const child of ringGroupRef.current?.children ?? []) {
       if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
-        child.material.opacity = visibility * 0.17;
+        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.34);
       }
     }
     for (const child of shardGroupRef.current?.children ?? []) {
       if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
-        child.material.opacity = visibility * 0.2;
+        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.24);
+      }
+    }
+    for (const child of backdropGroupRef.current?.children ?? []) {
+      if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
+        child.material.opacity = visibility * Number(child.userData.fieldOpacity ?? 0.2);
       }
     }
 
     if (!runtime.reducedMotion && root.visible) {
-      root.rotation.z += delta * 0.004;
-      root.rotation.y = Math.sin(runtime.orbit.angle * 0.24) * 0.025;
+      root.rotation.z += delta * 0.006;
+      root.rotation.y = Math.sin(runtime.orbit.angle * 0.24) * 0.032;
+      if (backdropGroupRef.current) {
+        backdropGroupRef.current.rotation.z -= delta * 0.009;
+      }
     }
   });
 
@@ -72,20 +81,24 @@ export function ProjectSpatialField() {
         </bufferGeometry>
         <pointsMaterial
           ref={pointMaterialRef}
-          color={experienceConfig.colors.projectCream}
+          color="#fff8e8"
           depthWrite={false}
           opacity={0}
-          size={0.025}
+          size={0.032}
           sizeAttenuation
           transparent
         />
       </points>
 
       <group ref={ringGroupRef}>
-        <mesh position={[0.4, 0.2, -5.8]} rotation={[1.18, 0.22, -0.18]}>
+        <mesh
+          position={[0.4, 0.2, -5.8]}
+          rotation={[1.18, 0.22, -0.18]}
+          userData={{ fieldOpacity: 0.46 }}
+        >
           <torusGeometry args={[5.3, 0.012, 4, 96]} />
           <meshBasicMaterial
-            color={experienceConfig.colors.projectCeladon}
+            color="#fff8e8"
             depthWrite={false}
             opacity={0}
             side={THREE.DoubleSide}
@@ -93,10 +106,14 @@ export function ProjectSpatialField() {
             wireframe
           />
         </mesh>
-        <mesh position={[-1.8, 0.6, -7.4]} rotation={[1.42, -0.34, 0.5]}>
+        <mesh
+          position={[-1.8, 0.6, -7.4]}
+          rotation={[1.42, -0.34, 0.5]}
+          userData={{ fieldOpacity: 0.34 }}
+        >
           <torusGeometry args={[3.7, 0.01, 4, 80]} />
           <meshBasicMaterial
-            color={experienceConfig.colors.projectCeladon}
+            color="#f4ce63"
             depthWrite={false}
             opacity={0}
             side={THREE.DoubleSide}
@@ -104,10 +121,14 @@ export function ProjectSpatialField() {
             wireframe
           />
         </mesh>
-        <mesh position={[2.7, -1.1, -8.7]} rotation={[1.1, 0.5, -0.65]}>
+        <mesh
+          position={[2.7, -1.1, -8.7]}
+          rotation={[1.1, 0.5, -0.65]}
+          userData={{ fieldOpacity: 0.3 }}
+        >
           <torusGeometry args={[2.25, 0.009, 4, 64]} />
           <meshBasicMaterial
-            color={experienceConfig.colors.projectCeladon}
+            color="#e9785f"
             depthWrite={false}
             opacity={0}
             side={THREE.DoubleSide}
@@ -118,7 +139,11 @@ export function ProjectSpatialField() {
       </group>
 
       <group ref={shardGroupRef}>
-        <mesh position={[-5.8, 1.9, -4.6]} rotation={[0.2, 0.48, 0.64]}>
+        <mesh
+          position={[-5.8, 1.9, -4.6]}
+          rotation={[0.2, 0.48, 0.64]}
+          userData={{ fieldOpacity: 0.3 }}
+        >
           <circleGeometry args={[1.55, 3]} />
           <meshBasicMaterial
             color={experienceConfig.colors.projectCoral}
@@ -129,7 +154,11 @@ export function ProjectSpatialField() {
             wireframe
           />
         </mesh>
-        <mesh position={[5.5, -1.6, -6.1]} rotation={[-0.3, -0.56, -0.38]}>
+        <mesh
+          position={[5.5, -1.6, -6.1]}
+          rotation={[-0.3, -0.56, -0.38]}
+          userData={{ fieldOpacity: 0.28 }}
+        >
           <circleGeometry args={[1.9, 3]} />
           <meshBasicMaterial
             color={experienceConfig.colors.projectCoral}
@@ -140,7 +169,11 @@ export function ProjectSpatialField() {
             wireframe
           />
         </mesh>
-        <mesh position={[3.9, 2.7, -9.2]} rotation={[0.48, 0.22, 0.92]}>
+        <mesh
+          position={[3.9, 2.7, -9.2]}
+          rotation={[0.48, 0.22, 0.92]}
+          userData={{ fieldOpacity: 0.24 }}
+        >
           <circleGeometry args={[1.2, 3]} />
           <meshBasicMaterial
             color={experienceConfig.colors.projectCoral}
@@ -149,6 +182,53 @@ export function ProjectSpatialField() {
             side={THREE.DoubleSide}
             transparent
             wireframe
+          />
+        </mesh>
+      </group>
+
+      <group ref={backdropGroupRef}>
+        <mesh position={[-2.8, 1.2, -9.8]} userData={{ fieldOpacity: 0.34 }}>
+          <circleGeometry args={[2.45, 64]} />
+          <meshBasicMaterial
+            color="#f4ce63"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[-2.8, 1.2, -9.72]} userData={{ fieldOpacity: 0.72 }}>
+          <ringGeometry args={[2.72, 2.76, 96]} />
+          <meshBasicMaterial
+            color="#fff8e8"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh position={[3.4, -0.5, -10.4]} userData={{ fieldOpacity: 0.3 }}>
+          <ringGeometry args={[2.9, 3.62, 3]} />
+          <meshBasicMaterial
+            color="#e9785f"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
+          />
+        </mesh>
+        <mesh
+          position={[0, -3.32, -3.4]}
+          rotation={[-Math.PI * 0.5, 0, 0]}
+          userData={{ fieldOpacity: 0.5 }}
+        >
+          <ringGeometry args={[3.8, 3.84, 96]} />
+          <meshBasicMaterial
+            color="#fff8e8"
+            depthWrite={false}
+            opacity={0}
+            side={THREE.DoubleSide}
+            transparent
           />
         </mesh>
       </group>

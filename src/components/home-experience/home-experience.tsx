@@ -132,6 +132,11 @@ export function HomeExperience({
       const packageTrack = root.querySelector<HTMLElement>("[data-package-track]");
       const packageWindow = root.querySelector<HTMLElement>("[data-package-window]");
       const packageStrip = root.querySelector<HTMLElement>("[data-package-strip]");
+      const introAperture = root.querySelector<HTMLElement>("[data-intro-aperture]");
+      const introChrome = root.querySelector<HTMLElement>("[data-intro-chrome]");
+      const introCopy = root.querySelector<HTMLElement>("[data-intro-copy]");
+      const introReveal = gsap.utils.toArray<HTMLElement>("[data-intro-reveal]", root);
+      const projectStageWord = root.querySelector<HTMLElement>("[data-project-stage-word]");
 
       if (!intro || !works || !vision || !showcase || !outro || !contactTrack) return;
 
@@ -250,6 +255,71 @@ export function HomeExperience({
       }
 
       if (!reducedMotion) {
+        const introTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+        if (introAperture) {
+          introTimeline.fromTo(
+            introAperture,
+            {
+              autoAlpha: 0,
+              clipPath: "polygon(48% 8%, 52% 8%, 52% 92%, 48% 92%)",
+              scale: 1.08,
+            },
+            {
+              autoAlpha: 1,
+              clipPath: "polygon(9% 0, 100% 0, 92% 100%, 0 91%)",
+              duration: 1.65,
+              scale: 1,
+            },
+            0.08,
+          );
+        }
+
+        if (introChrome) {
+          introTimeline.fromTo(
+            introChrome,
+            { autoAlpha: 0, rotate: -4, scale: 0.82 },
+            { autoAlpha: 1, duration: 1.4, rotate: 0, scale: 1 },
+            0.24,
+          );
+        }
+
+        introTimeline.fromTo(
+          introReveal,
+          { autoAlpha: 0, yPercent: 72 },
+          { autoAlpha: 1, duration: 0.9, stagger: 0.075, yPercent: 0 },
+          0.42,
+        );
+
+        gsap.to([introCopy, introAperture, introChrome].filter(Boolean), {
+          autoAlpha: 0,
+          ease: "none",
+          yPercent: -14,
+          scrollTrigger: {
+            trigger: intro,
+            start: "18% top",
+            end: "bottom top",
+            scrub: 0.7,
+          },
+        });
+
+        if (projectStageWord) {
+          gsap.fromTo(
+            projectStageWord,
+            { xPercent: -7 },
+            {
+              ease: "none",
+              scrollTrigger: {
+                trigger: works,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1,
+              },
+              xPercent: 7,
+            },
+          );
+        }
+
         if (
           packageTrack &&
           packageWindow &&
@@ -473,6 +543,7 @@ export function HomeExperience({
   }
 
   const activeProject = projects[snapshot.activeProjectIndex % Math.max(1, projects.length)];
+  const introProject = projects[0];
   const activeStage = processStages[snapshot.showcaseStage] ?? processStages[0];
 
   return (
@@ -513,16 +584,46 @@ export function HomeExperience({
         aria-labelledby="experience-intro-title"
       >
         <div className="experience-sticky">
-          <div className="experience-intro-copy">
-            <p className="experience-kicker">{experienceConfig.brand.name} · Mekânsal Deneyim</p>
-            <h1 id="experience-intro-title">
-              <span>Mekân,</span> <span>yaşamla anlam</span> <span>kazanır.</span>
-            </h1>
+          <div className="experience-intro-chrome" aria-hidden="true" data-intro-chrome>
+            <span className="experience-intro-chrome-ring experience-intro-chrome-ring-outer" />
+            <span className="experience-intro-chrome-ring experience-intro-chrome-ring-inner" />
+            <span className="experience-intro-chrome-axis experience-intro-chrome-axis-x" />
+            <span className="experience-intro-chrome-axis experience-intro-chrome-axis-y" />
+            <span className="experience-intro-chrome-sun" />
           </div>
-          <p className="experience-intro-description">
+          {introProject?.cover.kind === "image" && introProject.cover.src ? (
+            <div className="experience-intro-aperture" data-intro-aperture aria-hidden="true">
+              <Image
+                src={introProject.cover.src}
+                alt=""
+                fill
+                fetchPriority="high"
+                loading="eager"
+                sizes="(max-width: 767px) 100vw, 52vw"
+              />
+              <span className="experience-intro-aperture-wash" />
+              <span className="experience-intro-aperture-caption">
+                <b>Seçili mekân</b>
+                <i>{introProject.title}</i>
+              </span>
+            </div>
+          ) : null}
+          <div className="experience-intro-copy" data-intro-copy>
+            <p className="experience-kicker" data-intro-reveal>
+              {experienceConfig.brand.name} · Mekânsal Deneyim
+            </p>
+            <h1 id="experience-intro-title">
+              <span data-intro-reveal>Mekân,</span> <span data-intro-reveal>yaşamla anlam</span>{" "}
+              <span data-intro-reveal>kazanır.</span>
+            </h1>
+            <p className="experience-intro-signature" data-intro-reveal>
+              Işık <i /> Malzeme <i /> Oran
+            </p>
+          </div>
+          <p className="experience-intro-description" data-intro-reveal>
             Işık, malzeme ve oranı tek bir dijital galeride buluşturan iç mimari seçki.
           </p>
-          <p className="experience-intro-datum" aria-hidden="true">
+          <p className="experience-intro-datum" aria-hidden="true" data-intro-reveal>
             <span>01 / Giriş</span>
             <span>{siteConfig.contact.location}</span>
           </p>
@@ -541,6 +642,17 @@ export function HomeExperience({
         aria-labelledby="experience-projects-title"
       >
         <div className="experience-sticky">
+          <div className="experience-project-stage-identity" aria-hidden="true">
+            <span>Seçili</span>
+            <strong data-project-stage-word>Mekânlar</strong>
+          </div>
+          <div className="experience-project-stage-axis" aria-hidden="true">
+            <span>01</span>
+            <i />
+            <span>{String(projects.length).padStart(2, "0")}</span>
+            <b>İç mimari seçkisi</b>
+          </div>
+          <span className="experience-project-light-sweep" aria-hidden="true" />
           <h2 id="experience-projects-title" className="sr-only">
             Seçili projeler
           </h2>
