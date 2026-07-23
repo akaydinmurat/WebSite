@@ -10,6 +10,7 @@ import {
 
 const GOOGLE_PLACES_ENDPOINT = "https://places.googleapis.com/v1/places";
 const DEFAULT_TIMEOUT_MS = 4_000;
+const DEFAULT_REVALIDATE_SECONDS = 3_600;
 
 export const GOOGLE_PLACES_FIELD_MASK =
   "id,displayName,rating,userRatingCount,googleMapsUri,reviews,attributions";
@@ -25,6 +26,7 @@ export async function getGoogleReviews({
   fetchImpl = fetch,
   timeoutMs = DEFAULT_TIMEOUT_MS,
 }: GoogleReviewsFetchOptions = {}): Promise<GoogleReviewsResult> {
+  const cacheProductionRequest = env === process.env && fetchImpl === fetch;
   const fallbackUrl = normalizeGoogleMapsUrl(env.GOOGLE_MAPS_PLACE_URL);
 
   if (env.GOOGLE_REVIEWS_ENABLED?.trim() !== "true") {
@@ -53,7 +55,8 @@ export async function getGoogleReviews({
         "X-Goog-Api-Key": apiKey,
         "X-Goog-FieldMask": GOOGLE_PLACES_FIELD_MASK,
       },
-      cache: "no-store",
+      cache: cacheProductionRequest ? "force-cache" : "no-store",
+      ...(cacheProductionRequest ? { next: { revalidate: DEFAULT_REVALIDATE_SECONDS } } : {}),
       signal: controller.signal,
     });
 

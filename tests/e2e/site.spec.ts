@@ -695,7 +695,8 @@ test.describe("mobile journeys at 360px", () => {
 
     await expect(page).toHaveURL(/\/?\?scene=projects#experience-projects$/);
     await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
-    await expect(page.locator(".experience-project-meta-title")).toBeVisible();
+    await expect(page.locator(".experience-mobile-projects")).toBeVisible();
+    await expect(page.locator(".experience-mobile-project-card")).toHaveCount(8);
     expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   });
 
@@ -740,23 +741,65 @@ test.describe("mobile journeys at 360px", () => {
     }
   });
 
-  test("runs the same WebGL project surface on touch layouts when enabled", async ({
-    page,
-  }, testInfo) => {
+  test("keeps touch layouts on the lightweight project gallery", async ({ page }, testInfo) => {
     skipUnlessProject(testInfo.project.name, "mobile-chromium");
-    test.skip(
-      process.env.PLAYWRIGHT_EXPECT_WEBGL !== "true",
-      "The cross-device WebGL assertion only runs against an explicitly enabled server.",
-    );
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/?scene=projects");
 
     expect(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches)).toBe(true);
     await expect(page.locator("body")).toHaveAttribute("data-experience-phase", "works");
-    await expect(page.locator(".spatial-home")).toHaveAttribute("data-webgl-ready", "true");
-    await expect(page.locator(".experience-canvas canvas")).toBeVisible();
-    await expect(page.locator(".experience-fallback")).toHaveCSS("opacity", "0");
-    await expect(page.getByRole("link", { name: "Aktif projeyi incele" })).toBeVisible();
+    await expect(page.locator(".spatial-home")).toHaveAttribute("data-webgl-ready", "false");
+    await expect(page.locator(".experience-canvas canvas")).toHaveCount(0);
+    await expect(page.locator(".experience-mobile-projects")).toBeVisible();
+    await expect(page.locator(".experience-mobile-project-card")).toHaveCount(8);
+    await expectNoHorizontalOverflow(page, "Lightweight mobile projects");
+  });
+
+  test("contains the project hero image and keeps headings compact", async ({ page }, testInfo) => {
+    skipUnlessProject(testInfo.project.name, "mobile-chromium");
+    await page.goto("/projects/bm-evi-mutfak");
+
+    const heading = page.locator(".project-detail-heading h1");
+    const frame = page.locator(".project-detail-frame-media");
+    await expect(heading).toBeVisible();
+    await expect(frame).toBeVisible();
+
+    const layout = await page.evaluate(() => {
+      const headingElement = document.querySelector<HTMLElement>(".project-detail-heading h1");
+      const frameElement = document.querySelector<HTMLElement>(".project-detail-frame-media");
+      const imageElement = frameElement?.querySelector<HTMLElement>(".architectural-visual");
+      const headingBox = headingElement?.getBoundingClientRect();
+      const frameBox = frameElement?.getBoundingClientRect();
+      const imageBox = imageElement?.getBoundingClientRect();
+
+      return {
+        headingHeight: headingBox?.height ?? Number.POSITIVE_INFINITY,
+        frame: frameBox
+          ? {
+              left: frameBox.left,
+              right: frameBox.right,
+              top: frameBox.top,
+              bottom: frameBox.bottom,
+            }
+          : null,
+        image: imageBox
+          ? {
+              left: imageBox.left,
+              right: imageBox.right,
+              top: imageBox.top,
+              bottom: imageBox.bottom,
+            }
+          : null,
+      };
+    });
+
+    expect(layout.headingHeight).toBeLessThan(150);
+    expect(layout.frame).not.toBeNull();
+    expect(layout.image).not.toBeNull();
+    expect(layout.image!.left).toBeGreaterThanOrEqual(layout.frame!.left - 1);
+    expect(layout.image!.right).toBeLessThanOrEqual(layout.frame!.right + 1);
+    expect(layout.image!.top).toBeGreaterThanOrEqual(layout.frame!.top - 1);
+    expect(layout.image!.bottom).toBeLessThanOrEqual(layout.frame!.bottom + 1);
   });
 
   test("keeps key pages and home chapters within the 360px viewport", async ({

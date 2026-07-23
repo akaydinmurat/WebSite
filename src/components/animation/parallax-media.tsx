@@ -2,6 +2,7 @@
 
 import { useRef, type HTMLAttributes, type ReactNode } from "react";
 
+import { useFinePointer } from "@/hooks/use-pointer-capability";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { gsap, useGSAP } from "@/lib/animation/gsap";
 import { cn } from "@/lib/utils";
@@ -12,11 +13,12 @@ export function ParallaxMedia({
   ...props
 }: HTMLAttributes<HTMLDivElement> & { children: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
+  const finePointer = useFinePointer();
   const reducedMotion = useReducedMotion();
 
   useGSAP(
     () => {
-      if (!root.current || reducedMotion) return;
+      if (!root.current || reducedMotion || !finePointer) return;
       const media = root.current.firstElementChild;
       if (!media) return;
 
@@ -35,7 +37,7 @@ export function ParallaxMedia({
         },
       );
     },
-    { scope: root, dependencies: [reducedMotion], revertOnUpdate: true },
+    { scope: root, dependencies: [finePointer, reducedMotion], revertOnUpdate: true },
   );
 
   return (

@@ -158,7 +158,7 @@ Geliştirme provider'ı teslimat yapmadan açık bir doğrulama yanıtı üretir
 
 GSAP eklentileri `src/lib/animation/gsap.ts` içinde tek kez kaydedilir. Hareket primitives `useGSAP` ve scoped ref kullanır; reduced motion durumunda zorunlu olmayan hareket atlanır. Lenis, kendi ikinci döngüsünü kurmadan GSAP ticker ile sürülür.
 
-WebGL destekleyen masaüstü cihazlarda varsayılan olarak etkindir; `NEXT_PUBLIC_ENABLE_WEBGL_HERO=false` ile zorla kapatılabilir. Shader katmanı yalnız destek, fine pointer ve motion tercihi koşulları sağlanırsa görünür. Canvas `frameloop="demand"` ve sınırlı `[1, 1.5]` DPR kullanır. CSS hero her durumda fallback olarak kalır.
+WebGL varsayılan olarak kapalıdır ve yalnız büyük, fine-pointer masaüstü cihazlarda `NEXT_PUBLIC_ENABLE_WEBGL_HERO=true` ile açılır. Touch ve dar ekranlar her zaman semantik CSS deneyimini kullanır. Canvas sınırlı `[1, 1.5]` DPR kullanır; CSS hero her durumda fallback olarak kalır.
 
 Ayrıntılı kurallar için [ANIMATION_GUIDE.md](./ANIMATION_GUIDE.md) belgesini kullanın.
 

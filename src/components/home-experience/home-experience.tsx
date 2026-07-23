@@ -80,13 +80,11 @@ const packageTones = ["sky", "clay", "sand", "sage", "blue", "linen", "coral"] a
 type MetadataTransitionState = "idle" | "exit" | "enter";
 
 export function HomeExperience({
-  initialScene,
   packages,
   projects,
   reviews,
   services,
 }: {
-  initialScene: ExperienceEntryScene;
   packages: readonly DesignPackage[];
   projects: readonly Project[];
   reviews: GoogleReviewsResult;
@@ -352,16 +350,20 @@ export function HomeExperience({
   );
 
   useEffect(() => {
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const updateCapability = () =>
       setWebglCapable(
         isWebglViewportCapable({
+          hasFinePointer: finePointer.matches,
           viewportWidth: window.innerWidth,
         }),
       );
+    finePointer.addEventListener("change", updateCapability);
     window.addEventListener("resize", updateCapability);
     updateCapability();
 
     return () => {
+      finePointer.removeEventListener("change", updateCapability);
       window.removeEventListener("resize", updateCapability);
     };
   }, []);
@@ -480,7 +482,11 @@ export function HomeExperience({
     window.addEventListener("popstate", handlePopState);
 
     const initialFrame = window.requestAnimationFrame(() => {
-      if (initialScene !== "home") scrollToScene(initialScene, "auto");
+      const value = new URLSearchParams(window.location.search).get("scene") ?? "home";
+      const requestedScene = validScenes.has(value as ExperienceEntryScene)
+        ? (value as ExperienceEntryScene)
+        : "home";
+      if (requestedScene !== "home") scrollToScene(requestedScene, "auto");
     });
 
     return () => {
@@ -490,7 +496,7 @@ export function HomeExperience({
       window.removeEventListener("popstate", handlePopState);
       window.history.scrollRestoration = previousScrollRestoration;
     };
-  }, [initialScene, reducedMotion, scrollToScene]);
+  }, [reducedMotion, scrollToScene]);
 
   function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
     updateExperiencePointer(
@@ -644,6 +650,7 @@ export function HomeExperience({
           </p>
           <ExperienceRail active={1} />
         </div>
+        <MobileProjects projects={projects} />
       </section>
 
       <section
@@ -668,6 +675,7 @@ export function HomeExperience({
           </ol>
           <ExperienceRail active={2} light />
         </div>
+        <MobileProcess />
       </section>
 
       <div className="experience-outro" data-experience-track="outro">
@@ -695,6 +703,8 @@ function ExperienceFallback({
   phase: ExperiencePhase;
   projects: readonly Project[];
 }) {
+  const showsProjects = phase === "works" || phase === "vision-transition";
+  const showsProcess = phase === "showcase" || phase === "showcase-transition";
   const visibleProjectIndexes = [-1, 0, 1].map(
     (offset) => (activeProjectIndex + offset + projects.length) % Math.max(1, projects.length),
   );
@@ -721,6 +731,7 @@ function ExperienceFallback({
               key={`${project.slug}-${slotIndex}`}
               className={`experience-fallback-project experience-fallback-project-${slotIndex}`}
               project={project}
+              shouldLoadImage={showsProjects}
             />
           );
         })}
@@ -730,23 +741,110 @@ function ExperienceFallback({
         <span className="experience-fallback-process-frame" />
         <span
           className="experience-fallback-process-visual"
-          style={{ backgroundImage: `url(${processStage.visualSrc})` }}
+          style={showsProcess ? { backgroundImage: `url(${processStage.visualSrc})` } : undefined}
         />
       </div>
     </div>
   );
 }
 
-function FallbackProjectVisual({ className, project }: { className: string; project: Project }) {
+function FallbackProjectVisual({
+  className,
+  project,
+  shouldLoadImage,
+}: {
+  className: string;
+  project: Project;
+  shouldLoadImage: boolean;
+}) {
   return (
     <span
       className={className}
       style={
-        project.cover.kind === "image" && project.cover.src
+        shouldLoadImage && project.cover.kind === "image" && project.cover.src
           ? { backgroundImage: `url(${project.cover.src})` }
           : { background: project.cover.background }
       }
     />
+  );
+}
+
+function MobileProjects({ projects }: { projects: readonly Project[] }) {
+  return (
+    <div className="experience-mobile-projects">
+      <div className="experience-mobile-section-heading">
+        <p className="experience-kicker">Seçili projeler</p>
+        <h2>Mekânları yakından inceleyin.</h2>
+        <p>Projeler arasında yana kaydırın; her karta dokunarak ayrıntılara ulaşın.</p>
+      </div>
+      <ol className="experience-mobile-project-list" aria-label="Seçili projeler">
+        {projects.map((project, index) => {
+          const year = getProjectFact(project, "year");
+          const location = getProjectFact(project, "location");
+          const imageSrc = project.cover.src || "/images/placeholders/placeholder-plan.svg";
+
+          return (
+            <li key={project.slug}>
+              <Link
+                href={`/projects/${project.slug}`}
+                className="experience-mobile-project-card"
+                aria-label={`${project.title} projesini incele`}
+              >
+                <div className="experience-mobile-project-visual">
+                  <Image src={imageSrc} alt={project.cover.alt} fill sizes="84vw" />
+                  <span aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")} /{" "}
+                    {String(projects.length).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="experience-mobile-project-copy">
+                  <p>
+                    {year} · {projectCategoryLabels[project.category]}
+                  </p>
+                  <h3>{project.title}</h3>
+                  <span>
+                    {location} <ArrowUpRight aria-hidden="true" size={14} />
+                  </span>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </ol>
+      <Link className="experience-mobile-all-projects" href="/projects">
+        Tüm projeleri incele <ArrowUpRight aria-hidden="true" size={15} />
+      </Link>
+    </div>
+  );
+}
+
+function MobileProcess() {
+  return (
+    <div className="experience-mobile-process">
+      <div className="experience-mobile-section-heading">
+        <p className="experience-kicker">Tasarım süreci</p>
+        <h2>Fikirden uygulanabilir mekâna.</h2>
+        <p>Her aşama, kararları sadeleştirir ve tasarımı görünür kılar.</p>
+      </div>
+      <ol>
+        {processStages.map((stage, index) => (
+          <li key={stage.label}>
+            <div className="experience-mobile-process-visual">
+              <Image
+                src={stage.visualSrc}
+                alt={stage.visualAlt}
+                fill
+                sizes="(max-width: 767px) calc(100vw - 2.5rem), 1px"
+              />
+              <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            </div>
+            <p>{stage.label}</p>
+            <h3>{stage.title}</h3>
+            <p>{stage.description}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 

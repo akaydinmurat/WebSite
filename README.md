@@ -73,7 +73,7 @@ Copy-Item .env.example .env.local
 | Değişken                         | Kapsam                       | Varsayılan / davranış                                                            |
 | -------------------------------- | ---------------------------- | -------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL`           | Her ortam                    | `http://localhost:3000`; canonical origin, sonunda `/` olmamalı                  |
-| `NEXT_PUBLIC_ENABLE_WEBGL_HERO`  | İsteğe bağlı istemci bayrağı | Varsayılan `true`; `false` CSS fallback'i zorlar                                 |
+| `NEXT_PUBLIC_ENABLE_WEBGL_HERO`  | İsteğe bağlı istemci bayrağı | Varsayılan `false`; yalnız güçlü masaüstü cihazlarda `true` ile açılır           |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID`  | İsteğe bağlı, herkese açık   | Boşsa Sanity devre dışıdır                                                       |
 | `NEXT_PUBLIC_SANITY_DATASET`     | İsteğe bağlı, herkese açık   | `production`                                                                     |
 | `NEXT_PUBLIC_SANITY_API_VERSION` | İsteğe bağlı, herkese açık   | Boşsa kod `2026-03-01` kullanır                                                  |
